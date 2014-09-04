@@ -60,3 +60,4 @@ docs/_build/
 .Rnw
 .RData
 *-concordance.tex
+.synctex.gz
