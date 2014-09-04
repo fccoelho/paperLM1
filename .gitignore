@@ -54,10 +54,9 @@ docs/_build/
 
 # Latex garbage
 .bbl
-.log
-.tex.sav
-.aux
-.Rnw
-.RData
+*.tex.sav
+*.aux
+*.Rnw
+*.RData
 *-concordance.tex
-.synctex.gz
+*.synctex.gz
