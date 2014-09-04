@@ -53,7 +53,7 @@ coverage.xml
 docs/_build/
 
 # Latex garbage
-.bbl
+*.bbl
 *.tex.sav
 *.aux
 *.Rnw
