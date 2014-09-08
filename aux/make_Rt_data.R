@@ -1,6 +1,6 @@
 ### Code to export a CSV file with the disease cases and R_t plus credibility intervals.
 ### Rt is the raw estimate Y(t+1)/Y(t) and Rt2 is the mean of the inverse beta distribution
-### Se the tech report for details: https://github.com/maxbiostat/CODE/blob/master/Alerta/confidence_Rt.pdf
+### See the tech report for details: https://github.com/maxbiostat/CODE/blob/master/Alerta/confidence_Rt.pdf
 
 source("Rt_aux.R")
 source("elicit_Rt_prior.R")
