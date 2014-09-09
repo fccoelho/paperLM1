@@ -64,8 +64,6 @@ def model(theta):
         inits[0] = Ss[i];
         inits[-1] = 1 - sum(inits[:1])
         Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1))  #,tcrit=tcrit)
-        Y[t0:tf, 1] = Y[t0:tf, 1] * As[
-            ycode[int(t0)]]  #Adjusting the output to just the symptomatic I to compare with data
 
     return Y
 
