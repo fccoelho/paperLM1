@@ -143,14 +143,14 @@ def year_code(bstep):
 
     return yc
 
-
+# TODO: Fix this based on the actual dates
 def beta_step(timeline):
     """
     Returns the date ranges where beta should be low, i.e., during summers. 
     """
     bstep = np.zeros(len(timeline) + 200)
     for i, d in enumerate(timeline):
-        if d.year == 2009:  # In 209 h1n1 started in the summer
+        if d.year == 2009:  # In 2009 h1n1 started in the summer
             if d.month != 6:
                 bstep[i] = 1
         else:
@@ -172,8 +172,8 @@ def s_index(bstep):
 
 def calc_R0s():
     r0s = []
-    for s in Ss.itervalues():
-        r0s.append(b1 / tau * s)
+    for i in range(len(Ss)):
+        r0s.append(b1 / tau * SS[i])
     return np.array(r0s)
 
 
@@ -186,7 +186,7 @@ def constrain_Re(theta):
 # # running the analysys
 if __name__ == "__main__":
 
-    dt = prepdata('data_Rt_dengue.csv', 0, 243, 1);
+    dt = prepdata('data_Rt_dengue.csv', 0, 243, 1)
     modname = "Dengue_S0"
     #print dt['I'][:,1]
 
@@ -227,27 +227,15 @@ if __name__ == "__main__":
     #~ P.legend(['d','e']+[pnames[1]])
     #~ P.show()
     #Priors and limits for all countries
-    tpars_be = [(0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)] + \
-               [(0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)] + [(1, .4), (0, 4e-6)]
-    tlims_be = [(0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)] + \
-               [(0.1, 1), (0.2, 1), (0.2, 1), (0.2, 1), (0.2, 1), (0.2, 1), (0.1, 1)] + [(1.01, 1.4),
-                                                                                         (0, .00004)]  #beta and k
-    tpars_nl = [(0, .6), (0, .4), (0, .4), (0, .4), (0, .4), (0, .4), (0, .6)] + \
-               [(0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)] + [(1, .4), (0, 4e-6)]  #beta and k
-    tlims_nl = [(0, .35), (0, .4), (0, .4), (0, .4), (0, .4), (0, .3), (0, .5)] + \
-               [(0.2, .8), (0.2, 1), (0.2, .9), (0.2, .8), (0.2, .9), (0.2, .8), (0.2, .8)] + [(1.01, 1.4),
-                                                                                               (0, .00004)]  #beta and k
-    tpars_pt = [(0, .6), (0, .4), (0, .4), (0, .4), (0, .4), (0, .4), (0, .6)] + \
-               [(0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1), (0, 1)] + [(1, .4), (0, 4e-6)]  #beta and k
-    tlims_pt = [(0, .5), (0, .4), (0, .30), (0, .4), (0, .30), (0, .3), (0, .5)] + \
-               [(0.2, .8), (0.2, 1), (0.1, .9), (0.2, .8), (0.1, .9), (0.2, .8), (0.2, .8)] + [(1.1, 1.4),
-                                                                                               (0, .00004)]  #beta and k
+    tpars = [(0, 1), (0, 1), (0, 1)] + [(1, 4)]
+    tlims = [(0.1, 1), (0.2, 1), (0.2, 1)] + [(1.01, 4)]
+
 
     F = FitModel(2000, model, inits, tf, tnames, pnames,
                  wl, nw, verbose=1, burnin=2000, constraints=[])
     F.set_priors(tdists=nt * [st.uniform],
-                 tpars=tpars_be,
-                 tlims=tlims_be,
+                 tpars=tpars,
+                 tlims=tlims,
                  pdists=[st.uniform] * nph, ppars=[(0, 1)] * nph, plims=[(0, 1)] * nph)
 
     F.run(dt, 'DREAM', likvar=1e-6, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I'])
