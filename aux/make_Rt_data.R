@@ -5,11 +5,11 @@
 source("Rt_aux.R")
 source("elicit_Rt_prior.R")
 
-dat <- read.csv("dadojuntos_201433.csv", header=TRUE)
-
+dat <- read.csv("dadojuntos_201433.csv", header = TRUE)
 N <- length(unique(dat$SE))
 cases <- rowSums(matrix(dat$casos, nrow = N))
 pars <- elicit.Rt.hyperpars(m0 = 1/2, v0 = 2)  
 Rtb <- Rt.beta(cases, a0 = pars[1], b0 = pars[2])
-dadoexp <- data.frame(cases, Rtb)
+dadoexp <- data.frame(SE=unique(dat$SE), cases, Rtb)
+
 write.csv(dadoexp, file = "data_Rt_dengue.csv", row.names = FALSE)
