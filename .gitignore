@@ -56,7 +56,9 @@ docs/_build/
 .idea/*
 .idea/
 # Latex garbage
+*.blg
 *.bbl
+*.tex.backup
 *.tex.sav
 *.aux
 *.Rnw
