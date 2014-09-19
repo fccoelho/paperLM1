@@ -6,12 +6,14 @@ import pyximport;
 pyximport.install(pyimport=False)
 from BIP.Bayes.Melding import FitModel
 from scipy.integrate import odeint
+from scipy.interpolate import interp1d
 import scipy.stats as st
 import numpy as np
 import pylab as P
 import copy
 from collections import defaultdict
 import datetime
+import sys
 import pandas as pd
 
 
@@ -22,48 +24,55 @@ eta = .0  # infectivity of asymptomatic infections relative to clinical ones. FI
 epsilon = 2.8  # latency rate
 mu = 0  # nat/mortality rate
 
-tau = 0.2  # recovery rate. FIXED
+tau = 1  # recovery rate. FIXED
 
-s0 = .241  # fraction of susceptibles at the beginning of first epidemic
-s1 = 0.699;
-s2 = 0.699;
-
+N = 1  # Population of Rio
+s0 = 0.9999*N  # fraction of susceptibles at the beginning of first epidemic
+s1 = 0.999*N;
+s2 = 0.999*N;
 
 Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
-r0 = 1.2
-# Initial conditions
-inits = [.9999, .0001, 0]  # initial values for state variables.
 
+
+# Initial conditions
+inits = np.array([s0, 100, 0.0])  # initial values for state variables.
 
 def model(theta):
     # setting parameters
-    s0, s1, s2, r0 = theta
-    Ss = {0: s0, 1: s1, 2: s2}  #Multiple Ss map
+    s0, s1, s2 = theta
+    Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
 
-    #~ b1=19.9
+    # ~ b1=19.9
     def sir(y, t):
         '''ODE model'''
         S, I, R = y
-        b1 = r0 * tau / (Ss[ycode[int(t)]])
-        beta = b1 if bstep[int(t)] else b0
+        
+        beta = 0 if t > 242 else  iRt(t) * tau/ N#(Ss[ycode[int(t)]])
 
         #~ if (calc_R0s()<1.1).any():
         #~ print "flat"
-        lamb = beta * I * S
+        lamb = (beta * I * S)
         return [-lamb,  #dS/dt
                 lamb - tau * I,  #dI/dt
                 tau * I,  #dR/dt
         ]
 
     Y = np.zeros((wl, 3))
+    # Initial conditions
+
     for i in range(len(Ss)):
         t0 = t0s[i]
         tf = tfs[i]
-        #~ if i>0:
-        #~ inits[1] = Y[t0-1,1]
-        inits[0] = Ss[i];
-        inits[-1] = 1 - sum(inits[:1])
+        #print t0,tf
+        if i>0:
+            #~ inits[1] = Y[t0-1,1]
+            #~ print inits
+            inits[1] = dt['I'][t0-1] if N-Ss[i] > dt['I'][t0-1] else N-Ss[i]
+            #~ print inits
+        inits[0] = Ss[i];  # Define S0
+        inits[-1] = N - sum(inits[:2])  # Define R(0)
         Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1))  #,tcrit=tcrit)
+        #inits = Y[-1, :]
 
     return Y
 
@@ -78,23 +87,30 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     eday: final day
     mao: Moving average's Order
     """
-    data = pd.read_csv(fname, header=0, delimiter=',')
+    data = pd.read_csv(fname, header=0, delimiter=',', skiprows=[1, 2 , 3], parse_dates=True)
 
-    # dates = data.date[sday:eday]
+    dates = [datetime.datetime.strptime(d, "%Y-%m-%d") for d in data.start]
     sday = sday  # starting day for the fitting
     eday = len(df) if eday is None else eday
     # print data.dtype.names
-    incidence = data.cases[sday:eday]  #daily incidence
+    incidence = data.cases[sday:eday]  # daily incidence
     # Converting incidence to Prevalence
-    dur = 1. / tau  # infectiou period
+    dur = 1. / tau  # infectious period
     rawprev = np.convolve(incidence, np.ones(dur), 'same')
+    rawprev /= 6e6
 
-    P.plot(incidence, label='Incidence')
-    P.plot(rawprev, label='Prevalence')
-    P.grid()
-    P.legend()
+    #~ P.plot(dates, incidence, label='Incidence')
+    #~ P.plot(dates, rawprev, label='Prevalence')
+    #~ P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
+    #~ P.grid()
+    #~ P.legend()
+    #~ P.figure()
+    #~ P.plot(dates, data.Rt, label=r'$R_t$')
+    #~ P.plot(dates, data.lwr, 'r-.')
+    #~ P.plot(dates, data.upr, 'r-.')
+    #~ P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
     P.show()
-    #Doing moving average of order mao
+    # Doing moving average of order mao
     if mao > 1:
         sw = np.ones(mao, dtype=float) / mao  #smoothing window
         prev = np.convolve(rawprev, sw, 'same')  #Smoothing data (ma)
@@ -102,7 +118,7 @@ def prepdata(fname, sday=0, eday=None, mao=7):
         prev = rawprev
 
     # assert len(prev) == len(dates)
-    d = {'time': dates, 'I': np.nan_to_num(prev)}
+    d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': data.Rt}
     return d
 
 
@@ -129,24 +145,31 @@ def fill_in_missing_weeks(data):
 
     return d2
 
-def year_code(bstep):
+
+def year_code(dates):
     """
     Returns a series whose values are the year numbers
     """
-    a=0
-    yc = np.zeros(len(bstep))
-    for i,b in enumerate(bstep):
-        if i == 0:continue
-        if b==1 and bstep[i-1]==0:
-            a += b
+    a = 0
+    yc = np.zeros(len(dates), dtype=int)
+    year = dates[0].year
+    for i, d in enumerate(dates):
+        if d.year >= 2010:
+            yc[i] = 0
+        elif d.year >2010:
+            yc[i] = 1
+        else:
+            a += 1
+            year = d.year
         yc[i] = a
 
     return yc
 
+
 # TODO: Fix this based on the actual dates
 def beta_step(timeline):
     """
-    Returns the date ranges where beta should be low, i.e., during summers. 
+    Returns the date ranges where beta should be high, i.e., during summers.
     """
     bstep = np.zeros(len(timeline) + 200)
     for i, d in enumerate(timeline):
@@ -169,33 +192,26 @@ def s_index(bstep):
             si[i] = s
     return si
 
-
-def calc_R0s():
-    r0s = []
-    for i in range(len(Ss)):
-        r0s.append(b1 / tau * SS[i])
-    return np.array(r0s)
-
-
-def constrain_Re(theta):
-    res = []
-    for i in range(7):
-        res.append(theta[i] * theta[i + 7] * theta[-2] / tau > 1.1)
-    return np.array(res).all()
-
 # # running the analysys
 if __name__ == "__main__":
-
     dt = prepdata('data_Rt_dengue.csv', 0, 243, 1)
     modname = "Dengue_S0"
-    #print dt['I'][:,1]
+    # print dt['I'][:,1]
 
     bstep = beta_step(dt['time'])
-    ycode = year_code(bstep)
+    ycode = year_code(dt['time'])
     sindex = s_index(bstep)
     tcrit = [i for i in xrange(len(dt['time'])) if i]
-    t0s = [0] + [i for i in range(len(dt['time'])) if sindex[i]]
+    # Defining start and end of the simulations
+    t0s = [0, dt['time'].index(datetime.datetime(2011, 8, 7)), dt['time'].index(datetime.datetime(2012, 10, 28))]
     tfs = t0s[1:] + [len(dt['time'])]
+    print tfs
+    # Interpolated Rt
+    iRt = interp1d(np.arange(dt['Rt'].size), dt['Rt'], kind='cubic', bounds_error=False, fill_value=0)
+
+    #~ P.plot(dt['Rt'],'*')
+    #~ P.plot(np.arange(0,242,.2),[iRt(t) for t in np.arange(0,242,.2)])
+    
     #~ tfs = np.array(tfs)-1
     #~ print len(sindex), len(dt['I']), len(dt['time'])
     #~ print t0s,tfs
@@ -210,35 +226,35 @@ if __name__ == "__main__":
     #~ P.gcf().autofmt_xdate()
     #~ P.show()
 
-    tnames = ['s0', 's1', 's2', 'r0']
+    tnames = ['s0', 's1', 's2']
     nt = len(tnames)
     pnames = ['S', 'I', 'R']
     nph = len(pnames)
-    wl = dt['I'].shape[0]  #window length 446
+    wl = dt['I'].shape[0]  #window length
     nw = len(dt['time']) / wl  #number of windows
     tf = wl * nw  #total duration of simulation
-    inits[1] = max(st.nanmean(dt['I'][0]), 0.0001)
-    #~ #print inits
+    inits[1] = dt['I'][0]
+    print inits
     #~ print calc_R0s()
-    #~ y = model2([a0,a1,a2,a3,a4,a5,a6,s0,s1,s2,s3,s4,s5,s6,r0,k])
+    y = model([s0,s1,s2])
+    print s0, s1, s2
     #~ P.figure()
-    #~ P.plot(dt['I'],'*')
-    #~ P.plot(y[:,1])
-    #~ P.legend(['d','e']+[pnames[1]])
-    #~ P.show()
+    P.plot(dt['I'],'*')
+    P.plot(y[:,1])
+    P.legend([pnames[1]])
+    P.show()
     #Priors and limits for all countries
-    tpars = [(0, 1), (0, 1), (0, 1)] + [(1, 4)]
-    tlims = [(0.1, 1), (0.2, 1), (0.2, 1)] + [(1.01, 4)]
-
+    tpars = [(9, 1), (9, 1), (9, 1)]
+    tlims = [(0, 1), (0, 1), (0, 1)]
 
     F = FitModel(2000, model, inits, tf, tnames, pnames,
-                 wl, nw, verbose=1, burnin=2000, constraints=[])
-    F.set_priors(tdists=nt * [st.uniform],
+                 wl, nw, verbose=1, burnin=200, constraints=[])
+    F.set_priors(tdists=nt * [st.beta],
                  tpars=tpars,
                  tlims=tlims,
-                 pdists=[st.uniform] * nph, ppars=[(0, 1)] * nph, plims=[(0, 1)] * nph)
+                 pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-    F.run(dt, 'DREAM', likvar=1e-6, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I'])
-    print F.AIC, F.BIC, F.DIC
-    #~ print F.optimize(data=dt,p0=[a0,a1,a2,a3,a4,a5,a6,s0,s1,s2,s3,s4,s5,s6,b1,k], optimizer='oo',tol=1e-55, verbose=1, plot=1)
+    F.run(dt, 'DREAM', likvar=1e-7, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I'])
+    #~ print F.AIC, F.BIC, F.DIC
+    #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
     F.plot_results(['I'], dbname=modname, savefigs=1)
