@@ -28,8 +28,9 @@ Rt.beta <- function(d, gt = 3, alpha = .95, a0 = 2 , b0 = 3){
   K <- length(ac)
   jk1 <- ac[2:K] # J[k+1] 
   jk  <- ac[1:(K-1)]# J[k]  
-  Rt <- NA
+  Rt <- Rt2 <- NA
   Rt[(gt + 1):N] <- jk1/jk
+  Rt2[(gt + 1):N] <- (jk1 + a0)/(jk + b0 - 1)
   CIs <- data.frame (p1 = rep(NA, N), lwr = rep(NA, N), upr = rep(NA, N) )
   ## p1 = Pr(R>1) 
   for( k in 1: (N-gt)){
@@ -37,7 +38,7 @@ Rt.beta <- function(d, gt = 3, alpha = .95, a0 = 2 , b0 = 3){
     CIs[k+gt, 2:3] <- ll(betaconf(alpha = alpha, x = jk1[k], 
                                   n = jk1[k] + jk[k], a = a0, b = b0 ))
   } 
-  return(data.frame(Rt, CIs))
+  return(data.frame(Rt, Rt2, CIs))
 }
 ###################################################
 Rt.gamma <- function(d, gt = 3, alpha = .95){
