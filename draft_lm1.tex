@@ -152,54 +152,88 @@ Our paper is just awesome.
 \section*{Introduction}
 When modeling infecctious disease spread using dynamic models, the initial 
 conditions of the system, although key to match the simulated dynamics to 
-observed data, are frequently overlooked. If the model is about a disease 
+observed data, are frequently overlooked.
+If the model is about a disease 
 invading a new population one can simply assume the vast majority of the 
-population to be susceptible. However for a disease which is well in its way to 
+population to be susceptible.
+However for a disease which is well in its way to 
 endemicity but not yet stable, it can be very hard to determine the 
 immunological structure of the population without resorting to expensive large 
 scale prevalence tests.
 
-In the particular case of Dengue fever in Brasil, with four circulating 
+In the particular case of Dengue fever in Brazil, with four circulating 
 serotypes, it can be very challenging to parameterize a simulation starting at 
 any time other than when the date the disease was reintroduced in the country 
-in the late 1980s. For SIR-like models, the relevant initial values are the 
-number of infectious and susceptible  individuals. The number of infectious 
+in the late 1980s.
+For SIR-like models, the relevant initial values are the 
+number of infectious and susceptible  individuals. 
+The number of infectious 
 individuals are less challenging to determine, because the get very small 
 during the winters and can be derived from incidence data  with is monitored 
-continuously. The real challenge is to determine the number of susceptibles to 
+continuously.
+The real challenge is to determine the number of susceptibles to 
 a particular strain right at the beginning of the dengue season.
 
 Multiple factors contribute to the dificulty in estimating the number of 
 susceptibles in the population, first and foremost is the fact that dengue 
-confers permanente immunity within serotypes but with only short-lived 
-cross-immunity. Secondly, there are a larger number of asymptomatic cases in 
-any epidemic, which nevertheless acquire immunity. Lastly Demography and 
+confers permanent immunity within serotypes but with only short-lived 
+cross-immunity.
+Secondly, there are a larger number of asymptomatic cases in 
+any epidemic, which nevertheless acquire immunity.
+Lastly Demography and 
 migrations affect the number of susceptible in ways which are not easy to 
 determine.
 
 The initial number of susceptibles -- $S_0$ -- is a a very powerful parameter 
-with the regards to epidemic risk. Its value affects directly the local $R_0$, 
+with regard to epidemic risk.
+Its value affects directly the local $R_0$, 
 thus being intrumental in predicting epidemics, but it also affects the speed 
 and size of the epidemic.
 
 In this paper, we estimate the initial number of susceptibles right before 
-every epidemic in the last 18 years. For this we use a simplified model of 
-dengue transmission in which the vector is left out. We also model the mix of 
-circulating serotypes without discriminating between them. We then fit the 
+every epidemic in the last 18 years.
+For this we use a simplified model of 
+dengue transmission based on a Susceptible-infecctious-Removed (SIR) model.
+We then fit the 
 model output to observed data to estimate the $S_0$ before every 
 recorded epidemic in the Brazilian city of Rio de Janeiro. Rio de Janeiro has 
 bee through many Dengue epidemics of various serotypes and sizes.
 
 \section*{Methods}
 \subsection*{The data}
-The Data used to fit the model consists of weekly incidence from 1996 to 2014 
-in the city of Rio de Janeiro, Brazil. From this data, we calculated series 
-effective reproduction number, $R_t$, time series using the method described by 
-Nishiura et al.\cite{nishiura}.\todo[inline]{Add here more information about 
-the calculation of Rt such as generation time used, moving windows, etc}
+
+The data used to fit the model consists of weekly incidence from 1996 to 2014 
+in the city of Rio de Janeiro, Brazil.
+From this series, we calculated the effective reproduction number, $R_t$, according to the expression given by Nishiura et al.~\cite{nishiura}.
+The method assumes the disease counts $Y(t)$ are Poisson random variables such that $R_t$ is 
+\[ R_t = \left(\frac{Y(t + 1)}{Y(t)}\right)^{1/n}\]
+where $n$ is the ratio between the length of reporting interval and the mean generation time of the disease.
+In this paper we obtain the estimates of $R_t$ using a moving window of three weeks, which roughly corresponds to the generation time of dengue, and thus $n = 1$.
+We provide more detail on the estimation and confidence/credibility intervals in Text S1.
+
 \subsection*{The model}
-\subsection*{Parameter estimation using Bayesian melding}
-% Results and Discussion can be combined.
+
+A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue dynamics.
+In the traditional formulation of the model, transmission is governed by a transmission rate $\beta$ and recovery happens at a rate $\tau$.
+As the epidemic progresses, the effective transmission  rate changes and is
+\begin{equation}
+ \label{eq:effbeta}
+ \beta(t) = R_t	\cdot\tau
+\end{equation}
+
+We parameterize our model with the varying transmission using the system of ordinary differential equations
+\begin{align}
+ \frac{dS}{dt} &= -\beta(t)SI \\
+ \frac{dI}{dt} &= \beta(t)SI - \tau I&\\
+ \frac{dR}{dt} &= \tau I&
+\end{align}
+where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$. 
+This is a rather simplified model, in which, for instance, the vector is left out.
+Also, although there probably are multiple circulating serotypes, our approach does not discriminate between them.
+
+\subsection*{Bayesian parameter estimation}
+For the fitting procedure the time series were normalized to lie on the $[0,1]$ interval, therefore avoiding scaling issues.
+% Results and Discussion can be combined.xx
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
