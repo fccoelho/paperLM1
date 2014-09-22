@@ -15,6 +15,9 @@ import Gnuplot
 from scipy.stats import gaussian_kde
 import datetime
 import matplotlib.collections as collections
+import seaborn as sns
+import pandas as pd
+from sqlalchemy import create_engine
 
 from BIP.Bayes.PlotMeld import violin_plot, pred_new_cases, peakdet, plot_par_violin
 
@@ -34,7 +37,20 @@ def _read_results(nam):
         pt.append(a)
         series.append(b)
         predseries.append(pred)
+
     return pt, series, predseries, obs, nf
+
+def read_data(dbname):
+    """
+    Returns dataframes from tables of the sqlite database
+    :param dbname: sqlite3 database name
+    :return: list of pandas dataframes
+    """
+    eng = create_engine('sqlite:///{}.sqlite'.format(dbname))
+    df_data = pd.read_sql_table('data', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_pt = pd.read_sql_table('post_theta', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_series = pd.read_sql_table('series', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    return df_data, df_pt, df_series
 
 
 def create_tex_table(nms):
@@ -81,16 +97,16 @@ def plot_series2(tim, obs, series, names=[], title='Simulated vs Observed series
     else:
         lag = int(lag) * wl
     for i, n in enumerate(names):
-        ax = P.gca()  #fig.add_subplot(len(names), 1, i+1)
-        #~ if isinstance(tim[0], datetime.date):
-        #~ ax.xaxis_date()
+        fig = P.figure()
+        ax = P.gca()
         co = c.next()
         labs = ['Influenzanet', 'EISN']
         if n in obs:
-            #print obs[n].shape
-            for i in range(obs[n].shape[1]):
-                ax.plot(tim, obs[n][:len(tim), i], c.next() + s.next(), alpha=0.7, label=labs[i])
-                #print len(tim),  ls
+            if len(obs[n].shape) > 1:
+                for i in range(obs[n].shape[1]):
+                    ax.plot(tim, obs[n][:len(tim), i], c.next() + s.next(), alpha=0.7, label=labs[i])#print len(tim),  ls
+            else:
+                ax.plot(tim, obs[n][:len(tim)], c.next() + s.next(), alpha=0.7, label=n+"_obs")
         ax.plot(array(tim) + lag, median(ser2[n], axis=0), 'k-', label=n)
         lower = [stats.scoreatpercentile(t, 2.5) for t in ser2[n].T]
         upper = [stats.scoreatpercentile(t, 97.5) for t in ser2[n].T]
@@ -154,7 +170,7 @@ def multiplot():
         P.setp(ax2.get_yticklabels(), fontsize=8)
 
 
-def series(nam='be-multiyear'):
+def series(nam='Dengue_S0'):
     fig = P.figure()
     pt, series, predseries, obs, weeks = _read_results(nam)
     wl = len(array(obs['time'])) / weeks
@@ -164,34 +180,29 @@ def series(nam='be-multiyear'):
     ax.set_ylabel('Weekly Incidence')
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b-%d,`%y"))
     t = array(obs['time'])
-    plot_series2(t, obs, series, names=['I'], title=nam)
+    plot_series2(t, obs, series, names=['S', 'I'], title=nam)
     P.setp(ax.get_xticklabels(), rotation=30, fontsize=8)
     P.setp(ax.get_yticklabels(), fontsize=8)
-    # shading summer months
-    #~ shaded= array([i.month>6 and i.month<8 for i in t])
-    #~ print t.shape,shaded.shape,shaded
-    #~ ax.fill_betweenx(t,shaded, where=shaded,facecolor='gray')
 
-    fig2 = P.figure()
     pnames = pt[0].dtype.names
-    labs = [r'$\alpha_{04}$', r'$\alpha_{05}$', r'$\alpha_{06}$', r'$\alpha_{07}$', r'$\alpha_{08}$', r'$\alpha_{09}$',
-            r'$\alpha_{10}$',
-            r'$S_{0,04}$', r'$S_{0,05}$', r'$S_{0,06}$', r'$S_{0,07}$', r'$S_{0,08}$', r'$S_{0,09}$', r'$S_{0,10}$',
-            r'$r_e$', r'$m$']
-    #print len (labs), len(pnames) 
-    for i, n in zip(range(1, 17), pnames):
-        ax2 = fig2.add_subplot(4, 4, i)
-        #~ ax2.grid()
-        P.hist(pt[0][n])
-        P.xlabel(labs[i - 1])
-        #P.ylabel(str(var(pt[0][n])))
-        P.setp(ax2.get_xticklabels(), fontsize=8)
-        P.setp(ax2.get_yticklabels(), fontsize=8)
-        ax2.xaxis.set_major_formatter(FormatStrFormatter('%g'))
-        #print P.setp(ax2)
+
+    #print len (labs), len(pnames)
+    b, g, r, p = sns.color_palette("muted", 4)
+    fig2, ax2 = P.subplots(1, 3)
+    sns.despine(left=True)
+    for i, n in enumerate(pnames):
+        sns.distplot(pt[0][n], kde=False, norm_hist=True, color=p, ax=ax2[i])
+        P.xlabel(n)
 
 
-font_manager.FontProperties().set_size('x-small')
-# ~ series('be-multiyear')
-#~ P.show()
-print create_tex_table(['be-multiyear', 'nl-multiyear', 'pt-multiyear'])
+if __name__ == "__main__":
+    sns.set(style="darkgrid", palette="Set2")
+    font_manager.FontProperties().set_size('x-small')
+    series('Dengue_S0')
+    # data, theta, srs = read_data('Dengue_S0')
+
+    # sns.tsplot(series.S, time=series.time)
+
+    # series.groupby(level='time').plot()
+    P.show()
+    # print create_tex_table(['be-multiyear', 'nl-multiyear', 'pt-multiyear'])

@@ -247,8 +247,8 @@ if __name__ == "__main__":
     tpars = [(9, 1), (9, 1), (9, 1)]
     tlims = [(0, 1), (0, 1), (0, 1)]
 
-    F = FitModel(2000, model, inits, tf, tnames, pnames,
-                 wl, nw, verbose=1, burnin=200, constraints=[])
+    F = FitModel(10000, model, inits, tf, tnames, pnames,
+                 wl, nw, verbose=1, burnin=2000, constraints=[])
     F.set_priors(tdists=nt * [st.beta],
                  tpars=tpars,
                  tlims=tlims,
@@ -257,4 +257,4 @@ if __name__ == "__main__":
     F.run(dt, 'DREAM', likvar=1e-7, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I'])
     #~ print F.AIC, F.BIC, F.DIC
     #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
-    F.plot_results(['I'], dbname=modname, savefigs=1)
+    F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
