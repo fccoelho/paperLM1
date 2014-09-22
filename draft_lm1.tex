@@ -83,6 +83,7 @@
 \usepackage{lineno}
 % ligatures disabled
 \usepackage{microtype}
+\usepackage{todonotes}
 \DisableLigatures[f]{encoding = *, family = * }
 % rotating package for sideways tables
 %\usepackage{rotating}
@@ -132,7 +133,8 @@
 Flavio Code\c{c}o Coelho$^{1\ast}$, 
 Luiz Max de Carvalho$^{2}$, 
 \\
-\bf{1} Escola de Matem\'atica Aplicada , Funda\c{c}\~ao Get\'ulio Varga (FGV), Rio de Janeiro -- RJ, Brazil.
+\bf{1} Escola de Matem\'atica Aplicada , Funda\c{c}\~ao Getulio Vargas (FGV), 
+Rio de Janeiro -- RJ, Brazil.
 \\
 \bf{2} Programa de Computa\c{c}\~ao Cient\'ifica (PROCC), Funda\c{c}\~ao Oswaldo Cruz, Rio de Janeiro -- RJ, Brazil.
 \\
@@ -148,10 +150,53 @@ Our paper is just awesome.
 \section*{Author Summary}
 
 \section*{Introduction}
-% You may title this section "Methods" or "Models". 
-% "Models" is not a valid title for PLoS ONE authors. However, PLoS ONE
-% authors may use "Analysis" 
+When modeling infecctious disease spread using dynamic models, the initial 
+conditions of the system, although key to match the simulated dynamics to 
+observed data, are frequently overlooked. If the model is about a disease 
+invading a new population one can simply assume the vast majority of the 
+population to be susceptible. However for a disease which is well in its way to 
+endemicity but not yet stable, it can be very hard to determine the 
+immunological structure of the population without resorting to expensive large 
+scale prevalence tests.
+
+In the particular case of Dengue fever in Brasil, with four circulating 
+serotypes, it can be very challenging to parameterize a simulation starting at 
+any time other than when the date the disease was reintroduced in the country 
+in the late 1980s. For SIR-like models, the relevant initial values are the 
+number of infectious and susceptible  individuals. The number of infectious 
+individuals are less challenging to determine, because the get very small 
+during the winters and can be derived from incidence data  with is monitored 
+continuously. The real challenge is to determine the number of susceptibles to 
+a particular strain right at the beginning of the dengue season.
+
+Multiple factors contribute to the dificulty in estimating the number of 
+susceptibles in the population, first and foremost is the fact that dengue 
+confers permanente immunity within serotypes but with only short-lived 
+cross-immunity. Secondly, there are a larger number of asymptomatic cases in 
+any epidemic, which nevertheless acquire immunity. Lastly Demography and 
+migrations affect the number of susceptible in ways which are not easy to 
+determine.
+
+The initial number of susceptibles -- $S_0$ -- is a a very powerful parameter 
+with the regards to epidemic risk. Its value affects directly the local $R_0$, 
+thus being intrumental in predicting epidemics, but it also affects the speed 
+and size of the epidemic.
+
+In this paper, we estimate the initial number of susceptibles right before 
+every epidemic in the last 18 years. For this we use a simplified model of 
+dengue transmission in which the vector is left out. We also model the mix of 
+circulating serotypes without discriminating between them. We then fit the 
+model output to observed data to estimate the $S_0$ before every 
+recorded epidemic in the Brazilian city of Rio de Janeiro. Rio de Janeiro has 
+bee through many Dengue epidemics of various serotypes and sizes.
+
 \section*{Methods}
+\subsection*{The data}
+The Data used to fit the model consists of weekly incidence from 1996 to 2014 
+in the city of Rio de Janeiro, Brazil. From this data, we calculated series 
+effective reproduction number, $R_t$, time series using the method described by 
+Nishiura et al.\cite{nishiura}.\todo[inline]{Add here more information about 
+the calculation of Rt such as generation time used, moving windows, etc}
 \subsection*{The model}
 \subsection*{Parameter estimation using Bayesian melding}
 % Results and Discussion can be combined.
@@ -162,7 +207,7 @@ Our paper is just awesome.
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the estimation of $R(t)$.
-\section*{References}
+
 \bibliography{lm1}
 \section*{Figure Legends}
 % This section is for figure legends only, do not include
