@@ -15,6 +15,7 @@ from collections import defaultdict
 import datetime
 import sys
 import pandas as pd
+from numba import jit
 
 
 beta = 1.0  # Transmission coefficient
@@ -23,7 +24,7 @@ b0 = 1.5  # low beta during winters
 eta = .0  # infectivity of asymptomatic infections relative to clinical ones. FIXED
 epsilon = 2.8  # latency rate
 mu = 0  # nat/mortality rate
-
+m = 1e-6 # influx of cases
 tau = 1  # recovery rate. FIXED
 
 N = 1  # Population of Rio
@@ -35,12 +36,13 @@ N = 1  # Population of Rio
 # Initial conditions
 inits = np.array([1, 0.001, 0.0])  # initial values for state variables.
 
+
 def model(theta):
     # setting parameters
     s0, s1, s2, s3, s4, s5, s6, s7, s8, s9 = theta
     Ss = {0: s0, 1: s1, 2: s2, 3: s3, 4: s4, 5: s5, 6: s6, 7: s7, 8: s8, 9: s9}  # Multiple Ss map
 
-    # ~ b1=19.9
+    @jit
     def sir(y, t):
         '''ODE model'''
         S, I, R = y
@@ -49,12 +51,20 @@ def model(theta):
 
         #~ if (calc_R0s()<1.1).any():
         #~ print "flat"
-        lamb = (beta * I * S)
-        return [-lamb,  #dS/dt
+        lamb = (beta * (I+m) * S)
+        
+        return np.array([-lamb,  #dS/dt
                 lamb - tau * I,  #dI/dt
                 tau * I,  #dR/dt
-        ]
-
+        ])
+    @jit
+    def jac(y,t):
+        S, I, R = y
+        beta = 0 if t > 728 else iRt(t) * tau
+        return np.array([[-(I + m)*beta, -S*beta, 0],
+               [(I + m)*beta, S*beta - tau, 0],
+               [0, tau, 0]])
+               
     Y = np.zeros((wl, 3))
     # Initial conditions
 
@@ -68,7 +78,7 @@ def model(theta):
             inits[1] = dt['I'][t0-1] if N-Ss[i] > dt['I'][t0-1] else N-Ss[i]
         inits[0] = Ss[i];  # Define S0
         inits[-1] = N - sum(inits[:2])  # Define R(0)
-        Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1))  #,tcrit=tcrit)
+        Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), Dfun=jac)  #,tcrit=tcrit)
         #inits = Y[-1, :]
 
     return Y
@@ -115,35 +125,23 @@ def prepdata(fname, sday=0, eday=None, mao=7):
         prev = rawprev
     # sw = np.ones(6, dtype=float) / 6  #smoothing window
     # rt_smooth = np.convolve(data.Rt2, sw, 'same')
-
-    d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': data.Rt2}
+    Rt = fix_rt(data.Rt)
+    d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': Rt}
     return d
 
-# TODO: Fix this based on the actual dates
-def beta_step(timeline):
+@np.vectorize
+def fix_rt(rt):
     """
-    Returns the date ranges where beta should be high, i.e., during summers.
+    Replace both NANs and INFs by zero
+    :param rt: reproductive number, scalar
+    :return: fixed rt
     """
-    bstep = np.zeros(len(timeline) + 200)
-    for i, d in enumerate(timeline):
-        if d.year == 2009:  # In 2009 h1n1 started in the summer
-            if d.month != 6:
-                bstep[i] = 1
-        else:
-            if d.month < 7 or d.month > 8:
-                bstep[i] = 1
-    return np.array(bstep)
-
-
-def s_index(bstep):
-    si = np.zeros(len(bstep))
-    s = 0
-    for i, b in enumerate(bstep):
-        if i == 0: continue
-        if b and not bstep[i - 1]:
-            s += b
-            si[i] = s
-    return si
+    if np.isnan(rt):
+        return 0
+    elif np.isinf(rt):
+        return 0
+    else:
+        return rt
 
 # # running the analysys
 if __name__ == "__main__":
@@ -151,9 +149,9 @@ if __name__ == "__main__":
     modname = "Dengue_S0_big"
     # print dt['I'][:,1]
 
-    bstep = beta_step(dt['time'])
+
     #~ ycode = year_code(dt['time'])
-    sindex = s_index(bstep)
+
     tcrit = [i for i in xrange(len(dt['time'])) if i]
     # Defining start and end of the simulations
     t0s = [0,  # Start of the 1996 epidemic
@@ -164,16 +162,27 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2001, 9, 10)),  # Start of the 2002 epidemic
            dt['time'].index(datetime.datetime(2005, 8, 15)),  # Start of the 2006 epidemic
            dt['time'].index(datetime.datetime(2006, 9, 25)),  # Start of the 2007 epidemic
-           dt['time'].index(datetime.datetime(2007, 8, 20)),  # Start of the 2008 epidemic
+           dt['time'].index(datetime.datetime(2007, 8, 27)),  # Start of the 2008 epidemic
            dt['time'].index(datetime.datetime(2008, 9, 1)),  # Start of the 2009 epidemic
     ]
     tfs = t0s[1:] + [len(dt['time'])]
+    tfs = [ dt['time'].index(datetime.datetime(1996, 7, 29)),  # end of the 1996 epidemic
+            dt['time'].index(datetime.datetime(1998, 10, 12)),  # end of the 1998 epidemic
+            dt['time'].index(datetime.datetime(1999, 8, 23)),  # end of the 1999 epidemic
+            dt['time'].index(datetime.datetime(2000, 10, 2)),  # end of the 2000 epidemic
+            dt['time'].index(datetime.datetime(2001, 9, 10)),  # end of the 2001 epidemic
+            dt['time'].index(datetime.datetime(2002, 9, 2)),  # end of the 2002 epidemic
+            dt['time'].index(datetime.datetime(2006, 7, 31)),  # end of the 2006 epidemic
+            dt['time'].index(datetime.datetime(2007, 8, 27)),  # end of the 2007 epidemic
+            dt['time'].index(datetime.datetime(2008, 9, 1)),  # end of the 2008 epidemic
+            725,  # end of the 2009 epidemic
+    ]
     print tfs
     # Interpolated Rt
-    iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='cubic', bounds_error=False, fill_value=0)
+    iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
 
-    P.plot(dt['Rt'],'-*')
-    P.plot(np.arange(0,728,.2),[iRt(t) for t in np.arange(0, 728, .2)])
+    P.plot(dt['Rt'],'*')
+    P.plot(np.arange(0, 728, .2), [iRt(t) for t in np.arange(0, 728, .2)])
     #print type(dt['Rt'])
     #print [iRt(t) for t in np.arange(0, 728, .2)]
 
@@ -210,17 +219,17 @@ if __name__ == "__main__":
     P.legend([pnames[1]])
     P.show()
     #Priors and limits for all countries
-    tpars = [(2, 1)] * nt
+    tpars = [(2,1)]*nt#[(1, 2),(1, 2),(1, 2),(1, 2),(1, 2), (2, 1),(1, 2),(1, 2), (2, 1), (1, 2),]
     tlims = [(0, 1)] * nt
 
-    F = FitModel(5000, model, inits, tf, tnames, pnames,
-                 wl, nw, verbose=1, burnin=2000, constraints=[])
+    F = FitModel(1000, model, inits, tf, tnames, pnames,
+                 wl, nw, verbose=1, burnin=200, constraints=[])
     F.set_priors(tdists=nt * [st.beta],
                  tpars=tpars,
                  tlims=tlims,
                  pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-    F.run(dt, 'DREAM', likvar=1e-6, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I', 'S'])
+    F.run(dt, 'DREAM', likvar=9e-6, pool=False, ew=0, adjinits=False, dbname=modname, monitor=['I', 'S'])
     #~ print F.AIC, F.BIC, F.DIC
     #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
     F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
