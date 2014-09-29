@@ -180,7 +180,7 @@ susceptibles in the population, first and foremost is the fact that dengue
 confers permanente immunity within serotypes but with only short-lived 
 cross-immunity. Secondly, there are a larger number of asymptomatic cases in 
 any epidemic, which nevertheless acquire immunity, Thirdly, under-reporting is 
-a serious issue in Brazil. Duarte and Franca\cite{duarte_data_2006}, estimated 
+a serious issue in Brazil. Duarte and Fran\c{c}a\cite{duarte_data_2006}, estimated 
 the sensitivity of dengue reporting in Belo-Horizonte, Brazil to be of 63\%, 
 meaning that aproximately 37\% of the cases go unreported. Lastly, demography 
 and migrations affect the number of susceptible in ways which are not easy to
@@ -225,47 +225,104 @@ influenza seasons in europe\cite{pone2011}.
 
 
 \section*{Methods}
+
 \subsection*{The data}
 
 The data used to fit the model consists of weekly incidence from 1996 to 2014 
 in the city of Rio de Janeiro, Brazil.
-From this series, we calculated the effective reproduction number, $R_t$, according to the expression given by Nishiura et al.~\cite{nishiura}.
-The method assumes the disease counts $Y(t)$ are Poisson random variables such that $R_t$ is 
+From this series, we calculated the effective reproduction number, $R_t$, 
+according to the expression given by Nishiura et al.~\cite{nishiura}.
+The method assumes the disease counts $Y(t)$ are Poisson random variables such 
+that $R_t$ is 
 \[ R_t = \left(\frac{Y(t + 1)}{Y(t)}\right)^{1/n}\]
-where $n$ is the ratio between the length of reporting interval and the mean generation time of the disease.
-In this paper we obtain the estimates of $R_t$ using a moving window of three weeks, which roughly corresponds to the generation time of dengue, and thus $n = 1$.
-We provide more detail on the estimation and confidence/credibility intervals in Text S1.
+where $n$ is the ratio between the length of reporting interval and the mean 
+generation time of the disease.
+Here we obtain the estimates of $R_t$ using a moving window of three weeks, 
+which roughly corresponds to the generation time of dengue, and thus $n = 1$.
+
+We provide more detail on drawing posterior inference for $R_t$ in Text S1.
 
 \subsection*{The model}
 
 A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue dynamics.
-In the traditional formulation of the model, transmission is governed by a transmission rate $\beta$ and recovery happens at a rate $\tau$.
+In the traditional formulation of the model, transmission is governed by a 
+transmission rate $\beta$ and recovery happens at a rate $\tau$.
+
 As the epidemic progresses, the effective transmission  rate changes and is
-\begin{equation}
+\begin{equation} 
  \label{eq:effbeta}
- \beta(t) = R_t	\cdot\tau
+ \beta(t) = \frac{R_t\cdot\tau}{S_0}
 \end{equation}
 
-We parameterize our model with the varying transmission using the system of ordinary differential equations
+We parameterize our model with the varying transmission using the system of 
+ordinary differential equations
 \begin{align}
  \frac{dS}{dt} &= -\beta(t)SI \\
  \frac{dI}{dt} &= \beta(t)SI - \tau I&\\
  \frac{dR}{dt} &= \tau I&
 \end{align}
 where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$. 
-This is a rather simplified model, in which, for instance, the vector is left out.
-Also, although there probably are multiple circulating serotypes, our approach does not discriminate between them.
+This is a rather simplified model, in which, for instance, the vector is left 
+out.
+Also, although there probably are multiple circulating serotypes, our approach
+does not discriminate between them.
+
 
 \subsection*{Bayesian parameter estimation}
-For the fitting procedure the time series were normalized to lie on the $[0,1]$ interval, therefore avoiding scaling issues.
-% Results and Discussion can be combined.xx
+
+For the fitting procedure the time series were divided into epidemic windows 
+that corresponded to significant raises in incidence and normalized to lie on 
+the $[0,1]$ interval.
+
+Also, as the numerical integration routine needs $\beta(t)$ to be continuous, we 
+used linear interpolation to obtain values of $R_t$ for any time point.
+
+We take a Bayesian approach to the estimation of $S_0$ for each window.
+For a given interval $j = \{ t_j^{\text{start}}, t_j^{\text{end}} \} $ we 
+observe an incidence time series $\mathbf{Y_{j}}$.
+We are thus interested in the posterior distribution
+\begin{equation}
+ \label{eq:S0post}
+ p(S_{0j}|\mathbf{Y_{j}}) \propto l(\mathbf{Y_{j}}|S_{0j}, R_t, m,  \tau 
+)\pi(S_{0j}) 
+\end{equation}
+The likelihood $l(\mathbf{Y_{j}}|\cdot)$ is assumed to be a Normal distribution 
+with fixed variance $\sigma^2$.
+In this estimation procedure we kept $R_t$ fixed at fixed at the posterior mean 
+obtained as described in TextS1 and fixed $\tau = 1/7\: \text{days}^{-1}$.
+% \subsubsection*{Priors}
+To complete the inference, we need to specify prior distributions for the 
+parameters of interest.
+We place a flat $\text{Beta}(1, 1)$ prior on $S_{0j}\:\forall j$
+% 
+% \begin{align}
+%  S_{0j} &\sim Beta(1, 1) \\
+%        m &\sim \\
+% \end{align}
+
+
+% \subsubsection*{Posterior approximation}
+
+To approximate the posterior in~(\ref{eq:S0post}) we use Markov chain Monte 
+Carlo techiniques implemented in the Bayesian inference with Python 
+(BIP)~\cite{pone2011} available at 
+\url{http://code.google.com/p/bayesian-inference/}.
+BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\cite{vrugt2008} 
+scheme that efficiently samples from high-dimensional joint distributions using 
+multiple adaptive chains running in parallel with delayed rejection.
+The chains were run until $5000$ samples were obtained after discarding $500$ 
+burn-in samples.
+Convergence of the parallel chains was verified at every 100 iterations by the 
+calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
+% Results and Discussion can be combined.
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
 \section*{Discussion}
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
-LMC is grateful to Dr. Leonardo Bastos for useful discussions on the estimation of $R(t)$.
+LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
+posterior inference for $R(t)$.
 
 \bibliography{lm1}
 \section*{Figure Legends}
