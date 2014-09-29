@@ -234,7 +234,11 @@ From this series, we calculated the effective reproduction number, $R_t$,
 according to the expression given by Nishiura et al.~\cite{nishiura}.
 The method assumes the disease counts $Y(t)$ are Poisson random variables such 
 that $R_t$ is 
-\[ R_t = \left(\frac{Y(t + 1)}{Y(t)}\right)^{1/n}\]
+\begin{equation}
+ \label{eq:Rt}
+ R_t = \left(\frac{Y(t + 1)}{Y(t)}\right)^{1/n}
+\end{equation}
+ 
 where $n$ is the ratio between the length of reporting interval and the mean 
 generation time of the disease.
 Here we obtain the estimates of $R_t$ using a moving window of three weeks, 
@@ -253,7 +257,7 @@ As the epidemic progresses, the effective transmission  rate changes and is
  \label{eq:effbeta}
  \beta(t) = \frac{R_t\cdot\tau}{S_0}
 \end{equation}
-
+where $R_t$ is the effective reproductive number as defined in~\ref{eq:Rt}.
 We parameterize our model with the varying transmission using the system of 
 ordinary differential equations
 \begin{align}
@@ -265,17 +269,18 @@ where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$.
 This is a rather simplified model, in which, for instance, the vector is left 
 out.
 Also, although there probably are multiple circulating serotypes, our approach
-does not discriminate between them.
+does not discriminate between them due to the lack of serotype-specific data.
 
 
 \subsection*{Bayesian parameter estimation}
 
-For the fitting procedure the time series were divided into epidemic windows 
-that corresponded to significant raises in incidence and normalized to lie on 
-the $[0,1]$ interval.
+For the fitting procedure the time series was divided into $J=10$ epidemic 
+windows that corresponded to significant raises in incidence and normalized to 
+lie on the $[0,1]$ interval.
 
-Also, as the numerical integration routine needs $\beta(t)$ to be continuous, we 
-used linear interpolation to obtain values of $R_t$ for any time point.
+Also, as the numerical integration routine needs to treat $\beta(t)$ as a
+continuous function of time because of the variable step size, we used linear 
+interpolation to obtain values of $R_t$ for any time point.
 
 We take a Bayesian approach to the estimation of $S_0$ for each window.
 For a given interval $j = \{ t_j^{\text{start}}, t_j^{\text{end}} \} $ we 
@@ -310,6 +315,7 @@ Carlo techiniques implemented in the Bayesian inference with Python
 BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\cite{vrugt2008} 
 scheme that efficiently samples from high-dimensional joint distributions using 
 multiple adaptive chains running in parallel with delayed rejection.
+In this study we used one chain per parameter, i.e, 3 chains for each run.
 The chains were run until $5000$ samples were obtained after discarding $500$ 
 burn-in samples.
 Convergence of the parallel chains was verified at every 100 iterations by the 
