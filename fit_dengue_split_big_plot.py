@@ -217,6 +217,7 @@ def plot_concat_series(dbs):
         s_lwr = srs.S.groupby(level='time').aggregate(lwr)
         # P.legend(loc=0)
         P.fill_between(s_median.index, s_lwr, s_upr, facecolor=co, alpha=.2)
+    P.savefig('concat.svg')
 
 
 
