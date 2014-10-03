@@ -18,27 +18,11 @@ import matplotlib.collections as collections
 import seaborn as sns
 import pandas as pd
 from sqlalchemy import create_engine
+from collections import OrderedDict
 
 from BIP.Bayes.PlotMeld import violin_plot, pred_new_cases, peakdet, plot_par_violin
 
 
-def _read_results(nam):
-    """
-    read results from disk
-    """
-    pt, series, predseries = [], [], []
-    nf = len(glob.glob('%s*.pickle' % nam))
-    for w in range(nf):
-        fn = "%s_%s.pickle" % (nam, w)
-        print fn
-        with open(fn, 'r') as f:
-            a, b, obs, pred, samples = CP.load(f)
-        # f.close()
-        pt.append(a)
-        series.append(b)
-        predseries.append(pred)
-
-    return pt, series, predseries, obs, nf
 
 def read_data(dbname):
     """
@@ -53,16 +37,26 @@ def read_data(dbname):
     return df_data, df_pt, df_series
 
 
-def create_tex_table(nms):
-    pts = {}
-    for nm in nms:
-        pt, series, predseries, obs, weeks = _read_results(nm)
-        pts[nm.split("-")[0]] = pt
+def create_tex_table(dbs):
+    """
+    Create Latex table with the ratios of susceptibles per year
+    :return:
+    """
+    pts = OrderedDict()
+    series = OrderedDict()
+    obs = OrderedDict()
+    for db in dbs:
+        y = db.split('_')[0][-4:]
+        data, theta, srs = read_data(db)
+        series[y] = srs
+        obs[y] = data
+        pts[y] = theta
+
     head = r"""\begin{center}
-            \begin{tabular}{c|c c c}
+            \begin{tabular}{c|c}
             \hline
             """
-    head += r"""Name & Belgium & Netherlands & Portugal\\
+    head += r"""Year & Ratio \\
             \hline
             """
     bot = r"""
@@ -72,10 +66,13 @@ def create_tex_table(nms):
         """
     body = r""
     st = []
-    for n in pts['be'][0].dtype.names:
-        body += n + r" & %1.3G, " % mean(pts['be'][0][n]) + "%1.3G " % var(pts['be'][0][n]) + \
-                r" & %1.3G, " % mean(pts['nl'][0][n]) + "%1.3G " % var(pts['nl'][0][n]) + \
-                r" & %1.3G, " % mean(pts['pt'][0][n]) + r"%1.3G \\" % var(pts['pt'][0][n])
+    for i, Y in enumerate(series.keys()):
+        if Y == '1996':
+            continue
+        last_week_of_last_epi = series.values()[i-1].index[-1]
+        first_week = series.values()[i].index[0]
+        ratio = series[Y].S.ix[first_week] / series.values()[i-1].S.ix[last_week_of_last_epi]
+        body += Y + r" & {}\pm{}".format(mean(ratio), std(ratio))
 
     return head + body + bot
 
@@ -205,7 +202,7 @@ def series(nam='Dengue_S0'):
 
 def plot_concat_series(dbs):
     """
-
+    Plot concatenated time series for susceptibles and infectious
     :param dbs:
     """
     series = []
@@ -240,10 +237,6 @@ def plot_concat_series(dbs):
     P.savefig('concat_SI.svg')
 
 
-
-
-
-
 def plot_pt_corr(df):
     """
     plot the correlation matrix of the posteriors of the parameters
@@ -262,7 +255,8 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("DengueS*.sqlite")
-    plot_concat_series(dbs)
+    #plot_concat_series(dbs)
+    print create_tex_table(dbs)
 
 
     # sns.tsplot(series.S, time=series.time)
