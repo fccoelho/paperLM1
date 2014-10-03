@@ -47,9 +47,9 @@ def read_data(dbname):
     :return: list of pandas dataframes
     """
     eng = create_engine('sqlite:///{}'.format(dbname))
-    df_data = pd.read_sql_table('data', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
-    df_pt = pd.read_sql_table('post_theta', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
-    df_series = pd.read_sql_table('series', eng, index_col=['pk', 'time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_data = pd.read_sql_table('data', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_pt = pd.read_sql_table('post_theta', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_series = pd.read_sql_table('series', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
     return df_data, df_pt, df_series
 
 
@@ -204,20 +204,42 @@ def series(nam='Dengue_S0'):
         #print P.setp(ax2)
 
 def plot_concat_series(dbs):
+    """
 
+    :param dbs:
+    """
+    series = []
+    obs = []
+    for db in dbs:
+        data, theta, srs = read_data(db)
+        series.append(srs)
+        obs.append(data)
     upr = lambda x: stats.scoreatpercentile(x, 97.5)
     lwr = lambda x: stats.scoreatpercentile(x, 2.5)
     c = cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k'])
-    for db in dbs:
+    ax1 = P.subplot(211)
+    for srs in series:
         co = c.next()
-        data, theta, srs = read_data(db)
         s_median = srs.S.groupby(level='time').median()
         s_median.plot(style='k-', label='Median')
         s_upr = srs.S.groupby(level='time').aggregate(upr)
         s_lwr = srs.S.groupby(level='time').aggregate(lwr)
         # P.legend(loc=0)
         P.fill_between(s_median.index, s_lwr, s_upr, facecolor=co, alpha=.2)
-    P.savefig('concat.svg')
+
+    ax2 = P.subplot(212, sharex=ax1)
+    for srs, da in zip(series, obs):
+        co = c.next()
+        i_median = srs.I.groupby(level='time').median()
+        i_median.plot(style='k-', label='Median')
+        da.I.groupby(level='time').plot(style='r*', label='cases', alpha=.5)
+        i_upr = srs.I.groupby(level='time').aggregate(upr)
+        i_lwr = srs.I.groupby(level='time').aggregate(lwr)
+        P.fill_between(i_median.index, i_lwr, i_upr, facecolor=co, alpha=.2)
+    P.tight_layout()
+    P.savefig('concat_SI.svg')
+
+
 
 
 
