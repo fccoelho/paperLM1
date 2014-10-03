@@ -72,7 +72,7 @@ def create_tex_table(dbs):
         last_week_of_last_epi = series.values()[i-1].index[-1]
         first_week = series.values()[i].index[0]
         ratio = array(series[Y].S.ix[first_week]) / array(series.values()[i-1].S.ix[last_week_of_last_epi])
-        body += Y + r" & {}({}-{})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
+        body += Y + r" & {:.2%}({:.2%}-{:.2%})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
         body += "\n"
 
     return head + body + bot
