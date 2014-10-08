@@ -363,11 +363,23 @@ distribution, $PoisBin(p_i,n)$, where
  P(S_T=k) = \sum \prod_i p_i \prod_i  (1-p_i)
 \end{equation}
 
-To elicit priors for the $p_i \sim Be(a,b)$, we used the proportion of 
-serotyped cases at the end of each epidemic as the expected value for the $p_i$.
+Initially, we have no information about the distribution of the $p_i$ but they 
+can be learned gradually with each epidemic.
 
 Let $S_{0T}$ and $S_{fT}$, be the total number of susceptibles before and 
-after an epidemic, respectively
+after an epidemic, respectively. The total number of cases observed in an 
+epidemic, $I_T = \sum_i I_i$ can be expressed as $S_{0T}-S_{fT}$, thus
+\begin{align}
+ S_{fT} &= S_{0T} - I_T\\
+ &=\sum S_i - \sum I_i\\
+ &=\sum_i S_i-I_i
+\end{align}
+
+If $S_i/n \approx p_i$ and $I_i$ is observed, we can adjust the initial 
+$p_i$ proportionately to $I_i$.
+\todo[inline]{sera que da para fazer inferencia bayesiana aqui?}
+
+
 
 
 % the suceptibility can be manifested, in individuals, as one of 
