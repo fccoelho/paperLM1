@@ -347,6 +347,31 @@ calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
+\subsection{Serotype proportion}
+The susceptible population estimated in this paper is defined as individuals 
+susceptible to at least one of the circulating serotypes in any given year. 
+This is due to the fact that we use case data to estimate $S_0$ prior to the 
+epidemic. In general, susceptibility to dengue may be represented by 
+4 binomially distributed random variables. Each representing the 
+fraction of susceptibles to each virus type -- $S_i \sim Bin(p_i), \, i \in  
+\{1, 2, 3, 4\}$. In the absence of 
+cross-immunity, the suceptibility can be manifested, in individuals, as one of 
+the following forms:
+\begin{equation}
+ S = \{S_{1}, S_{2}, S_{3}, 
+S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
+\end{equation}
+
+Even though we don't observe the incidences for each serotype independently, we 
+have information about the proportion of Serotypes, based on the lab confirmed 
+cases. We also know that the drop in susceptibles estimated by the model, 
+corresponds to the drop in the number of the one or more serotypes. For 
+example: in an epidemic of just DENV1, the debt of susceptibles would have to 
+be distributed between the following types: 
+$\{S_{1},S_{12},S_{123},S_{1234},S_{13},S_{14}\}$.
+
+
+
 \section*{Discussion}
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
