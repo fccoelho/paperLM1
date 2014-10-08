@@ -347,29 +347,36 @@ calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
-\subsection{Serotype proportion}
+\subsection*{Serotype proportion}
 The susceptible population estimated in this paper is defined as individuals 
 susceptible to at least one of the circulating serotypes in any given year. 
-This is due to the fact that we use case data to estimate $S_0$ prior to the 
-epidemic. In general, susceptibility to dengue may be represented by 
-4 binomially distributed random variables. Each representing the 
-fraction of susceptibles to each virus type -- $S_i \sim Bin(p_i), \, i \in  
-\{1, 2, 3, 4\}$. In the absence of 
-cross-immunity, the suceptibility can be manifested, in individuals, as one of 
-the following forms:
+Let this Total number of susceptibles be denoted by $S_T$. 
+
+Let the number of susceptibles to a given dengue virus ($DENV_i$), $S_i$ be 
+represented by a Binomial random variables $S_i \sim Bin(n, p_i)$ where $n$ is 
+population size and p is the true proportion of susceptibles to $DENV_i$ in 
+the population, with $i \in  \{1, 2, 3, 4\}$. In the absence of 
+cross-immunity, i.e., the exposure to serotypes are independent, the 
+total number of susceptibles $S_T=\sum_i S_i$  should follow a Poisson-Binomial 
+distribution, $PoisBin(p_i,n)$, where
 \begin{equation}
- S = \{S_{1}, S_{2}, S_{3}, 
-S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
+ P(S_T=k) = \sum \prod_i p_i \prod_i  (1-p_i)
 \end{equation}
 
-Even though we don't observe the incidences for each serotype independently, we 
-have information about the proportion of Serotypes, based on the lab confirmed 
-cases. We also know that the drop in susceptibles estimated by the model, 
-corresponds to the drop in the number of the one or more serotypes. For 
-example: in an epidemic of just DENV1, the debt of susceptibles would have to 
-be distributed between the following types: 
-$\{S_{1},S_{12},S_{123},S_{1234},S_{13},S_{14}\}$. \todo{this doesn't need to 
-put in explicit terms}
+To elicit priors for the $p_i \sim Be(a,b)$, we used the proportion of 
+serotyped cases at the end of each epidemic as the expected value for the $p_i$.
+
+Let $S_{0T}$ and $S_{fT}$, be the total number of susceptibles before and 
+after an epidemic, respectively
+
+
+% the suceptibility can be manifested, in individuals, as one of 
+% the following forms:
+% \begin{equation}
+%  S = \{S_{1}, S_{2}, S_{3}, 
+% S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
+% \end{equation}
+
 
 
 
