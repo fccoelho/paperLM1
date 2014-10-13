@@ -1,6 +1,6 @@
 
 \documentclass[12pt]{article}              
-\usepackage[margin=1.5cm]{geometry}
+\usepackage[margin=2.0cm]{geometry}
 \usepackage{setspace,relsize}               
 \usepackage{moreverb}                        
 \usepackage{url}
@@ -21,13 +21,14 @@
 \title{
 Supporting Information to Estimating the Initial Susceptible Fraction in Dengue Dynamics"
 }           
-\author{Flavio Code\c{c}o Coelho \\
+\author{
+Flavio Code\c{c}o Coelho \\
 \\
 \& \\
 Luiz Max de Carvalho \\
 }
 
-\date{\today}
+\date{}
 % Notation defs
 \def \rr {$R_{t}\ $}
 
@@ -38,70 +39,12 @@ Luiz Max de Carvalho \\
 %
 \maketitle
 
-In monitoring of infectious diseases, it is important to assess whether the incidence of a a particular disease is increasing significantly, in order to decide to take preventive measures.
-The effective reproductive number at time $t$, \rr, can be understood as a real-time estimate of the basic reproductive number ($R_{0}$) and is defined as the average number of secondary cases per primary case at time $t$.
-Here we derive confidence/credibility bounds for the uncertainty about the estimate of the effective reproductive number $R_t$ under the assumption that reported disease counts are Poisson distributed.
-It is shown that one can construct a conservative confidence interval for \rr using the induced probability distribution that results from the approach of \citet{mantel}.
-
-Let $Y_t$ be the number of reported disease cases for a particular time $t \in (0, T)$.
-\citet{nishiura} extend the theory developed by \citet{stallybrass} and propose to estimate \rr as
-\begin{equation}
-\label{eq:Rtestimate}
-R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
-\end{equation}
-where $n$ is taken to be the ratio between the length of reporting interval and the mean generation time of the disease.
-Here we are interested in the simpler case $n=1$.
-If \rr is to be used as a decision tool, one needs to be able to quantify the uncertainty about estimate in equation~\ref{eq:Rtestimate}. 
-Here we detail how to obtain confidence intervals for \rr, exploring two approaches under the assumption that the counts $Y_t$ are Poisson distributed for all $t$.
-
-\section*{The approach Ederer \& Mantel (1974)}
-
-\label{sec:mantel}
-First we explore the approach of \citet{mantel}, whose objective is to obtain confidence intervals for the ratio of two Poisson counts. 
-Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ and define $S = Y_{t} + Y_{t+1}$.
-The authors then proceed to note that by conditioning on the sum $S$
-\begin{align}
-\label{eq:binlike}
-Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
-\theta_t &= \frac{\lambda_{t+1}}{\lambda_{t} + \lambda_{t+1}}
-\end{align}
-Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that $Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
-Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that $Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
-\citet{mantel} show that one can construct a $100\alpha \%$ confidence interval for \rr by noting that
-\begin{align}
- R_t^{(L)} &= \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})}\\
- R_t^{(U)} &= \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}
-\end{align}
-
-Many authors have derived $c_{\alpha}(\theta_t)$ following orthodox approaches such as those of \citet{wilson} and \citet{clopper}, mainly for simplicity reasons.
-We choose instead to take a Bayesian approach and use the  $100\alpha \%$ posterior credibility interval for $\theta_t$ as $c_{\alpha}(\theta_t)$.
-If we choose the conjugate beta prior with parameters $a_0$ and $b_0$ for the binomial likelihood in (\ref{eq:binlike}), the posterior distribution for $\theta_t$ is
-\begin{equation}
-\label{eq:thetapost}
-p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
-\end{equation}
-Equation~(\ref{eq:thetapost}) tells us that the induced distribution of $R_t$ is a beta prime with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 =  Y_t + b_0$.
-The density of this induced distribution  $f_P(R_t)$ is then 
-\begin{equation}
-\label{eq:densityMantel}
-f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 - 1} (1 + R_t)^{-(a_1 + b_1)}
-\end{equation}
-Thus, the expectation of \rr under $f_P$ is $a_1/(b_1 - 1)$ and its variance is $a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
-
-Since when $R_t > 1$ indicates sustained transmission, one may be interested in computing the probability of this event.
-By noting that
-\begin{align}
-\label{cumprobMantel}
-Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
-            &= 1- Pr(\theta_t < \frac{1}{2})
-\end{align}
-one can avoid dealing with the density in~(\ref{eq:densityMantel}) directly.
-
-\subsection*{A remark on prior distributions and tail behaviour}
+\subsection*{A remark on prior distributions and tail behavior of the 
+distribution of $R_t$}
 \label{sec:tails}
 
 In order to decide which approach to take, it may be of use analysing the variance and tail behaviour of the derived distributions for \rr. 
-Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$ in Section~\ref{sec:mantel}.
+Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to the conditional distribution in (\ref{eq:densityNishiura}), thus providing more conservative confidence/credibility intervals.  
 As a side note, the Bayesian approach presented in Section~\ref{sec:mantel} will give similar results to those of \citet{wilson} and \citet{wilson} for $Y_{t+1}$ and $Y_t >> 1$.
