@@ -419,55 +419,6 @@ calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
-\subsection*{Serotype proportion}
-The susceptible population estimated in this paper is defined as individuals 
-susceptible to at least one of the circulating serotypes in any given year. 
-Let this Total number of susceptibles be denoted by $S_T$. 
-
-Let the number of susceptibles to a given dengue virus ($DENV_i$), $S_i$ be 
-represented by a Binomial random variables $S_i \sim Bin(n, p_i)$ where $n$ is 
-population size and p is the true proportion of susceptibles to $DENV_i$ in 
-the population, with $i \in  \{1, 2, 3, 4\}$. In the absence of 
-cross-immunity, i.e., the exposure to serotypes are independent, the 
-total number of susceptibles $S_T=\sum_i S_i$  should follow a Poisson-Binomial 
-distribution, $PoisBin(p_i,n)$, where
-\begin{equation}
- P(S_T=k) = \sum \prod_i p_i \prod_i  (1-p_i)
-\end{equation}
-\todo[inline]{this sum is over all types of susceptibles, I think: 
-$\{S_{1}, S_{2}, 
-S_{3},S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
-$}
-
-Initially, we have no information about the distribution of the $p_i$ but they 
-can be learned gradually with each epidemic.
-
-Let $S_{0T}$ and $S_{fT}$, be the total number of susceptibles before and 
-after an epidemic, respectively. The total number of cases observed in an 
-epidemic, $I_T = \sum_i I_i$ can be expressed as $S_{0T}-S_{fT}$, thus
-\begin{align}
- S_{fT} &= S_{0T} - I_T\\
- &=\sum S_{0i} - \sum I_i\\
- &=\sum_i S_{0i}-I_i
-\end{align}
-
-If $S_i/n \approx p_i$ and $I_i$ is observed, we can adjust the initial 
-$p_i$ according to $I_i$.
-\todo[inline]{sera que da para fazer inferencia bayesiana aqui?}
-
-
-
-
-% the suceptibility can be manifested, in individuals, as one of 
-% the following forms:
-% \begin{equation}
-%  S = \{S_{1}, S_{2}, S_{3}, 
-% S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
-% \end{equation}
-
-
-
-
 \section*{Discussion}
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
@@ -497,8 +448,6 @@ posterior inference for $R(t)$.
 
 
 
-
-
 \section*{Tables}
 % 
 % See introductory notes if you wish to include sideways tables.
@@ -515,29 +464,6 @@ posterior inference for $R(t)$.
 %\end{flushleft}
 %\label{tab:label}
 % \end{table}
-
-\begin{table}
-\caption{\bf{Table title}}
- \begin{center}
-            \begin{tabular}{c|c}
-            \hline
-            Year & Ratio \\
-            \hline
-            1997 & 204.26(67.45-706.68)\\
-1998 & 207.45 (170.45-261.63)\\
-2000 & 2300.63 (1741.30-3156.85)\\
-2001 & 317.62 (226.47-526.45)\\
-2005 & 100.28 (48.95-171.58)\\
-2006 & 198.26 (114.59-317.88)\\
-2007 & 567.78 (388.55-834.58)\\
-2008 & 7.82 (2.97-34.43)\\
-1999 & 26.70 (5.97-87.36)\\
-
-        \hline
-        \end{tabular}
-        \end{center}
-\end{table}
-
 
 \section*{Supporting Information Legends}
 %
