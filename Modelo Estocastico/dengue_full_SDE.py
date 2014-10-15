@@ -19,12 +19,12 @@ tm = genfromtxt('tmat.csv', delimiter=',', skip_header=2, usecols=range(1, 67), 
 
 N = 1000
 
-ini = [N - 4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ini = [N - 40, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 pars = (1 / 70.,  # mu
         400,  # beta
         1,  # phi
-        1 / 3.65,  # sigma
+        100,  # sigma
         1)  # gamma
 
 # Propensity functions
