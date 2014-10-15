@@ -109,6 +109,8 @@
 \renewcommand{\@biblabel}[1]{\quad#1.}
 \makeatother
 
+% Our defs 
+\def \rr {$R_{t}\ $}
 
 % Leave date blank
 \date{}
@@ -249,25 +251,94 @@ influenza seasons in europe\cite{pone2011}.
 
 \section*{Methods}
 
-\subsection*{The data}
+\subsection*{Estimating the reproductive number}
+
+In monitoring of infectious diseases, it is important to assess whether the 
+incidence of a a particular disease is increasing significantly, in order to 
+decide to take preventive measures.
+The effective reproductive number at time $t$, \rr, can be understood as a 
+real-time estimate of the basic reproductive number ($R_{0}$) and is defined as 
+the average number of secondary cases per primary case at time $t$.
+Here we derive confidence/credibility bounds for the uncertainty about the 
+estimate of the effective reproductive number $R_t$ under the assumption that 
+reported disease counts are Poisson distributed.
+It is shown that one can construct a conservative confidence interval for \rr 
+using the induced probability distribution that results from the approach of 
+\cite{mantel}.
+
+Let $Y_t$ be the number of reported disease cases for a particular time $t \in 
+(0, T)$.
+\cite{nishiura} extend the theory developed by \cite{stallybrass} and propose 
+to estimate \rr as
+\begin{equation}
+\label{eq:Rtestimate}
+R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
+\end{equation}
+where $n$ is taken to be the ratio between the length of reporting interval and 
+the mean generation time of the disease.
+Here we are interested in the simpler case $n=1$.
+If \rr is to be used as a decision tool, one needs to be able to quantify the 
+uncertainty about estimate in equation~\ref{eq:Rtestimate}. 
+Here we detail how to obtain confidence intervals for \rr, exploring two 
+approaches under the assumption that the counts $Y_t$ are Poisson distributed 
+for all $t$.
+
+First we explore the approach of \cite{mantel}, whose objective is to obtain 
+confidence intervals for the ratio of two Poisson counts. 
+Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
+and define $S = Y_{t} + Y_{t+1}$.
+The authors then proceed to note that by conditioning on the sum $S$
+\begin{align}
+\label{eq:binlike}
+Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
+\theta_t &= \frac{\lambda_{t+1}}{\lambda_{t} + \lambda_{t+1}}
+\end{align}
+Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that 
+$Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
+Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that 
+$Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
+\cite{mantel} show that one can construct a $100\alpha \%$ confidence interval 
+for \rr by noting that
+\begin{align}
+ R_t^{(L)} &= \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})}\\
+ R_t^{(U)} &= \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}
+\end{align}
+
+Many authors have derived $c_{\alpha}(\theta_t)$ following orthodox approaches 
+such as those of \cite{wilson} and \cite{clopper}, mainly for simplicity 
+reasons.
+We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
+posterior credibility interval for $\theta_t$ as $c_{\alpha}(\theta_t)$.
+If we choose the conjugate beta prior with parameters $a_0$ and $b_0$ for the 
+binomial likelihood in (\ref{eq:binlike}), the posterior distribution for 
+$\theta_t$ is
+\begin{equation}
+\label{eq:thetapost}
+p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
+\end{equation}
+Equation~(\ref{eq:thetapost}) tells us that the induced distribution of $R_t$ is 
+a beta prime with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 =  Y_t + b_0$.
+The density of this induced distribution  $f_P(R_t)$ is then 
+\begin{equation}
+\label{eq:densityMantel}
+f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 - 
+1} (1 + R_t)^{-(a_1 + b_1)}
+\end{equation}
+Thus, the expectation of \rr under $f_P$ is $a_1/(b_1 - 1)$ and its variance is 
+$a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
+
+Since when $R_t > 1$ indicates sustained transmission, one may be interested in 
+computing the probability of this event.
+By noting that
+\begin{align}
+\label{cumprobMantel}
+Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
+            &= 1- Pr(\theta_t < \frac{1}{2})
+\end{align}
+one can avoid dealing with the density in~(\ref{eq:densityMantel}) directly.
 
 The data used to fit the model consists of weekly incidence from 1996 to 2014 
 in the city of Rio de Janeiro, Brazil.
-From this series, we calculated the effective reproduction number, $R_t$, 
-according to the expression given by Nishiura et al.~\cite{nishiura}.
-The method assumes the disease counts $Y(t)$ are Poisson random variables such 
-that $R_t$ is 
-\begin{equation}
- \label{eq:Rt}
- R_t = \left(\frac{Y(t + 1)}{Y(t)}\right)^{1/n}
-\end{equation}
- 
-where $n$ is the ratio between the length of reporting interval and the mean 
-generation time of the disease.
-Here we obtain the estimates of $R_t$ using a moving window of three weeks, 
-which roughly corresponds to the generation time of dengue, and thus $n = 1$.
-
-We provide more detail on drawing posterior inference for $R_t$ in Text S1.
 
 \subsection*{The model}
 
@@ -280,7 +351,8 @@ As the epidemic progresses, the effective transmission  rate changes and is
  \label{eq:effbeta}
  \beta(t) = \frac{R_t\cdot\tau}{S_0}
 \end{equation}
-where $R_t$ is the effective reproductive number as defined in~\ref{eq:Rt}.
+where $R_t$ is the effective reproductive number as defined 
+in~\ref{eq:Rtestimate}.
 We parameterize our model with the varying transmission using the system of 
 ordinary differential equations
 \begin{align}
@@ -300,7 +372,6 @@ does not discriminate between them due to the lack of serotype-specific data.
 For the fitting procedure the time series was divided into $J=10$ epidemic 
 windows that corresponded to significant raises in incidence and normalized to 
 lie on the $[0,1]$ interval.
-
 Also, as the numerical integration routine needs to treat $\beta(t)$ as a
 continuous function of time because of the variable step size, we used linear 
 interpolation to obtain values of $R_t$ for any time point.
@@ -343,59 +414,11 @@ The chains were run until $5000$ samples were obtained after discarding $500$
 burn-in samples.
 Convergence of the parallel chains was verified at every 100 iterations by the 
 calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
+
 % Results and Discussion can be combined.
 \section*{Results}
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
-\subsection*{Serotype proportion}
-The susceptible population estimated in this paper is defined as individuals 
-susceptible to at least one of the circulating serotypes in any given year. 
-Let this Total number of susceptibles be denoted by $S_T$. 
-
-Let the number of susceptibles to a given dengue virus ($DENV_i$), $S_i$ be 
-represented by a Binomial random variables $S_i \sim Bin(n, p_i)$ where $n$ is 
-population size and p is the true proportion of susceptibles to $DENV_i$ in 
-the population, with $i \in  \{1, 2, 3, 4\}$. In the absence of 
-cross-immunity, i.e., the exposure to serotypes are independent, the 
-total number of susceptibles $S_T=\sum_i S_i$  should follow a Poisson-Binomial 
-distribution, $PoisBin(p_i,n)$, where
-\begin{equation}
- P(S_T=k) = \sum \prod_i p_i \prod_i  (1-p_i)
-\end{equation}
-\todo[inline]{this sum is over all types of susceptibles, I think: 
-$\{S_{1}, S_{2}, 
-S_{3},S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
-$}
-
-Initially, we have no information about the distribution of the $p_i$ but they 
-can be learned gradually with each epidemic.
-
-Let $S_{0T}$ and $S_{fT}$, be the total number of susceptibles before and 
-after an epidemic, respectively. The total number of cases observed in an 
-epidemic, $I_T = \sum_i I_i$ can be expressed as $S_{0T}-S_{fT}$, thus
-\begin{align}
- S_{fT} &= S_{0T} - I_T\\
- &=\sum S_{0i} - \sum I_i\\
- &=\sum_i S_{0i}-I_i
-\end{align}
-
-If $S_i/n \approx p_i$ and $I_i$ is observed, we can adjust the initial 
-$p_i$ according to $I_i$.
-\todo[inline]{sera que da para fazer inferencia bayesiana aqui?}
-
-
-
-
-% the suceptibility can be manifested, in individuals, as one of 
-% the following forms:
-% \begin{equation}
-%  S = \{S_{1}, S_{2}, S_{3}, 
-% S_{4},S_{12},S_{123},S_{1234},S_{13},S_{14},S_{23},S_{234},S_{24},S_{34}\}
-% \end{equation}
-
-
-
-
 \section*{Discussion}
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
@@ -425,8 +448,6 @@ posterior inference for $R(t)$.
 
 
 
-
-
 \section*{Tables}
 % 
 % See introductory notes if you wish to include sideways tables.
@@ -443,29 +464,6 @@ posterior inference for $R(t)$.
 %\end{flushleft}
 %\label{tab:label}
 % \end{table}
-
-\begin{table}
-\caption{\bf{Table title}}
- \begin{center}
-            \begin{tabular}{c|c}
-            \hline
-            Year & Ratio \\
-            \hline
-            1997 & 204.26(67.45-706.68)\\
-1998 & 207.45 (170.45-261.63)\\
-2000 & 2300.63 (1741.30-3156.85)\\
-2001 & 317.62 (226.47-526.45)\\
-2005 & 100.28 (48.95-171.58)\\
-2006 & 198.26 (114.59-317.88)\\
-2007 & 567.78 (388.55-834.58)\\
-2008 & 7.82 (2.97-34.43)\\
-1999 & 26.70 (5.97-87.36)\\
-
-        \hline
-        \end{tabular}
-        \end{center}
-\end{table}
-
 
 \section*{Supporting Information Legends}
 %
