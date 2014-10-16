@@ -4,6 +4,7 @@ from BIP.SDE.gillespie import Model
 import time
 from numpy import array, genfromtxt
 import pylab as P
+import numpy as np
 
 vnames = ['S', 'I1', 'I2', 'I3', 'I4', 'R1', 'R2', 'R3', 'R4', 'I11',
           'I12', 'I13', 'I14', 'I21', 'I22', 'I23', 'I24', 'I31', 'I32',
@@ -19,13 +20,13 @@ tm = genfromtxt('tmat.csv', delimiter=',', skip_header=2, usecols=range(1, 68), 
 
 N = 5000
 
-ini = [N, 150, 150, 150, 150, 150, 150, 150, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ini = [N, 150, 100, 75, 50, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-pars = (1 / 70.,  # mu
-        400,  # beta
-        1,  # phi
-        100,  # sigma
-        1.7)  # gamma
+pars = (1 / 50.,  # mu
+        0.0004,  # beta
+        1.1,  # phi
+        .1,  # sigma
+        1.1)  # gamma
 
 # Propensity functions
 def gen_prop_functs():
@@ -38,8 +39,9 @@ def gen_prop_functs():
 
     nt = tm.shape[1]
     with open('propfun.py', 'w') as f:
+        f.write("import numpy as np\n\n")
         f.write("pars = {}\nini = {}\nN = {}\n\n".format(pars, ini, N))
-        f.write("lamb = lambda i: {}*(ini[i+1] + sum(ini[9+i : 9+12+i+1 : 4])-ini[9+4*i+1])\n".format(pars[1]))
+        f.write("lamb = lambda i: {}*(ini[i+1] + sum(np.array(ini[9+i : 9+12+i+1 : 4])*{})-ini[9+4*i+1])\n".format(pars[1], pars[4]))
         # f.write(inf_code)
 
         f.write("\n#Natality\n\n")
@@ -99,14 +101,25 @@ assert len(propensity) == tm.shape[1]
 
 M = Model(vnames=vnames, rates=pars, inits=ini, tmat=tm, propensity=propensity)
 t0 = time.time()
-M.run(tmax=500, reps=1, viz=0, serial=1)
+M.run(tmax=200, reps=1, viz=0, serial=1)
 print 'total time: {} seconds'.format(time.time() - t0)
 t, series, steps, evts = M.getStats()
 ser = series.mean(axis=0)
+
+#  Calculatin prevalence by serotype
+
+p1 = ser[:, 1]+ser[:, 9:14].sum(axis=1)+ser[:, 17]+ser[:, 21]
+p2 = ser[:, 2]+ser[:, 10]+ser[:, 13:17].sum(axis=1)+ser[:, 22]
+p3 = ser[:, 3]+ser[:, 11]+ser[:, 15]+ser[:, 17:21].sum(axis=1)+ser[:, 23]
+p4 = ser[:, 4]+ser[:, 12]+ser[:, 16]+ser[:, 20]+ser[:, 21:25].sum(axis=1)
 # print evts
-P.plot(t, ser[:, 1:])
-P.legend(M.vn[1:], loc=0)
-# P.plot(t, ser[:, 0::3], 'r-.')  # S plots
+# P.plot(t, ser[:, :-1], '*-')
+# P.legend(M.vn[:-1], loc=0)
+P.plot(t, p1, 'r-.', label='DENV1')
+P.plot(t, p2, 'g-*', label='DENV2')
+P.plot(t, p3, 'b-.', label='DENV3')
+P.plot(t, p4, 'y-.', label='DENV4')
+P.legend()
 # P.plot(t, ser[:, 1::3], 'g-^')  # I plots
 # P.plot(t, ser[:, 2::3], 'b-o')  # R plots
 # P.legend(M.vn[0::3] + M.vn[1::3] + M.vn[2::3], loc=0)
