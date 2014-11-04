@@ -155,48 +155,48 @@ Our paper is just awesome.
 \section*{Introduction}
 
 Dengue is a disease which is caused by 4 different types of viruses 
-which co-circulate between the vector and human populations. immunity is 
-considered permanent after the exposure of humans to each of the viruses but 
+which co-circulate between the vector and human populations. Immunity is 
+considered permanent after the exposure of humans to each of the viruses and 
 cross immunity is considered very limited[ref].
 Thus, the proportions of viral types co-circulating at any point in time is 
 strongly dependent on previous incidence of the disease, which determines the 
 number of susceptibles for each viral type at any point in time.
 
-Dengue transmission is conditioned on temperature, due to its effects on the 
-vector reproduction.
-In places with sufficient temperature variations dengue is a summer disease 
-mainly. 
+Dengue transmission is modulated by environmental conditions, of which 
+temperature, due to its effects on the 
+vector reproduction, stands out as a strong predictor of 
+incidence\cite{honorio_temporal_2009,wu_higher_2009}.
+In places with sufficient temperature variation dengue is predominantly a 
+summer disease.
 
-Determining the viral types in circulation during an epidemic is 
-expensive, as it requires virus isolation and reverse-transcriptase-PCR. 
-Therefore only a very limited number of samples are examined on any epidemic. 
-Besides, mild cases are rarely detected let alone tested for dengue.
+The long term dynamics of dengue is also modulated by the alternation of virus 
+types in circulation Demographics also plays a role in replenishing the 
+population of susceptibles. 
 
-Dengue in Brazil is a disease which is well in its way to 
-endemicity but not yet stable, therefore co-circulation patterns have not yet 
-reached a steady state as has been demonstrated for certain countries in 
-south-east asia which have had the disease much longer.
+The Attack ratio of disease is a mesure of mobidity defined as the number of new
+cases divided byt the population at risk. For Dengue outbreaks and epidemics 
+this can be difficult to calculated due to the lack of information about the 
+population at risk. The population at risk in the case of dengue, is the number 
+of susceptibles to the circulating virus type(s) befor a given epidemic.
 
-In the particular case of Dengue fever in Brazil, with four circulating 
-serotypes, it can be very challenging to parameterize a simulation starting at 
-any time other than when the date the disease was reintroduced in the country 
-in the late 1980s and even so, without virological survey data from time to 
-time, to inform on the mixing of viruses in circulation, it is virtually 
-impossible to predict, by simulation alone, the imunological state of the 
-population at any point in the future.
+The main source of information about Dengue dynamics are the incidence 
+timeseries, which represent all the cases of Dengue reported by health 
+professionals with no discrimination of virus types. Only a very small sample 
+of the cases are ever examined to determined the virus type.
 
-For SIR-like models, the relevant initial values are the number of infectious 
-and susceptible  individuals. 
-The number of infectious individuals are less challenging to determine, because 
-the get very small during the winters and can be derived from incidence data  
-with is monitored continuously.
-The real challenge is to determine the number of susceptibles to 
-a particular strain right at the beginning of the dengue season.
+In order to calculate the attack ratio, we need to determine the number of 
+susceptibles to the circulating virus types right before the epidemic. Without 
+regular virological surveys, it is virtually impossible to determine the 
+population at risk.
 
-Multiple factors contribute to the dificulty in estimating the number of 
-susceptibles in the population, first and foremost is the fact that dengue
-confers permanent immunity within serotypes but with only short-lived 
-cross-immunity. 
+The attack ratio is also influenced by the reproductive number of the disease 
+\cite{bacaer_final_2009, katriel_attack_2012}. With Dengue, since transmission 
+is affected by environmental conditions as discussed above, the reproductive 
+number is a function of time. 
+
+%%%% Revised up to here
+
+
 Secondly, there are a larger number of asymptomatic cases in 
 any epidemic, which nevertheless acquire immunity. It is estimated that for 
 every case reported, 10-20 are not seen by health authorities (personnal 

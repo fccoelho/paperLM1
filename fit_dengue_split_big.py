@@ -38,7 +38,7 @@ inicio=0
 inits = np.array([0.999, 0.001, 0.0])  # initial values for state variables.
 
 
-@jit
+#@jit
 def sir(y, t, *pars):
     '''ODE model'''
     S, I, R = y
@@ -53,7 +53,7 @@ def sir(y, t, *pars):
             tau * I,  #dR/dt
     ])
 
-@jit
+#@jit
 def jac(y, t, *pars):
     S, I, R = y
     s0, m, tau = pars
@@ -61,7 +61,7 @@ def jac(y, t, *pars):
     return np.array([[-(I + m)*beta, -S*beta, 0],
            [(I + m)*beta, S*beta - tau, 0],
            [0, tau, 0]])
-@jit
+#@jit
 def model(theta):
     # setting parameters
     s0, m, tau = theta
@@ -177,8 +177,8 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2008, 9, 1)),  # Start of the 2009 epidemic
 
            dt['time'].index(datetime.datetime(2010, 10, 17)),  # Start of the 2011 epidemic
-           dt['time'].index(datetime.datetime(2011, 8, 29)),  # Start of the 2012 epidemic
-           dt['time'].index(datetime.datetime(2012, 11, 12)),  # Start of the 2013 epidemic
+           dt['time'].index(datetime.datetime(2011, 8, 28)),  # Start of the 2012 epidemic
+           dt['time'].index(datetime.datetime(2012, 11, 11)),  # Start of the 2013 epidemic
     ]
     tfs = t0s[1:] + [len(dt['time'])]
     tfs = [ dt['time'].index(datetime.datetime(1996, 7, 29)),  # end of the 1996 epidemic
@@ -230,8 +230,8 @@ if __name__ == "__main__":
 
 
 
-    for inicio, fim in zip(t0s, tfs)[3:4]: # Slice to force start from a different point
-        dt = prepdata('data_Rt_dengue_big.csv', inicio, fim, 1)
+    for inicio, fim in zip(t0s, tfs):#[3:4]: # Slice to force start from a different point
+        dt = prepdata('data_Rt_dengue_complete.csv', inicio, fim, 1)
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
         ano = dt['time'][0].year
@@ -253,15 +253,15 @@ if __name__ == "__main__":
         dt2 = copy.deepcopy(dt)
         #print inits
 
-        F = FitModel(10000, model, inits, fim-inicio, tnames, pnames,
-                     wl, nw, verbose=1, burnin=5000, constraints=[])
+        F = FitModel(5000, model, inits, fim-inicio, tnames, pnames,
+                     wl, nw, verbose=1, burnin=1000, constraints=[])
         F.set_priors(tdists=[st.beta, st.uniform, st.uniform],
                      tpars=tpars,
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
         
         
-        F.run(dt, 'DREAM', likvar=1e-10, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
         #~ print F.AIC, F.BIC, F.DIC
         #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
