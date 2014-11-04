@@ -42,16 +42,25 @@ Luiz Max de Carvalho \\
 \subsection*{A remark on prior distributions and tail behavior of the 
 distribution of $R_t$}
 \label{sec:tails}
-
-In order to decide which approach to take, it may be of use analysing the variance and tail behaviour of the derived distributions for \rr. 
+There are a number of approaches to deriving the distribution of \rr.
+One could for example  use the distribution in equation A6 of~\citet{nishiura} 
+or estimate \rr using the approach described in the main text~\citep{mantel}.
+In order to decide which approach to take, it may be of use analyzing the 
+variance and tail behavior of the derived distributions for \rr. 
 Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
-The beta prime (inverse beta distribution) will have heavier tails compared to the conditional distribution in (\ref{eq:densityNishiura}), thus providing more conservative confidence/credibility intervals.  
-As a side note, the Bayesian approach presented in Section~\ref{sec:mantel} will give similar results to those of \citet{wilson} and \citet{wilson} for $Y_{t+1}$ and $Y_t >> 1$.
+The beta prime (inverse beta distribution) will have heavier tails compared to 
+the conditional distribution proposed by~\citet{nishiura}, thus providing more 
+conservative confidence/credibility intervals.  
+As a side note, the Bayesian approach presented in this 
+paper will give similar results to those of 
+\citet{wilson} and \citet{wilson} for $Y_{t+1}$ and $Y_t >> 1$.
 Under the flat  uniform prior for $\theta_t$, the Bayesian posterior credibility interval is nearly indistinguishable from the confidence interval proposed by \citet{clopper} for $Y_{t+1}, Y_t > 20$.
 Note that the $Beta(1, 1)$ uniform prior for $\theta_t$ constitutes a poor prior choice mainly because the induced distribution for \rr is only well-defined for $b_0 > 2$.
 
-The main advange of the Bayesian approach is that one can devise prior distributions for $\theta_t$ taking advantage of the intuitive parametrisation and flexibility of the beta family of distributions.
+An advantage of the Bayesian approach is that one can devise prior 
+distributions for $\theta_t$ taking advantage of the intuitive parameterization 
+and flexibility of the beta family of distributions.
 Prior elicitation can also be done for \rr and the hyperparameters directly plugged into the prior for $\theta_t$. 
 One can, for example, choose a priori mean and variance for \rr and find $a_0$ and $b_0$ that satisfy those conditions.
 Let $m_0$ and $v_0$ be the prior expectation and variance for $R_t$. 
@@ -67,6 +76,11 @@ If one wants only to specify $m_0$ and a coefficient of variation $c$ \footnote{
 a_0 &= \frac{m_0^3c^2 + m_0^3 + m_0^2}{m_0^2c^2} \\
 b_0 &= \frac{2m_0^2c^2 + m^2 + m}{m_0^2c^2}
 \end{align}
+
+This approach thus makes possible to incorporate epidemiological knowledge 
+about disease biology (e.g. the magnitude of $R_0$) into the computation of \rr.
+This may prove particularly important when disease counts are low and/or close 
+to the detection threshold.
 \newpage
 \bibliography{lm1}
 \end{document}
