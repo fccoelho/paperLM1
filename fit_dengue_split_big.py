@@ -38,7 +38,7 @@ inicio=0
 inits = np.array([0.999, 0.001, 0.0])  # initial values for state variables.
 
 
-#@jit#('f8[:](f8[:],f8,f8,f8)')
+@jit
 def sir(y, t, *pars):
     '''ODE model'''
     S, I, R = y
@@ -53,7 +53,7 @@ def sir(y, t, *pars):
             tau * I,  #dR/dt
     ])
 
-#@jit#('f8[:,:](f8[:],f8,f8,f8)')
+@jit
 def jac(y, t, *pars):
     S, I, R = y
     s0, m, tau = pars
@@ -61,7 +61,7 @@ def jac(y, t, *pars):
     return np.array([[-(I + m)*beta, -S*beta, 0],
            [(I + m)*beta, S*beta - tau, 0],
            [0, tau, 0]])
-
+@jit
 def model(theta):
     # setting parameters
     s0, m, tau = theta
@@ -160,7 +160,8 @@ def fix_rt(rt):
 
 # # running the analysys
 if __name__ == "__main__":
-    dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
+    # dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
+    dt = prepdata('data_Rt_dengue_complete.csv', 0, 971, 1)
 
     
     # Defining start and end of the simulations
@@ -174,6 +175,10 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2006, 9, 25)),  # Start of the 2007 epidemic
            dt['time'].index(datetime.datetime(2007, 8, 27)),  # Start of the 2008 epidemic
            dt['time'].index(datetime.datetime(2008, 9, 1)),  # Start of the 2009 epidemic
+
+           dt['time'].index(datetime.datetime(2010, 10, 17)),  # Start of the 2011 epidemic
+           dt['time'].index(datetime.datetime(2011, 8, 29)),  # Start of the 2012 epidemic
+           dt['time'].index(datetime.datetime(2012, 11, 12)),  # Start of the 2013 epidemic
     ]
     tfs = t0s[1:] + [len(dt['time'])]
     tfs = [ dt['time'].index(datetime.datetime(1996, 7, 29)),  # end of the 1996 epidemic
@@ -186,6 +191,10 @@ if __name__ == "__main__":
             dt['time'].index(datetime.datetime(2007, 8, 27)),  # end of the 2007 epidemic
             dt['time'].index(datetime.datetime(2008, 9, 1)),  # end of the 2008 epidemic
             dt['time'].index(datetime.datetime(2009, 9, 28)),  # end of the 2009 epidemic
+
+            dt['time'].index(datetime.datetime(2011, 8, 28)),  # end of the 2011 epidemic
+            dt['time'].index(datetime.datetime(2012, 11, 11)),  # end of the 2012 epidemic
+            dt['time'].index(datetime.datetime(2013, 8, 25)),  # end of the 2013 epidemic
     ]
     # print tfs
     # Interpolated Rt
