@@ -192,7 +192,7 @@ population at risk.
 The attack ratio is also influenced by the reproductive number of the disease 
 \cite{bacaer_final_2009, katriel_attack_2012}. With Dengue, since transmission 
 is affected by environmental conditions as discussed above, the reproductive 
-number is a function of time. 
+number is also expected to vary with time. 
 
 %%%% Revised up to here
 
@@ -209,26 +209,22 @@ meaning that aproximately 37\% of the suspected dengue cases go unreported.
 Lastly, demography and migrations affect the number of susceptible in ways which 
 are not easy to determine.
 
-The initial number of susceptibles -- $S_0$ -- is a a very powerful parameter 
-with regards to epidemic risk.
-Its value affects directly the local $R_0$, thus being intrumental in predicting 
-epidemics, but it also affects the speed and size of the epidemic.
 
-In this paper, we estimate the number of susceptibles, allowing for 
-discontinuities right before every epidemic in the last 18 years. 
-Through this method we hope to detect drastic changes in the mixture of 
-susceptibles cause by the replacement of the predominant serotype, which 
-can redefine susceptibility for the following season.
+In this paper, we estimate the number of susceptibles before every major 
+outbreak ($S_{0, year}$) in the last 18 years. Due to the alternation of 
+ciculating serotypes, we detected fluctuating levels of susceptibility the 
+circulating virus(es). To Estimate the susceptibles we have we have fixed the 
+tramissibility based on the $R_t$ series derived from data\cite{nishiura}. Then, 
+from the incidence series and the population at risk, we could then calculate 
+the attack ratio for each epidemic.
 
-To accomplish this we use a simplified model of 
-dengue transmission based on a Susceptible-infecctious-Removed (SIR) model. 
-Since Dengue is not caused by a single pathogen, but by four separate strains 
-with limited cross-immunity, when we talk about number of susceptibles, in the 
-context of a single serotype SIR model, we are actually referring to the sum of 
-the susceptibles to the currently circulating serotypes at any given time. 
-
-Some information is available about the predominant serotypes during the 
-period of study\cite{macedo_virological_2013}. 
+To accomplish the estimation of the $S_0$, we use a simplified model of 
+dengue transmission based on a single-strain Susceptible-infecctious-Removed 
+(SIR) model. The reason for the choice of a single strain model, is the lack of 
+accurate information regarding the actual proportions of each virus in 
+circulation. However, some information is available about the predominant 
+serotypes for some epidemics in the period 
+of study\cite{macedo_virological_2013}. 
 
 The estimation of the  number of susceptibles have been attempted 
 before, for other diseases\cite{bjornstad_dynamics_2002, 
@@ -238,9 +234,8 @@ outbreaks from case data.\todo[inline]{anyone else?} In the case of Dengue the
 series of susceptibles to all possible serotypes, cannot be reconstructed based 
 solely on a deterministic transmission model, since the arrival/re-emergenge of 
 new serotypes (which are a stochastic events) can change drastically the pool 
-of susceptibles throwing off any sequential estimation of the dynamics. 
-Adopting a multi-strain transmission model, does not help because of 
-insufficient information about the proportions of each serotype in case data.
+of susceptibles throwing off any sequential estimation based on the incidence
+dynamics.
 
 The authors have applied similar methods as used here, to estimate the number 
 of susceptibles for the predominant strain of influenza at the beginning of  

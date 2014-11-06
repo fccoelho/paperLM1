@@ -230,7 +230,7 @@ def plot_concat_series(dbs):
         co = c.next()
         i_median = srs.I.groupby(level='time').median()
         i_median.plot(style='k-', label='Median')
-        da.I.groupby(level='time').plot(style='r*', label='cases', alpha=.5)
+        da.I.groupby(level='time').plot(style='r.', label='cases')
         i_upr = srs.I.groupby(level='time').aggregate(upr)
         i_lwr = srs.I.groupby(level='time').aggregate(lwr)
         P.fill_between(i_median.index, i_lwr, i_upr, facecolor=co, alpha=.2)
@@ -256,12 +256,12 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("DengueS*.sqlite")
-    #plot_concat_series(dbs)
-    print create_tex_table(dbs)
+    plot_concat_series(dbs)
+    #print create_tex_table(dbs)
 
 
     # sns.tsplot(series.S, time=series.time)
 
     # series.groupby(level='time').plot()
     P.show()
-    # print create_tex_table(['be-multiyear', 'nl-multiyear', 'pt-multiyear'])
+
