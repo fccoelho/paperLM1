@@ -1,7 +1,7 @@
 import numpy as np
 
-pars = (0.014285714285714285, 400, 2.4, 0.1, 1.8)
-ini = [5000, 150, 100, 75, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+pars = (0.014285714285714285, 400, 1.0, 0.1, 1.0, 0.001)
+ini = [5000, 50, 40, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 N = 5000
 
 # infectives for each serotype
@@ -12,7 +12,7 @@ inf_types = {1: [ini[1], ini[12], ini[15], ini[18]],
              4: [ini[4], ini[11], ini[14], ini[17]]
             }
 
-lamb = lambda i: 400*(ini[i+1] + sum(np.array(inf_types[i+1])*2.4))
+lamb = lambda i: 400*(ini[i+1] + sum(np.array(inf_types[i+1])*1.0))
 
 #Natality
 
@@ -34,18 +34,18 @@ def fI4_R4(r, ini): return r[3]*ini[4]
 
 #Secondary Infection rates
 
-def fR1_I12(r, ini): return r[4]*ini[5]*lamb(1)
-def fR1_I13(r, ini): return r[4]*ini[5]*lamb(2)
-def fR1_I14(r, ini): return r[4]*ini[5]*lamb(3)
-def fR2_I21(r, ini): return r[4]*ini[6]*lamb(0)
-def fR2_I23(r, ini): return r[4]*ini[6]*lamb(2)
-def fR2_I24(r, ini): return r[4]*ini[6]*lamb(3)
-def fR3_I31(r, ini): return r[4]*ini[7]*lamb(0)
-def fR3_I32(r, ini): return r[4]*ini[7]*lamb(1)
-def fR3_I34(r, ini): return r[4]*ini[7]*lamb(3)
-def fR4_I41(r, ini): return r[4]*ini[8]*lamb(0)
-def fR4_I42(r, ini): return r[4]*ini[8]*lamb(1)
-def fR4_I43(r, ini): return r[4]*ini[8]*lamb(2)
+def fR1_I12(r, ini): return r[4]*r[5]*ini[5]*lamb(1)
+def fR1_I13(r, ini): return r[4]*r[5]*ini[5]*lamb(2)
+def fR1_I14(r, ini): return r[4]*r[5]*ini[5]*lamb(3)
+def fR2_I21(r, ini): return r[4]*r[5]*ini[6]*lamb(0)
+def fR2_I23(r, ini): return r[4]*r[5]*ini[6]*lamb(2)
+def fR2_I24(r, ini): return r[4]*r[5]*ini[6]*lamb(3)
+def fR3_I31(r, ini): return r[4]*r[5]*ini[7]*lamb(0)
+def fR3_I32(r, ini): return r[4]*r[5]*ini[7]*lamb(1)
+def fR3_I34(r, ini): return r[4]*r[5]*ini[7]*lamb(3)
+def fR4_I41(r, ini): return r[4]*r[5]*ini[8]*lamb(0)
+def fR4_I42(r, ini): return r[4]*r[5]*ini[8]*lamb(1)
+def fR4_I43(r, ini): return r[4]*r[5]*ini[8]*lamb(2)
 
 #Secondary Recovery rates
 

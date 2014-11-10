@@ -1,6 +1,6 @@
 # coding:utf8
 from __future__ import division
-from BIP.SDE.gillespie import Model
+from cgillespie import Model
 import time
 from numpy import array, genfromtxt
 import pylab as P
@@ -22,13 +22,16 @@ tm = genfromtxt('tmat.csv', delimiter=',', skip_header=2, usecols=range(1, 56), 
 
 N = 5000
 
-ini = [N, 150, 100, 75, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ini = [N, 50, 40, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 pars = (1 / 70.,  # mu
         400,  # beta
-        2.4,  # phi
+        1.,  # phi
         .1,  # sigma
-        1.8)  # gamma
+        1., # gamma
+        0.001, #delta : cross immunity protection
+        )
+        
         
 # infectives for each serotype
 inf_types = {1: [ini[1], ini[12], ini[15], ini[18]],
@@ -41,10 +44,9 @@ inf_types = {1: [ini[1], ini[12], ini[15], ini[18]],
 def gen_prop_functs():
     nat_code = "def fnat(r, ini): return r[0]*sum(ini)\n"
     mu_code = "def fmu{}(r, ini): return r[0]*ini[{}]\n"
-    # inf_code = """def fS(r, ini): return ini[0]*sum([lamb(i) for i in range(4)])\n"""
-    inf2_code = """def f{}(r, ini): return ini[0]* lamb({})\n"""
+    inf_code = """def f{}(r, ini): return ini[0]* lamb({})\n"""
     rec_code = """def f{}(r, ini): return r[3]*ini[{}]\n"""
-    inf3_code = """def f{}(r, ini): return r[4]*ini[{}]*lamb({})\n"""
+    inf2_code = """def f{}(r, ini): return r[4]*r[5]*ini[{}]*lamb({})\n"""
 
     nt = tm.shape[1]
     with open('propfun.py', 'w') as f:
@@ -66,7 +68,7 @@ def gen_prop_functs():
 
         f.write("\n#Infection rates\n\n")
         for i, n in enumerate(['S_I1', 'S_I2', 'S_I3', 'S_I4']):  # Infection rates
-            f.write(inf2_code.format(n, i))
+            f.write(inf_code.format(n, i))
 
         f.write("\n#Primary recovery rates\n\n")
         for i, n in enumerate(['I1_R1', 'I2_R2', 'I3_R3', 'I4_R4']):
@@ -77,7 +79,7 @@ def gen_prop_functs():
                 ['R1_I12', 'R1_I13', 'R1_I14', 'R2_I21', 'R2_I23', 'R2_I24', 'R3_I31',
                  'R3_I32', 'R3_I34', 'R4_I41', 'R4_I42', 'R4_I43']):
             type_i = [1,2,3,0,2,3,0,1,3,0,1,2] #serotype number for each infection
-            f.write(inf3_code.format(n, i // 3 + 5, type_i[i]))
+            f.write(inf2_code.format(n, i // 3 + 5, type_i[i]))
 
         f.write("\n#Secondary Recovery rates\n\n")
         for i, n in enumerate(
@@ -119,10 +121,11 @@ assert len(propensity) == tm.shape[1]
 
 M = Model(vnames=vnames, rates=pars, inits=ini, tmat=tm, propensity=propensity)
 t0 = time.time()
-M.run(tmax=200, reps=1, viz=0, serial=1)
+M.run(tmax=10000, reps=1)
 print 'total time: {} seconds'.format(time.time() - t0)
-t, series, steps, evts = M.getStats()
-ser = series.mean(axis=0)
+t, series, steps = M.getStats()
+
+ser = series.mean(axis=2)
 
 #  Calculatin prevalence by serotype
 
@@ -133,9 +136,9 @@ p4 = sum(ser[:,i] for i, n in enumerate(vnames) if (n.startswith('I') and '4' in
 # print evts
 co = cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k'])
 sy = cycle(['o', '^', '>', '<', 's', '*', '+', '1'])
-for s in ser.T:
-    P.plot(t, s, co.next()+sy.next()+'-')
-P.legend(M.vn, loc=0)
+for s in range(ser.shape[1]):
+    P.plot(t, ser[:,s], co.next()+sy.next()+'-')
+P.legend(vnames, loc=0)
 P.figure()
 P.plot(t, p1, 'r-.', label='DENV1')
 P.plot(t, p2, 'g-*', label='DENV2')
