@@ -121,7 +121,7 @@ assert len(propensity) == tm.shape[1]
 
 M = Model(vnames=vnames, rates=pars, inits=ini, tmat=tm, propensity=propensity)
 t0 = time.time()
-M.run(tmax=10000, reps=1)
+M.run(tmax=1000, reps=1)
 print 'total time: {} seconds'.format(time.time() - t0)
 t, series, steps = M.getStats()
 
