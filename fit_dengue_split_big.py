@@ -15,8 +15,8 @@ from collections import defaultdict
 import datetime
 import sys
 import pandas as pd
-import numba
-from numba import jit
+#import numba
+#from numba import jit
 
 
 beta = 1.0  # Transmission coefficient

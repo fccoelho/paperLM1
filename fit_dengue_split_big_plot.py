@@ -39,7 +39,7 @@ def read_data(dbname):
 
 def create_tex_table(dbs):
     """
-    Create Latex table with the ratios of susceptibles per year
+    Create Latex table with the Attack ratios for each epidemic
     :return:
     """
     pts = OrderedDict()
@@ -56,7 +56,7 @@ def create_tex_table(dbs):
             \begin{tabular}{c|c}
             \hline
             """
-    head += r"""Year & Ratio \\
+    head += r"""Year & median Attack Ratio \\
             \hline
             """
     bot = r"""
@@ -67,11 +67,9 @@ def create_tex_table(dbs):
     body = r""
     st = []
     for i, Y in enumerate(series.keys()):
-        if Y == '1996':
-            continue
-        last_week_of_last_epi = series.values()[i-1].index[-1]
+        cases = obs[Y].sum()
         first_week = series.values()[i].index[0]
-        ratio = array(series[Y].S.ix[first_week]) / array(series.values()[i-1].S.ix[last_week_of_last_epi])
+        ratio = 1.0*cases/array(series[Y].S.ix[first_week]) 
         body += Y + r" & {:.2%}({:.2%}-{:.2%})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
         body += "\n"
 
@@ -256,8 +254,8 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("DengueS*.sqlite")
-    plot_concat_series(dbs)
-    #print create_tex_table(dbs)
+    #plot_concat_series(dbs)
+    print create_tex_table(dbs)
 
 
     # sns.tsplot(series.S, time=series.time)

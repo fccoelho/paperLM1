@@ -126,7 +126,6 @@ print 'total time: {} seconds'.format(time.time() - t0)
 t, series, steps = M.getStats()
 
 ser = series.mean(axis=2)
-print ser[:,11]
 
 #  Calculatin prevalence by serotype
 
