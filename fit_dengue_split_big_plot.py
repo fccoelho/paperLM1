@@ -48,81 +48,40 @@ def create_tex_table(dbs):
     for db in dbs:
         y = db.split('_')[0][-4:]
         data, theta, srs = read_data(db)
+        #print data
         series[y] = srs
-        obs[y] = data
+        obs[y] = data.I
         pts[y] = theta
 
     head = r"""\begin{center}
-            \begin{tabular}{c|c}
-            \hline
-            """
+\begin{tabular}{c|c}
+\hline
+"""
     head += r"""Year & median Attack Ratio \\
-            \hline
-            """
+\hline
+"""
     bot = r"""
-        \hline
-        \end{tabular}
-        \end{center}
+\hline
+\end{tabular}
+\end{center}
         """
     body = r""
     st = []
+    # years = sorted(list(series.keys()))
     for i, Y in enumerate(series.keys()):
         cases = obs[Y].sum()
         first_week = series.values()[i].index[0]
-        ratio = 1.0*cases/array(series[Y].S.ix[first_week]) 
-        body += Y + r" & {:.2%}({:.2%}-{:.2%})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
-        body += "\n"
+        try:
+            ratio = 1.0*cases/array(series[Y].S.ix[first_week])
+            body += Y + r" & {:.2%} ({:.2%}-{:.2%})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
+            body += "\n"
+        except KeyError as e:
+            print Y, first_week, e
+        
 
     return head + body + bot
 
 
-def plot_series2(tim, obs, series, names=[], title='Simulated vs Observed series', wl=7, lag=False):
-    ser2 = {}
-    for n in series[0].dtype.names:
-        ser2[n] = concatenate([s[n] for s in series], axis=1)
-    ls = ser2[n].shape[1]
-    tim = tim[:ls]
-    # print type (series)#.I.shape
-    #fig =P.gcf()
-    if not names:
-        names = series[0].dtype.names
-    c = cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k'])
-    s = cycle(['o', '^', '>', '<', 's', '*', '+', '1'])
-    if isinstance(tim[0], datetime.date):
-        lag = datetime.timedelta(int(lag) * wl)
-    else:
-        lag = int(lag) * wl
-    for i, n in enumerate(names):
-        ax = P.gca()
-        co = c.next()
-        labs = ['Influenzanet', 'EISN']
-        if n in obs:
-            if len(obs[n].shape) > 1:
-                for i in range(obs[n].shape[1]):
-                    ax.plot(tim, obs[n][:len(tim), i], c.next() + s.next(), alpha=0.7, label=labs[i])#print len(tim),  ls
-            else:
-                ax.plot(tim, obs[n][:len(tim)], c.next() + s.next(), alpha=0.7, label=n+"_obs")
-        ax.plot(array(tim) + lag, median(ser2[n], axis=0), 'k-', label=n)
-        lower = [stats.scoreatpercentile(t, 2.5) for t in ser2[n].T]
-        upper = [stats.scoreatpercentile(t, 97.5) for t in ser2[n].T]
-        if len(series) > 1:  #in the case of iterative simulations
-            dif = (array(upper) - array(lower))
-            dif = dif / max(dif) * 10
-            pe, va = peakdet(dif, 1)
-            xp = [0] + pe[:, 0].tolist() + [len(lower) - 1]
-            lower = interp(range(len(lower)), xp, array(lower)[xp])  # valley-to-valley interpolated band
-            upper = interp(range(len(upper)), xp, array(upper)[xp])  #peak-to-peak interpolated band
-        ax.fill_between(array(tim) + lag, lower, upper, facecolor=co, alpha=0.2)
-        #ax.fill_between(array(tim)+lag,lower,upper,facecolor='k',alpha=0.1)
-        if i < (len(names) - 1): ax.xaxis.set_ticklabels([])
-        ax.legend()
-        if i == 0:
-            ax.set_title(title)
-    #ax.xaxis.set_visible(True)
-    #P.title(title)
-    P.xlabel('Weeks')
-    #~ if isinstance(tim[0], datetime.date):
-    #~ P.gcf().autofmt_xdate()
 
 
 def multiplot():
@@ -227,13 +186,16 @@ def plot_concat_series(dbs):
     for srs, da in zip(series, obs):
         co = c.next()
         i_median = srs.I.groupby(level='time').median()
-        i_median.plot(style='k-', label='Median')
-        da.I.groupby(level='time').plot(style='r.', label='cases')
+        i_median.plot(style='k-')
+        # da.I.plot(style='ro', alpha=.5, label='obs')
         i_upr = srs.I.groupby(level='time').aggregate(upr)
         i_lwr = srs.I.groupby(level='time').aggregate(lwr)
         P.fill_between(i_median.index, i_lwr, i_upr, facecolor=co, alpha=.2)
+        P.scatter(da.index,da.I,alpha=0.8, label='Observations')
+    # P.legend(['Median', 'obs'])
     P.tight_layout()
     P.savefig('concat_SI.svg')
+    P.savefig('concat_SI.png', dpi=400)
 
 
 def plot_pt_corr(df):
@@ -254,8 +216,8 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("DengueS*.sqlite")
-    #plot_concat_series(dbs)
-    print create_tex_table(dbs)
+    plot_concat_series(dbs)
+    # print create_tex_table(dbs)
 
 
     # sns.tsplot(series.S, time=series.time)

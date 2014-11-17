@@ -360,10 +360,11 @@ in~\ref{eq:Rtestimate}.
 We parameterize our model with the varying transmission using the system of 
 ordinary differential equations
 \begin{align}
- \frac{dS}{dt} &= -\beta(t)SI \\
- \frac{dI}{dt} &= \beta(t)SI - \tau I&\\
+   \label{eq:model}
+ \frac{dS}{dt} &= -\beta(t)SI \\     \nonumber
+ \frac{dI}{dt} &= \beta(t)SI - \tau I&\\      \nonumber
  \frac{dR}{dt} &= \tau I&
-\end{align}
+\end{align}  
 where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$. 
 This is a rather simplified model, in which, for instance, the vector is left 
 out.
@@ -421,7 +422,7 @@ In this study we used one chain per parameter, i.e, 3 chains for each run.
 The chains were run until $5000$ samples were obtained after discarding $500$ 
 burn-in samples.
 Convergence of the parallel chains was verified at every 100 iterations by the 
-calculation of the Gelman-Rubins' R convergence diagnostic~\cite{brooks1998}.
+calculation of the Gelman-Rubin's R convergence diagnostic~\cite{brooks1998}.
 
 \subsection*{Calculating the attack ratio}
 
@@ -445,8 +446,17 @@ estimated as described above.
 % Results and Discussion can be combined.
 \section*{Results and Discussion}
  
-The time series used for all the analyses consist of officially notified dengue 
-cases agregated weekly.
+The time series used for all the analyses consists of officially notified 
+dengue cases aggregated weekly. 
+Figure XX  shows the $R_t$ series, according to 
+(\ref{eq:Rtestimate}). 
+It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
+indistinguishable from 1.
+
+Figure \ref{Fig:S0}, shows the model from (\ref{eq:model}) fitted to the data.
+
+Table \ref{tab:AR} contains the attack ratios calculated for each 
+epidemic/outbreak.
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
 \section*{Discussion}
@@ -469,10 +479,15 @@ Codeco for helpful discussions about the manuscript.
 %\end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=.9\textwidth]{./plots/concat_SI.png}
+\includegraphics[width=.9\textwidth]{./concat_SI.png}
 \end{center}
 \caption{
-{\bf Bold the first sentence.}  Rest of figure caption.  
+{\bf Susceptibles and Infectious posterior curves.}  The curves were estimated 
+only for the periods where $R_t> 1$.  The susceptible curves in the top panel 
+reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
+each epidemic/outbreak. In the lower panel see the posterior distribution 
+of infectious curves, represented by its Median and 95\% credible interval. 
+Scatter plot shows the observed cases.
 }
 \label{Fig:S0}
 \end{figure}
@@ -495,6 +510,41 @@ Codeco for helpful discussions about the manuscript.
 %\end{flushleft}
 %\label{tab:label}
 % \end{table}
+
+
+
+\begin{table}[!ht]
+\caption{
+\bf{Median Attack ration calculated according to (\ref{eq:AR2})}}
+\begin{center}
+\begin{tabular}{l|r}
+\hline
+Year & Median Attack Ratio \\
+\hline
+1996 & \textbf{38.64\%} (17.18\%-54.19\%)\\
+1997 & \textbf{87.31\%} (73.83\%-87.31\%)\\
+1998 & \textbf{49.86\%} (49.19\%-49.86\%)\\
+1999 & \textbf{10.76\%} (3.72\%-20.24\%)\\
+2000 & \textbf{25.49\%} (24.47\%-26.98\%)\\
+2001 & \textbf{48.12\%} (46.57\%-49.15\%)\\
+2005 & \textbf{14.74\%} (10.23\%-21.38\%)\\
+2006 & \textbf{11.22\%} (8.00\%-14.41\%)\\
+2007 & \textbf{15.08\%} (14.76\%-15.38\%)\\
+2008 & \textbf{13.73\%} (3.10\%-30.84\%)\\
+2010 & \textbf{18.30\%} (17.34\%-19.33\%)\\
+2011 & \textbf{8.59\%} (8.20\%-9.36\%)\\
+2012 & \textbf{13.92\%} (12.71\%-14.92\%)\\
+\hline
+\end{tabular}
+\begin{flushleft}Medians are presented with 95\% credible intervals.
+\end{flushleft}
+
+\end{center}
+
+
+
+\label{tab:AR}
+\end{table}
 
 \section*{Supporting Information Legends}
 %

@@ -230,7 +230,7 @@ if __name__ == "__main__":
 
 
 
-    for inicio, fim in zip(t0s, tfs):#[3:4]: # Slice to force start from a different point
+    for inicio, fim in zip(t0s, tfs)[3:4]: # Slice to force start from a different point
         dt = prepdata('data_Rt_dengue_complete.csv', inicio, fim, 1)
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
@@ -261,7 +261,7 @@ if __name__ == "__main__":
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
         
         
-        F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-10, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
         #~ print F.AIC, F.BIC, F.DIC
         #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
