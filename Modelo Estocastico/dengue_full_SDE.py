@@ -22,7 +22,7 @@ tm = genfromtxt('tmat.csv', delimiter=',', skip_header=2, usecols=range(1, 56), 
 
 N = 5000
 
-ini = [N, 50, 40, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ini = (N, 50, 30, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 pars = (1 / 70.,  # mu
         400,  # beta
@@ -43,9 +43,9 @@ inf_types = {1: [ini[1], ini[12], ini[15], ini[18]],
 # Propensity functions
 def gen_prop_functs():
     nat_code = "def fnat(r, ini): return r[0]*sum(ini)\n"
-    mu_code = "def fmu{}(r, ini): return r[0]*ini[{}]\n"
+    mu_code = "def fmu{}(r, ini): return r[0]*max(0,ini[{}])\n"
     inf_code = """def f{}(r, ini): return ini[0]* lamb({})\n"""
-    rec_code = """def f{}(r, ini): return r[3]*ini[{}]\n"""
+    rec_code = """def f{}(r, ini): return r[3]*max(0,ini[{}])\n"""
     inf2_code = """def f{}(r, ini): return r[4]*r[5]*ini[{}]*lamb({})\n"""
 
     nt = tm.shape[1]
@@ -97,7 +97,7 @@ def gen_prop_functs():
 gen_prop_functs()
 from propfun import *
 
-propensity = [fnat,  # Natality
+propensity = [fnat,                             # Natality
               fS_I1, fS_I2, fS_I3, fS_I4,       # Primary infections
               fI1_R1, fI2_R2, fI3_R3, fI4_R4,   # primary recovery
               fR1_I12, fR1_I13, fR1_I14,        #Secondary infections
@@ -121,11 +121,12 @@ assert len(propensity) == tm.shape[1]
 
 M = Model(vnames=vnames, rates=pars, inits=ini, tmat=tm, propensity=propensity)
 t0 = time.time()
-M.run(tmax=10000, reps=1)
+M.run(tmax=500, reps=1)
 print 'total time: {} seconds'.format(time.time() - t0)
 t, series, steps = M.getStats()
 
 ser = series.mean(axis=2)
+print ser[:,11]
 
 #  Calculatin prevalence by serotype
 

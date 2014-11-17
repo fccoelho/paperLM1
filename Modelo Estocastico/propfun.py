@@ -1,7 +1,7 @@
 import numpy as np
 
 pars = (0.014285714285714285, 400, 1.0, 0.1, 1.0, 0.001)
-ini = [5000, 50, 40, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+ini = (5000, 50, 30, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 N = 5000
 
 # infectives for each serotype
@@ -27,10 +27,10 @@ def fS_I4(r, ini): return ini[0]* lamb(3)
 
 #Primary recovery rates
 
-def fI1_R1(r, ini): return r[3]*ini[1]
-def fI2_R2(r, ini): return r[3]*ini[2]
-def fI3_R3(r, ini): return r[3]*ini[3]
-def fI4_R4(r, ini): return r[3]*ini[4]
+def fI1_R1(r, ini): return r[3]*max(0,ini[1])
+def fI2_R2(r, ini): return r[3]*max(0,ini[2])
+def fI3_R3(r, ini): return r[3]*max(0,ini[3])
+def fI4_R4(r, ini): return r[3]*max(0,ini[4])
 
 #Secondary Infection rates
 
@@ -49,40 +49,40 @@ def fR4_I43(r, ini): return r[4]*r[5]*ini[8]*lamb(2)
 
 #Secondary Recovery rates
 
-def fI12_R(r, ini): return r[3]*ini[9]
-def fI13_R(r, ini): return r[3]*ini[10]
-def fI14_R(r, ini): return r[3]*ini[11]
-def fI21_R(r, ini): return r[3]*ini[12]
-def fI23_R(r, ini): return r[3]*ini[13]
-def fI24_R(r, ini): return r[3]*ini[14]
-def fI31_R(r, ini): return r[3]*ini[15]
-def fI32_R(r, ini): return r[3]*ini[16]
-def fI34_R(r, ini): return r[3]*ini[17]
-def fI41_R(r, ini): return r[3]*ini[18]
-def fI42_R(r, ini): return r[3]*ini[19]
-def fI43_R(r, ini): return r[3]*ini[20]
+def fI12_R(r, ini): return r[3]*max(0,ini[9])
+def fI13_R(r, ini): return r[3]*max(0,ini[10])
+def fI14_R(r, ini): return r[3]*max(0,ini[11])
+def fI21_R(r, ini): return r[3]*max(0,ini[12])
+def fI23_R(r, ini): return r[3]*max(0,ini[13])
+def fI24_R(r, ini): return r[3]*max(0,ini[14])
+def fI31_R(r, ini): return r[3]*max(0,ini[15])
+def fI32_R(r, ini): return r[3]*max(0,ini[16])
+def fI34_R(r, ini): return r[3]*max(0,ini[17])
+def fI41_R(r, ini): return r[3]*max(0,ini[18])
+def fI42_R(r, ini): return r[3]*max(0,ini[19])
+def fI43_R(r, ini): return r[3]*max(0,ini[20])
 
 #Mortality rates
 
-def fmuS(r, ini): return r[0]*ini[0]
-def fmuI1(r, ini): return r[0]*ini[1]
-def fmuI2(r, ini): return r[0]*ini[2]
-def fmuI3(r, ini): return r[0]*ini[3]
-def fmuI4(r, ini): return r[0]*ini[4]
-def fmuR1(r, ini): return r[0]*ini[5]
-def fmuR2(r, ini): return r[0]*ini[6]
-def fmuR3(r, ini): return r[0]*ini[7]
-def fmuR4(r, ini): return r[0]*ini[8]
-def fmuI12(r, ini): return r[0]*ini[9]
-def fmuI13(r, ini): return r[0]*ini[10]
-def fmuI14(r, ini): return r[0]*ini[11]
-def fmuI21(r, ini): return r[0]*ini[12]
-def fmuI23(r, ini): return r[0]*ini[13]
-def fmuI24(r, ini): return r[0]*ini[14]
-def fmuI31(r, ini): return r[0]*ini[15]
-def fmuI32(r, ini): return r[0]*ini[16]
-def fmuI34(r, ini): return r[0]*ini[17]
-def fmuI41(r, ini): return r[0]*ini[18]
-def fmuI42(r, ini): return r[0]*ini[19]
-def fmuI43(r, ini): return r[0]*ini[20]
-def fmuR(r, ini): return r[0]*ini[21]
+def fmuS(r, ini): return r[0]*max(0,ini[0])
+def fmuI1(r, ini): return r[0]*max(0,ini[1])
+def fmuI2(r, ini): return r[0]*max(0,ini[2])
+def fmuI3(r, ini): return r[0]*max(0,ini[3])
+def fmuI4(r, ini): return r[0]*max(0,ini[4])
+def fmuR1(r, ini): return r[0]*max(0,ini[5])
+def fmuR2(r, ini): return r[0]*max(0,ini[6])
+def fmuR3(r, ini): return r[0]*max(0,ini[7])
+def fmuR4(r, ini): return r[0]*max(0,ini[8])
+def fmuI12(r, ini): return r[0]*max(0,ini[9])
+def fmuI13(r, ini): return r[0]*max(0,ini[10])
+def fmuI14(r, ini): return r[0]*max(0,ini[11])
+def fmuI21(r, ini): return r[0]*max(0,ini[12])
+def fmuI23(r, ini): return r[0]*max(0,ini[13])
+def fmuI24(r, ini): return r[0]*max(0,ini[14])
+def fmuI31(r, ini): return r[0]*max(0,ini[15])
+def fmuI32(r, ini): return r[0]*max(0,ini[16])
+def fmuI34(r, ini): return r[0]*max(0,ini[17])
+def fmuI41(r, ini): return r[0]*max(0,ini[18])
+def fmuI42(r, ini): return r[0]*max(0,ini[19])
+def fmuI43(r, ini): return r[0]*max(0,ini[20])
+def fmuR(r, ini): return r[0]*max(0,ini[21])
