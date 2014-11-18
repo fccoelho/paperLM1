@@ -455,7 +455,17 @@ indistinguishable from 1.
 
 Figure \ref{Fig:S0}, shows the model from (\ref{eq:model}) fitted to the data. 
 In it we can see that the susceptibles series in each epidemic starts at the 
-estimated level of S0. Levels are low
+estimated level of $S_0$. The proportion of susceptibles may seem low, but we 
+must remember that these estimates are being affected by an unknown 
+underreporting factor, which experts suggest is somewhere between 5 and 10, 
+i.e. for every case observed there are 5 or 10 unobserved. Since this 
+underreporting ration affects both the numerator and denominator of 
+(\ref{eq:AR}), its effects should cancel out, giving us an unbiased attack ratio 
+estimate. One other possible source of bias which would lead to the 
+underestimation of $S_0$ could come from a significant part of the population 
+not being exposed to the disease. But, as we can see in figure xx\todo{add 
+figure with the four maps}, the disease spread pretty much homogeneously over 
+the entire city (in the last four epidemics, at least). 
 
 Table \ref{tab:AR} contains the attack ratios calculated for each 
 epidemic/outbreak.
@@ -489,7 +499,8 @@ only for the periods where $R_t> 1$.  The susceptible curves in the top panel
 reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
 each epidemic/outbreak. In the lower panel see the posterior distribution 
 of infectious curves, represented by its Median and 95\% credible interval. 
-Scatter plot shows the observed cases.
+Scatter plot shows the observed cases. Prevalences are scaled as fractions 
+of the entire population.
 }
 \label{Fig:S0}
 \end{figure}
