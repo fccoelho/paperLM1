@@ -20,7 +20,7 @@ tm = genfromtxt('tmat.csv', delimiter=',', skip_header=2, usecols=range(1, 56), 
 # Initial Conditions
 # Initial conditions for each of the four Serotype model
 
-N = 5000
+N = 500
 
 ini = (N, 50, 30, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
@@ -121,7 +121,7 @@ assert len(propensity) == tm.shape[1]
 
 M = Model(vnames=vnames, rates=pars, inits=ini, tmat=tm, propensity=propensity)
 t0 = time.time()
-M.run(tmax=500, reps=1)
+M.run(tmax=1000, reps=1)
 print 'total time: {} seconds'.format(time.time() - t0)
 t, series, steps = M.getStats()
 
@@ -151,5 +151,8 @@ P.legend()
 # P.plot(t, ser[:, 1::3], 'g-^')  # I plots
 # P.plot(t, ser[:, 2::3], 'b-o')  # R plots
 # P.legend(M.vn[0::3] + M.vn[1::3] + M.vn[2::3], loc=0)
+P.figure()
+for prop in propensity:
+    P.plot(t, [prop(pars,i) for i in ser])
 P.show()
 
