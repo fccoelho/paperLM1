@@ -27,7 +27,7 @@ if __name__=="__main__":
     smod.Model('Dengue_full.psc')
 
     #smod.DoStochSim(trajectories = 1,mode = 'time',end = 100, epsilon=0.03, method="TauLeaping", IsTrackPropensities=False)
-    smod.DoCainStochSim(endtime=100,frames=10000,trajectories=100, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
+    smod.DoCainStochSim(endtime=100,frames=10000,trajectories=10, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
     smod.GetRegularGrid()
     smod.PlotAverageSpeciesTimeSeries()
     #smod.PlotAveragePropensitiesTimeSeries()
@@ -37,5 +37,5 @@ if __name__=="__main__":
 #    series = smod.data_stochsim_grid.species_means
 #    sds = smod.data_stochsim_grid.species_standard_deviations
 #    l = smod.data_stochsim.species_labels
-#    plot(t,series,l)
+#    plot(t,seriegs,l)
 #    P.show()

@@ -225,10 +225,10 @@ beta = 400
 phi = 1
 sigma = 0.1
 gamma = 1
-delta = 0.001
+delta = 1
 
 #InitVar
-S = 100000
+S = 50000
 I1 = 50
 I2 = 0
 I3 = 50
