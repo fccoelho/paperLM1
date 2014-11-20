@@ -4,7 +4,7 @@
 # Decay Dimerazing model
 
 Modelname: Dengue_4_serotypes
-Description: Dengue model with for seotypes and cross-immunity
+Description: Dengue model with four serotypes and cross-immunity
 
 # Transitions
 # S > I1
