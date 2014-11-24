@@ -8,6 +8,7 @@ import os
 from itertools import cycle
 import pylab as P
 import numpy as np
+from stochpy.modules import InterfaceCain
 
 def plot(t,s,l):
     P.figure()
@@ -25,11 +26,16 @@ if __name__=="__main__":
     smod.model_dir = os.getcwd()
     smod.output_dir = os.getcwd()
     smod.Model('Dengue_full.psc')
+    
+    InterfaceCain.getCainInputfile(smod.SSA, 100, 100, 1)
+    with open(os.path.join(stochpy.temp_dir,'cain_in.txt')) as f:
+        with open('export.txt','w') as g:
+            g.write(f.read())
 
-    #smod.DoStochSim(trajectories = 1,mode = 'time',end = 100, epsilon=0.03, method="TauLeaping", IsTrackPropensities=False)
-    smod.DoCainStochSim(endtime=100,frames=10000,trajectories=10, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
+    smod.DoStochSim(trajectories = 1,mode = 'time',end = 100,  method="direct", IsTrackPropensities=False)
+    #smod.DoCainStochSim(endtime=100,frames=10000,trajectories=1, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
     smod.GetRegularGrid()
-    smod.PlotAverageSpeciesTimeSeries()
+    smod.PlotSpeciesTimeSeries()
     #smod.PlotAveragePropensitiesTimeSeries()
     #smod.PlotAverageSpeciesAutocorrelations()
     
