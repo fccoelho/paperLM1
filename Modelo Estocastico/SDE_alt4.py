@@ -25,7 +25,7 @@ if __name__=="__main__":
     smod = stochpy.SSA()
     smod.model_dir = os.getcwd()
     smod.output_dir = os.getcwd()
-    smod.Model('Dengue_full.psc')
+    smod.Model('Dengue_full4.psc')
     
 #    InterfaceCain.getCainInputfile(smod.SSA, 100, 100, 1)
 #    with open(os.path.join(stochpy.temp_dir,'cain_in.txt')) as f:

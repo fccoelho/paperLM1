@@ -82,6 +82,58 @@ Death_R4:
     R4 > $pool
     mu*R4
 
+Death_I12:
+    I12 > $pool
+    mu*I12
+
+Death_I13:
+    I13 > $pool
+    mu*I13
+
+Death_I14:
+    I14 > $pool
+    mu*I14
+    
+Death_I21:
+    I21 > $pool
+    mu*I21
+    
+Death_I23:
+    I23 > $pool
+    mu*I23
+
+Death_I24:
+    I24 > $pool
+    mu*I24
+
+Death_I31:
+    I31 > $pool
+    mu*I31
+
+Death_I32:
+    I32 > $pool
+    mu*I32
+
+Death_I34:
+    I34 > $pool
+    mu*I34
+
+Death_I41:
+    I41 > $pool
+    mu*I41
+
+Death_I42:
+    I42 > $pool
+    mu*I42
+
+Death_I43:
+    I43 > $pool
+    mu*I43
+
+Death_R:
+    R > $pool
+    mu*R
+
 Inf_I1:
     S > I1
     beta*S*(I1+(phi*I21)+(phi*I31)+(phi*I41))
@@ -231,8 +283,8 @@ delta = 1
 S = 50000
 I1 = 50
 I2 = 0
-I3 = 50
-I4 = 50
+I3 = 0
+I4 = 0
 R1 = 0
 R2 = 0
 R3 = 0
@@ -251,6 +303,6 @@ I42 = 0
 I43 = 0
 R = 0
 
-#Event: denv2, _TIME_ > 52 , 0 {
-#I2 = 50
-#}
+Event: denv2, _TIME_ > 52 , 0 {
+I2 = 50
+}
