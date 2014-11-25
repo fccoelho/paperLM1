@@ -22,23 +22,25 @@ def plot(t,s,l):
     
 if __name__=="__main__":
 # Loading the model
-    smod = stochpy.SSA()
+    smod = stochpy.SSA(IsInteractive=False)
     smod.model_dir = os.getcwd()
     smod.output_dir = os.getcwd()
     smod.Model('Dengue_full4.psc')
+
     
 #    InterfaceCain.getCainInputfile(smod.SSA, 100, 100, 1)
 #    with open(os.path.join(stochpy.temp_dir,'cain_in.txt')) as f:
 #        with open('export.txt','w') as g:
 #            g.write(f.read())
 
-    smod.DoStochSim(trajectories = 1,mode = 'time',end = 500,  method="direct", IsTrackPropensities=False)
+    smod.DoStochSim(trajectories = 1,mode = 'time',end = 200,  method="direct", IsTrackPropensities=False)
     #smod.DoCainStochSim(endtime=100,frames=10000,trajectories=1, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
     smod.GetRegularGrid()
     smod.PlotSpeciesTimeSeries()
+    stochpy.plt.savefig(os.path.join(smod.output_dir,'full4.png'), dpi=300)
     #smod.PlotAveragePropensitiesTimeSeries()
     #smod.PlotAverageSpeciesAutocorrelations()
-    
+    stochpy.plt.show()
 #    t = smod.data_stochsim_grid.time
 #    series = smod.data_stochsim_grid.species_means
 #    sds = smod.data_stochsim_grid.species_standard_deviations

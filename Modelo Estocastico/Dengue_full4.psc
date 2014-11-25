@@ -4,7 +4,7 @@
 # Decay Dimerazing model
 
 Modelname: Dengue_4_serotypes
-Description: Dengue model with for seotypes and cross-immunity
+Description: Dengue model with four serotypes and cross-immunity
 
 # Transitions
 # S > I1
@@ -242,7 +242,7 @@ Death_R1234:
     
 Inf_I1:
     S > I1
-    beta*S*(I1+(phi*I21)+(phi*I31)+(phi*I41))
+    beta*S*(I1+(phi*I21)+(phi*I31)+(phi*I41)+(phi*I231)+(phi*I241)+(phi*I341)+(phi*I2341))
 
 Inf_I2:
     S > I2
@@ -279,54 +279,54 @@ Rec_I4:
 # R1
 Inf_I12:
     R1 > I12
-    R1*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42))
+    R1*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42)+(phi*I132)+(phi*I142)+(phi*I342)+(phi*I1342))
 
 Inf_I13:
     R1 > I13
-    R1*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43))
+    R1*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43)+(phi*I123)+(phi*I143)+(phi*I243)+(phi*I1243))
 
 Inf_I14:
     R1 > I14
-    R1*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34))
+    R1*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34)+(phi*I124)+(phi*I134)+(phi*I234)+(phi*I1234))
 
 #R2
 Inf_I21:
     R2 > I21
-    R2*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41))
+    R2*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41)+(phi*I231)+(phi*I241)+(phi*I341)+(phi*I2341))
 
 Inf_I23:
     R2 > I23
-    R2*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43))
+    R2*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43)+(phi*I123)+(phi*I143)+(phi*I243)+(phi*I1243))
 
 Inf_I24:
     R2 > I14
-    R2*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34))
+    R2*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34)+(phi*I124)+(phi*I134)+(phi*I234)+(phi*I1234))
 
 #R3
 Inf_I31:
     R3 > I31
-    R3*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41))
+    R3*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41)+(phi*I231)+(phi*I241)+(phi*I341)+(phi*I2341))
 
 Inf_I32:
     R3 > I32
-    R3*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42))
+    R3*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42)+(phi*I132)+(phi*I142)+(phi*I342)+(phi*I1342))
 
 Inf_I34:
     R3 > I34
-    R3*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34))
+    R3*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34)+(phi*I124)+(phi*I134)+(phi*I234)+(phi*I1234))
 
 #R4
 Inf_I41:
     R4 > I41
-    R4*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41))
+    R4*gamma*delta*beta*(I1+(phi*I21)+(phi*I31)+(phi*I41)+(phi*I231)+(phi*I241)+(phi*I341)+(phi*I2341))
 
 Inf_I42:
     R4 > I42
-    R4*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42))
+    R4*gamma*delta*beta*(I2+(phi*I12)+(phi*I32)+(phi*I42)+(phi*I132)+(phi*I142)+(phi*I342)+(phi*I1342))
 
 Inf_I43:
     R4 > I43
-    R4*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43))
+    R4*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43)+(phi*I123)+(phi*I143)+(phi*I243)+(phi*I1243))
 
 # Secondary Recoveries
 
@@ -531,7 +531,7 @@ gamma = 1
 delta = 0.5
 
 #InitVar
-S = 50000
+S = 50
 I1 = 50
 I2 = 0
 I3 = 0
@@ -570,16 +570,16 @@ I243 = 0
 I124 = 0
 I134 = 0
 I234 = 0
-R123 = 0
+R123 = 24950
 R124 = 0
 R134 = 0
-R234 = 0
+R234 = 24950
 I1234 = 0
 I1243 = 0
 I1342 = 0
 I2341 = 0
 R1234 = 0
 
-Event: denv2, _TIME_ > 52 , 0 {
-I2 = 50
+Event: denv4, _TIME_ > 12 , 0 {
+I4 = 50
 }
