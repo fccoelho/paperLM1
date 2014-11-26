@@ -82,5 +82,58 @@ about disease biology (e.g. the magnitude of $R_0$) into the computation of \rr.
 This may prove particularly important when disease counts are low and/or close 
 to the detection threshold.
 \newpage
+\section*{Multi-strain dynamics}
+
+In order to validate the estimates derived in the paper, we simulated 
+multi-strain Dengue dynamics by means of a stochastic 4-serotype SIR model with 
+cross-immunity as described below. The model permits up to 4 dengue infections 
+with reduced susceptibility after the first Dengue episode due to cross 
+immunity. Immunity to each serotype is considered complete and permanent. 
+Figure xx depicted all possible states and state-transitions included in the 
+model.
+
+Let $S$ be individuals susceptible to all 4 types of dengue, $I_i$ infectious 
+with Dengue type $i$ and $R_i$ individuals recovered from Dengue type $i$. 
+Infectious individuals already on their secondary and later Dengue infections 
+are represented by multiple indices. For example, $I_{[23]1}$ is an individual 
+which has had Dengues type 2 and 3 in the past -- and therefore is immune to 
+them -- and is currently transmitting Dengue 1. The index outside the bracket 
+denotes current infection. Recovered individuals indices denote their immunity, 
+so for instance $R_{123}$ is an individual which is immune to Dengue types 1, 2 
+and 3, but not to 4. Let $I_{*i} = \sum I_{[\ldots]i}$ with $[\ldots]$ 
+representing exposure history of the infected individual which can vary from 0 
+to 3 in length. All individuals are born to the $S$ state and birth and death 
+rates are equal.
+
+The possible state-transitions and their  propensities are listed in table 
+\ref{tab:trans}.
+\begin{table}
+\caption{
+\bf{State-transitions and propensities}}
+\label{tab:trans}
+\begin{center}
+\begin{tabular}[c]{l|l|l}
+\hline
+Transition & Propensity & Description\\
+\hline
+$S \rightarrow I_i$ & $\beta S I_{*i}$ & Primary infection \\
+$I_i \rightarrow R_i$ & $\sigma I_i$ & Primary recovery\\
+$R_i \rightarrow I_{[i]j}$ & $\beta \delta R_i I_{*j}$ & Secondary infection\\
+$I_{[i]j} \rightarrow R_{ij}$ & $\sigma I_{[i]j}$ & Secondary recovery\\
+$R_{ij} \rightarrow I_{[ij]k}$ & $\beta \delta R_{ij} I_{*k}$ & Tertiary 
+infection\\
+$I_{[ij]k} \rightarrow R_{ijk}$ & $\sigma I_{[ij]k}$ & Tertiary recovery\\
+$R_{ijk} \rightarrow I_{[ijk]l}$ & $\beta \delta R_{ijk} I_{*l}$ & Quaternary 
+infection\\
+$I_{[ijk]l} \rightarrow R_{ijkl}$ & $\sigma I_{[ijk]l}$ & Quaternary recovery\\
+$\rightarrow S$ & $\mu N$ & Birth\\
+$All \rightarrow$ & $\mu N$ & Death\\
+\hline
+\end{tabular}
+\end{center}
+
+\end{table}
+
+
 \bibliography{lm1}
 \end{document}
