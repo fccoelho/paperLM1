@@ -86,40 +86,60 @@ to the detection threshold.
 
 In order to validate the estimates derived in the paper, we simulated 
 multi-strain Dengue dynamics by means of a stochastic 4-serotype SIR model with 
-cross-immunity as described below. The model permits up to 4 dengue infections 
+cross-immunity as described below. 
+The model permits up to 4 dengue infections 
 with reduced susceptibility after the first Dengue episode due to cross 
-immunity. Immunity to each serotype is considered complete and permanent. 
-Figure xx depicted all possible states and state-transitions included in the 
+immunity. 
+Immunity to each serotype is considered complete and permanent. 
+Figure xx depicts all possible states and state-transitions included in the 
 model.
+
+          \begin{figure}
+ \centering
+ \includegraphics[width=16cm]{Dengue4.png}
+
+ \caption{Block diagram detailing the stochastic model}
+ \label{fig:sde_blocks}
+\end{figure}
+
 
 Let $S$ be individuals susceptible to all 4 types of dengue, $I_i$ infectious 
 with Dengue type $i$ and $R_i$ individuals recovered from Dengue type $i$. 
 Infectious individuals already on their secondary and later Dengue infections 
 are represented by multiple indices. For example, $I_{[23]1}$ is an individual 
 which has had Dengues type 2 and 3 in the past -- and therefore is immune to 
-them -- and is currently transmitting Dengue 1. The index outside the bracket 
+them -- and is currently transmitting Dengue 1. 
+The index outside the bracket 
 denotes current infection. Recovered individuals indices denote their immunity, 
 so for instance $R_{123}$ is an individual which is immune to Dengue types 1, 2 
 and 3, but not to 4. Let $I_{*i} = \sum I_{[\ldots]i}$ with $[\ldots]$ 
 representing exposure history of the infected individual which can vary from 0 
-to 3 in length. All individuals are born to the $S$ state and birth and death 
+to 3 in length. 
+All individuals are born to the $S$ state and birth and death 
 rates are equal.
 
 The possible state-transitions and their  propensities are listed in table 
 \ref{tab:trans}.
 \begin{table}
 \caption{
-\bf{State-transitions and propensities}}
+\bf{State-transitions and propensities: $P(\Delta X(t)|X(t))$}. The 
+transitions are summarized below, Fully expanded the system comtemplates 64 
+possible state transitions, as can be verified in figure \ref{fig:sde_blocks}. 
+}
 \label{tab:trans}
 \begin{center}
-\begin{tabular}[c]{l|l|l}
+\begin{tabular}[c]{l|l|l|l}
 \hline
-Transition & Propensity & Description\\
+Transition & Propensity & State Change & Description\\
 \hline
-$S \rightarrow I_i$ & $\beta S I_{*i}$ & Primary infection \\
-$I_i \rightarrow R_i$ & $\sigma I_i$ & Primary recovery\\
-$R_i \rightarrow I_{[i]j}$ & $\beta \delta R_i I_{*j}$ & Secondary infection\\
-$I_{[i]j} \rightarrow R_{ij}$ & $\sigma I_{[i]j}$ & Secondary recovery\\
+$S \rightarrow I_i$ & $\beta S I_{*i}$ & $\Delta S(t)=-1,\, \Delta I_i(t) = 1$ 
+& Primary infection \\
+$I_i \rightarrow R_i$ & $\sigma I_i$ & $\Delta I_i(t)=-1,\, \Delta R_i(t) = 1$ 
+& Primary recovery\\
+$R_i \rightarrow I_{[i]j}$ & $\beta \delta R_i I_{*j}$ & $$\Delta R_i(t)=-1,\, 
+\Delta I_{[i]j}(t) = 1$$ & Secondary infection\\
+$I_{[i]j} \rightarrow R_{ij}$ & $\sigma I_{[i]j}$ &$$\Delta I_{[i]j}(t)=-1,\, 
+\Delta R_{ij}(t) = 1$$& Secondary recovery\\
 $R_{ij} \rightarrow I_{[ij]k}$ & $\beta \delta R_{ij} I_{*k}$ & Tertiary 
 infection\\
 $I_{[ij]k} \rightarrow R_{ijk}$ & $\sigma I_{[ij]k}$ & Tertiary recovery\\
@@ -133,6 +153,22 @@ $All \rightarrow$ & $\mu N$ & Death\\
 \end{center}
 
 \end{table}
+
+The model is implemented as a continuous time Markov jump process. Let
+$$\overrightarrow{X}(t) = [S(t), I_1(t), I_2(t), \ldots, R_{1234}(t)]$$ 
+be the 
+state of the system at the time $t$. 
+The system is written as a forward Kolmogorov differential equation, which in 
+matrix form looks like
+\begin{equation}
+dP_X(t) = Q P_X(t) 
+\end{equation}
+
+Where $P_X(t)$ is  the matrix of transition probabilities (given in table 
+\ref{tab:trans}) and Q is the generator matrix, whose non-zero values are also 
+given in table \ref{tab:trans} (in the state change column). The full formula 
+and matrices are ommited due to their large sizes.
+
 
 
 \bibliography{lm1}
