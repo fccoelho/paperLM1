@@ -198,7 +198,7 @@ Death_I134:
     I134 > $pool
     mu*I134
 
-Death_234:
+Death_I234:
     I234 > $pool
     mu*I234
 
@@ -246,15 +246,15 @@ Inf_I1:
 
 Inf_I2:
     S > I2
-    beta*S*(I2+(phi*I12)+(phi*I32)+(phi*I42))
+    beta*S*(I2+(phi*I12)+(phi*I32)+(phi*I42)+(phi*I132)+(phi*I142)+(phi*I342)+(phi*I1342))
 
 Inf_I3:
     S > I3
-    beta*S*(I4+(phi*I13)+(phi*I23)+(phi*I43))
+    beta*S*(I3+(phi*I13)+(phi*I23)+(phi*I43)+(phi*I123)+(phi*I143)+(phi*I243)+(phi*I1243))
 
 Inf_I4:
     S > I4
-    beta*S*(I4+(phi*I14)+(phi*I24)+(phi*I34))
+    beta*S*(I4+(phi*I14)+(phi*I24)+(phi*I34)+(phi*I124)+(phi*I134)+(phi*I234)+(phi*I1234))
     
 # Primary Recoveries
 
@@ -299,7 +299,7 @@ Inf_I23:
     R2*gamma*delta*beta*(I3+(phi*I13)+(phi*I23)+(phi*I43)+(phi*I123)+(phi*I143)+(phi*I243)+(phi*I1243))
 
 Inf_I24:
-    R2 > I14
+    R2 > I24
     R2*gamma*delta*beta*(I4+(phi*I14)+(phi*I24)+(phi*I34)+(phi*I124)+(phi*I134)+(phi*I234)+(phi*I1234))
 
 #R3
@@ -478,7 +478,7 @@ Rec_I124:
     I124 > R124
     sigma*I124
 
-Rec_I34:
+Rec_I134:
     I134 > R134
     sigma*I134
 
@@ -523,19 +523,19 @@ Rec_I2341:
     sigma*I2341
     
 #InitPar
-mu = 1/70.0
-beta = 400
+mu = 1.0/(70*52) #70 years in weeks
+beta = 400/52.0
 phi = 1
-sigma = 0.1
+sigma = 1/1.5
 gamma = 1
 delta = 0.5
 
 #InitVar
-S = 50
+S = 0
 I1 = 50
 I2 = 0
 I3 = 0
-I4 = 0
+I4 = 50
 R1 = 0
 R2 = 0
 R3 = 0
@@ -570,16 +570,16 @@ I243 = 0
 I124 = 0
 I134 = 0
 I234 = 0
-R123 = 24950
+R123 = 250
 R124 = 0
 R134 = 0
-R234 = 24950
+R234 = 250
 I1234 = 0
 I1243 = 0
 I1342 = 0
 I2341 = 0
-R1234 = 0
+R1234 = 49500
 
-Event: denv4, _TIME_ > 12 , 0 {
-I4 = 50
-}
+#Event: denv4, _TIME_ > 12 , 0 {
+#I4 = 50
+#}

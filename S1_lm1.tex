@@ -98,7 +98,9 @@ model.
  \centering
  \includegraphics[width=16cm]{Dengue4.png}
 
- \caption{Block diagram detailing the stochastic model}
+ \caption{Block diagram detailing the stochastic model. Infected individuals 
+with different Dengue viruses are represented by different colors. Infections 
+are also represented by colored arrows matching the virus type.}
  \label{fig:sde_blocks}
 \end{figure}
 
@@ -123,7 +125,7 @@ The possible state-transitions and their  propensities are listed in table
 \begin{table}
 \caption{
 \bf{State-transitions and propensities: $P(\Delta X(t)|X(t))$}. The 
-transitions are summarized below, Fully expanded the system comtemplates 64 
+transitions are summarized below. Fully expanded, the system contemplates 64 
 possible state transitions, as can be verified in figure \ref{fig:sde_blocks}. 
 }
 \label{tab:trans}
@@ -136,18 +138,20 @@ $S \rightarrow I_i$ & $\beta S I_{*i}$ & $\Delta S(t)=-1,\, \Delta I_i(t) = 1$
 & Primary infection \\
 $I_i \rightarrow R_i$ & $\sigma I_i$ & $\Delta I_i(t)=-1,\, \Delta R_i(t) = 1$ 
 & Primary recovery\\
-$R_i \rightarrow I_{[i]j}$ & $\beta \delta R_i I_{*j}$ & $$\Delta R_i(t)=-1,\, 
-\Delta I_{[i]j}(t) = 1$$ & Secondary infection\\
-$I_{[i]j} \rightarrow R_{ij}$ & $\sigma I_{[i]j}$ &$$\Delta I_{[i]j}(t)=-1,\, 
-\Delta R_{ij}(t) = 1$$& Secondary recovery\\
-$R_{ij} \rightarrow I_{[ij]k}$ & $\beta \delta R_{ij} I_{*k}$ & Tertiary 
-infection\\
-$I_{[ij]k} \rightarrow R_{ijk}$ & $\sigma I_{[ij]k}$ & Tertiary recovery\\
-$R_{ijk} \rightarrow I_{[ijk]l}$ & $\beta \delta R_{ijk} I_{*l}$ & Quaternary 
-infection\\
-$I_{[ijk]l} \rightarrow R_{ijkl}$ & $\sigma I_{[ijk]l}$ & Quaternary recovery\\
-$\rightarrow S$ & $\mu N$ & Birth\\
-$All \rightarrow$ & $\mu N$ & Death\\
+$R_i \rightarrow I_{[i]j}$ & $\beta \delta R_i I_{*j}$ & $\Delta R_i(t)=-1,\, 
+\Delta I_{[i]j}(t) = 1$ & Secondary infection\\
+$I_{[i]j} \rightarrow R_{ij}$ & $\sigma I_{[i]j}$ &$\Delta I_{[i]j}(t)=-1,\, 
+\Delta R_{ij}(t) = 1$& Secondary recovery\\
+$R_{ij} \rightarrow I_{[ij]k}$ & $\beta \delta R_{ij} I_{*k}$ &$\Delta 
+R_{ij}(t)=-1,\, \Delta I_{[ij]k}(t) = 1$& Tertiary infection\\
+$I_{[ij]k} \rightarrow R_{ijk}$ & $\sigma I_{[ij]k}$ &$\Delta 
+I_{[ij]k}(t)=-1,\, \Delta R_{ijk}(t) = 1$& Tertiary recovery\\
+$R_{ijk} \rightarrow I_{[ijk]l}$ & $\beta \delta R_{ijk} I_{*l}$ &$\Delta 
+R_{ijk}(t)=-1,\, \Delta I_{[ijk]l}(t) = 1$& Quaternary infection\\
+$I_{[ijk]l} \rightarrow R_{ijkl}$ & $\sigma I_{[ijk]l}$ & $\Delta 
+I_{[ijk]l}(t)=-1,\, \Delta R_{ijkl}(t) = 1$ & Quaternary recovery\\
+$\rightarrow S$ & $\mu N$ & $\Delta S = 1$ & Birth\\
+$All \rightarrow$ & $\mu N$ &$\Delta All = -1$& Death\\
 \hline
 \end{tabular}
 \end{center}
@@ -161,7 +165,7 @@ state of the system at the time $t$.
 The system is written as a forward Kolmogorov differential equation, which in 
 matrix form looks like
 \begin{equation}
-dP_X(t) = Q P_X(t) 
+\frac{dP_X(t)}{dt} = Q P_X(t) 
 \end{equation}
 
 Where $P_X(t)$ is  the matrix of transition probabilities (given in table 
