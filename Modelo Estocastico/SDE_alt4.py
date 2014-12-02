@@ -20,45 +20,64 @@ def plot(t, s, l):
         P.plot(t, s[:, i], co.next() + sy.next() + '-')
     P.legend(l, loc=0)
 
-
-def plot_4_types(t, s, l):
+def agg_by_type(s, l):
     """
-    Plot all infectives for each serotype
+    return series aggregated by serotype
+    :param s: series
+    :param l: labels
     """
-    print l
-    P.figure()
     s = np.vstack(s).T
-    # type 1
     i1 = [l.index(i) for i in l if i.endswith('1') and i.startswith('I')]
-    print i1
     s1 = np.zeros(s.shape[0])
     for i in i1:
         s1 += s[:, i]
-    P.plot(t, s1, label='1')
-    # Type 2
+
     i2 = [l.index(i) for i in l if i.endswith('2') and i.startswith('I')]
     s2 = np.zeros(s.shape[0])
     for i in i2:
         s2 += s[:, i]
-    P.plot(t, s2, label='2')
-    # type 3
+
     i3 = [l.index(i) for i in l if i.endswith('3') and i.startswith('I')]
-    print "I3: ", i3
+    # print "I3: ", i3
     s3 = np.zeros(s.shape[0])
     for i in i3:
         s3 += s[:, i]
-    P.plot(t, s3, label='3')
-    # Type 4
+
     i4 = [l.index(i) for i in l if i.endswith('4') and i.startswith('I')]
     s4 = np.zeros(s.shape[0])
-    print "I4: ", i4
+    # print "I4: ", i4
     for i in i4:
         s4 += s[:, i]
+
+    return s1, s2, s3, s4
+
+
+def plot_4_types(t, s, l):
+    """
+    Plot all infectives for each serotype
+    :param t: Times
+    :param s: series
+    :param l: labels
+    """
+    # print l
+    P.figure()
+
+    s1, s2, s3, s4 = agg_by_type(s, l)
+
+    P.plot(t, s1, label='1')
+
+    P.plot(t, s2, label='2')
+
+    P.plot(t, s3, label='3')
+
     P.plot(t, s4, label='4')
     P.legend(loc=0)
     P.xlabel('time')
     P.ylabel('individuals')
     P.savefig('4types.png', dpi=300)
+
+def plot_xcorr(s1, s2):
+    P.figure("Cross Correlation")
 
 
 if __name__ == "__main__":
@@ -74,7 +93,7 @@ if __name__ == "__main__":
     #        with open('export.txt','w') as g:
     #            g.write(f.read())
 
-    smod.DoStochSim(trajectories=1, mode='time', end=500, method="direct", IsTrackPropensities=False)
+    smod.DoStochSim(trajectories=1, mode='time', end=1000, method="direct", IsTrackPropensities=False)
     #smod.DoCainStochSim(endtime=200,frames=10000,trajectories=1, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
     smod.GetRegularGrid()
     smod.PlotSpeciesTimeSeries()

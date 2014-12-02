@@ -466,7 +466,7 @@ Rec_I123:
 
 Rec_I143:
     I143 > R134
-    sigma*I43
+    sigma*I143
 
 Rec_I243:
     I243 > R234
@@ -522,19 +522,12 @@ Rec_I2341:
     I2341 > R1234
     sigma*I2341
     
-#InitPar
-mu = 1.0/(70*52) #70 years in weeks
-beta = 400/52.0
-phi = 1
-sigma = 1/1.5
-gamma = 1
-delta = 0.5
 
 #InitVar
-S = 0
+S = 100
 I1 = 50
-I2 = 0
-I3 = 0
+I2 = 50
+I3 = 50
 I4 = 50
 R1 = 0
 R2 = 0
@@ -570,16 +563,25 @@ I243 = 0
 I124 = 0
 I134 = 0
 I234 = 0
-R123 = 250
+R123 = 0
 R124 = 0
 R134 = 0
-R234 = 250
+R234 = 0
 I1234 = 0
 I1243 = 0
 I1342 = 0
 I2341 = 0
-R1234 = 49500
+R1234 = 48000
 
-#Event: denv4, _TIME_ > 12 , 0 {
+#InitPar
+mu = 1.0/(70*52) #70 years in weeks
+beta = 400/52.0
+phi = 1
+sigma = 1/1.5
+gamma = 1
+delta = 0.5
+
+
+#Event: denv4, _TIME_ > 40 , 0 {
 #I4 = 50
 #}
