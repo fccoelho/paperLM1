@@ -158,6 +158,13 @@ def series(nam='Dengue_S0'):
         # ax2.xaxis.set_major_formatter(FormatStrFormatter('%g'))
         #print P.setp(ax2)
 
+def plot_rt_beta():
+    df = pd.read_csv('data_Rt_dengue_complete.csv', header=0, delimiter=',', skiprows=[1, 2, 3], parse_dates=True)
+    df.Rt.plot()
+    df.Rt2.plot()
+    df.lwr.plot()
+    df.upr.plot()
+
 def plot_concat_series(dbs):
     """
     Plot concatenated time series for susceptibles and infectious
@@ -216,8 +223,10 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("DengueS*.sqlite")
-    plot_concat_series(dbs)
+    #plot_concat_series(dbs)
     # print create_tex_table(dbs)
+    plot_rt_beta()
+
 
 
     # sns.tsplot(series.S, time=series.time)
