@@ -110,7 +110,7 @@
 \makeatother
 
 % Our defs 
-\def \rr {$R_{t}\ $}
+\def \rr {$R_{t}\:$}
 
 % Leave date blank
 \date{}
@@ -165,7 +165,7 @@ number of susceptibles for each viral type at any point in time.
 Dengue transmission is modulated by environmental conditions, of which 
 temperature, due to its effects on the 
 vector reproduction, stands out as a strong predictor of 
-incidence\cite{honorio_temporal_2009,wu_higher_2009}.
+incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
 In places with sufficient temperature variation dengue is predominantly a 
 summer disease.
 
@@ -174,33 +174,39 @@ types in circulation Demographics also plays a role in replenishing the
 population of susceptibles. 
 
 The Attack ratio of disease is a mesure of mobidity defined as the number of new
-cases divided byt the population at risk. For Dengue outbreaks and epidemics 
+cases divided byt the population at risk.
+For Dengue outbreaks and epidemics 
 this can be difficult to calculated due to the lack of information about the 
 population at risk. The population at risk in the case of dengue, is the number 
 of susceptibles to the circulating virus type(s) befor a given epidemic.
 
 The main source of information about Dengue dynamics are the incidence 
 timeseries, which represent all the cases of Dengue reported by health 
-professionals with no discrimination of virus types. Only a very small sample 
+professionals with no discrimination of virus types.
+Only a very small sample 
 of the cases are ever examined to determined the virus type.
 
 In order to calculate the attack ratio, we need to determine the number of 
-susceptibles to the circulating virus types right before the epidemic. Without 
+susceptibles to the circulating virus types right before the epidemic.
+Without 
 regular virological surveys, it is virtually impossible to determine the 
 population at risk.
 
 The attack ratio is also influenced by the reproductive number of the disease 
-\cite{bacaer_final_2009, katriel_attack_2012}. With Dengue, since transmission 
+~\cite{bacaer_final_2009, katriel_attack_2012}.
+With Dengue, since transmission 
 is affected by environmental conditions as discussed above, the reproductive 
 number is also expected to vary with time.
 
-Various challenges exist to assess the attack rate of a dengue epidemic. One of 
+Various challenges exist to assess the attack rate of a dengue epidemic. 
+One of 
 them is that there are a large number of asymptomatic cases in any epidemic, 
-which nevertheless acquire immunity. It is estimated that for 
+which nevertheless acquire immunity.
+It is estimated that for 
 every case reported, 10-20 are not seen by health authorities (personnal 
 communication).
 Thirdly, under-reporting is a serious issue in Brazil. 
-Duarte and Fran\c{c}a\cite{duarte_data_2006}, estimated 
+Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
 the sensitivity of dengue reporting for hospitalized patients in 
 Belo-Horizonte, Brazil to be of 63\%, 
 meaning that aproximately 37\% of the suspected dengue cases go unreported.  
@@ -209,26 +215,33 @@ are not easy to determine.
 
 
 In this paper, we estimate the number of susceptibles before every major 
-outbreak ($S_{0, year}$) in the last 18 years. Due to the alternation of 
+outbreak ($S_{0, year}$) in the last 18 years.
+Due to the alternation of 
 ciculating serotypes, we detected fluctuating levels of susceptibility the 
-circulating virus(es). To Estimate the susceptibles we have we have fixed the 
-tramissibility based on the $R_t$ series derived from data\cite{nishiura}. Then, 
+circulating virus(es).
+To estimate the susceptibles we have we have fixed the 
+tramissibility based on the $R_t$ series derived from data~\cite{nishiura}. 
+Then, 
 from the incidence series and the population at risk, we could then calculate 
 the attack ratio for each epidemic.
 
 To accomplish the estimation of the $S_0$, we use a simplified model of 
-dengue transmission based on a single-strain Susceptible-infecctious-Removed 
-(SIR) model. The reason for the choice of a single strain model, is the lack of 
+dengue transmission based on a single-strain Susceptible-Infecctious-Removed 
+(SIR) model.
+The reason for the choice of a single strain model, is the lack of 
 accurate information regarding the actual proportions of each virus in 
-circulation. However, some information is available about the predominant 
+circulation.
+However, some information is available about the predominant 
 serotypes for some epidemics in the period 
-of study\cite{macedo_virological_2013}. 
+of study~\cite{macedo_virological_2013}. 
 
 Methods for estimating the  number of susceptibles have been proposed 
-before, for other diseases\cite{bjornstad_dynamics_2002, 
-wallinga_reconstruction_2003}. These methods try to reconstruct the entire 
+before, for other diseases~\cite{bjornstad_dynamics_2002, 
+wallinga_reconstruction_2003}.
+These methods try to reconstruct the entire 
 series of infectious and susceptibles for measles 
-outbreaks from case data.\todo[inline]{anyone else?} In the case of Dengue the 
+outbreaks from case data.\todo[inline]{anyone else?}
+In the case of Dengue the 
 series of susceptibles to all possible serotypes, cannot be reconstructed based 
 solely on a deterministic transmission model, since the arrival/re-emergenge of 
 new serotypes (which are a stochastic events) can change drastically the pool 
@@ -237,43 +250,39 @@ dynamics.
 
 The authors have applied similar methods as used here, to estimate the number 
 of susceptibles for the predominant strain of influenza at the beginning of  
-influenza seasons in europe\cite{pone2011}.
+influenza seasons in europe~\cite{pone2011}.
 
 
 \section*{Methods}
 
-In this section we will start by describing how we estimated the effective 
-reproductive number, $R_t$, relative to the global dengue cases, and its 
-posterior probability distribution. 
-We then proceed to describe the SIR model 
-used to represent the global incidence and how the $R_t$ is integrated into the 
-model to allow for time varying transmission. 
-Then we describe the Bayesian 
-estimation methodology applied to find the posterior probability distributions 
-of the susceptibles to the main circulating Dengue viruses for each epidemic, 
-using Dengue incidence time series for Rio de Janeiro from 1996 to 2014.
-In the last subsection we describe how we estimated the Attack ratio of each 
-epidemic from the estimated susceptibility and observed incidence.
+In this section we will start by describing a method to estimate the 
+effective 
+reproductive number, $R_t$, and obtain its 
+posterior distribution. 
+We then proceed to describe Susceptible-infectious-recovered (SIR) model 
+used to represent the global disease incidence and how $R_t$ can be integrated 
+into the model to allow for time varying transmission. 
+Next, an approach to approximate the posterior distributions 
+of the numbers of susceptible to the main circulating Dengue viruses for each 
+epidemic is detailed.
+Finally, we discuss how to estimate the attack ratio of each 
+epidemic using the estimated susceptible fraction and observed incidence.
+We employ these methods to analyze Dengue incidence time series for the city of 
+Rio de Janeiro from 1996 to 2014.
 
-\subsection*{Estimating the effective reproductive number, $R_t$}
+\subsection*{Estimating the effective reproductive number ($R_t$)}
 
-In monitoring of infectious diseases, it is important to assess whether the 
+ In monitoring of infectious diseases, it is important to assess whether the 
 incidence of a  particular disease is increasing significantly, in order to 
 decide to take preventive measures.
 The effective reproductive number at time $t$, \rr, can be understood as a 
 real-time estimate of the basic reproductive number ($R_{0}$) and is defined as 
 the average number of secondary cases per primary case at time $t$.
-Here we derive confidence/credibility bounds for the uncertainty about the 
-estimate of the effective reproductive number $R_t$ under the assumption that 
-reported disease counts are Poisson distributed.
-It is shown that one can construct a conservative confidence interval for \rr 
-using the induced probability distribution that results from the approach of 
-\cite{mantel}.
 
 Let $Y_t$ be the number of reported disease cases for a particular time $t \in 
 (0, T)$.
-\cite{nishiura} extend the theory developed by \cite{stallybrass} and propose 
-to estimate \rr as
+Nishiura el al. (2010)~\cite{nishiura} extend the theory developed by 
+Stallybrass et al. (1931)~\cite{stallybrass} and propose to estimate \rr as
 \begin{equation}
 \label{eq:Rtestimate}
 R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
@@ -281,13 +290,14 @@ R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
 where $n$ is taken to be the ratio between the length of reporting interval and 
 the mean generation time of the disease.
 Here we are interested in the simpler case $n=1$.
-If \rr is to be used as a decision tool, one needs to be able to quantify the 
+If \rr is to be used as a decision tool, howeve, one needs to be able to 
+quantify the 
 uncertainty about estimate in equation~\ref{eq:Rtestimate}. 
-Here we detail how to obtain confidence intervals for \rr, exploring two 
-approaches under the assumption that the counts $Y_t$ are Poisson distributed 
-for all $t$.
+Here we detail how to obtain credibility intervals for \rr under the assumption 
+that the counts $Y_t$ are Poisson distributed for all $t$.
 
-First we explore the approach of \cite{mantel}, whose objective is to obtain 
+We explore the approach of Ederer and Mantel~\cite{mantel}, whose objective is 
+to obtain 
 confidence intervals for the ratio of two Poisson counts. 
 Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
 and define $S = Y_{t} + Y_{t+1}$.
