@@ -357,7 +357,7 @@ Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
 \end{align}
 one can compute the desired probability while avoiding dealing with the density 
 in~(\ref{eq:densityMantel}) directly.
-
+s
 \subsection*{Mathematical modeling} % The model
 
 A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue 
@@ -382,58 +382,50 @@ ordinary differential equations
  \frac{dR}{dt} &= \tau I&
 \end{align}  
 where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$. 
-This is a rather simplified model, in which, for instance, the vector is left 
-out.
+Of course, this is a rather simplified model, in which, for instance, the 
+vector is omitted.
 The rationale for this simplification is based on the ability of the 
 empirically derived $R_t$  to incorporate the effects of the fluctuating vector 
 populations.
 Also, although there are multiple circulating serotypes, our approach
-does not discriminate between them due to the lack of serotype-specific data.
-
+can not discriminate between them due to the lack of serotype-specific data.
+Nevertheless, this modeling strategy can still provide some insight into the 
+disease dynamics and allows us to estimate the initial fraction of susceptibles 
+$S_0$.
 
 \subsection*{Bayesian parameter estimation}
-
-For the fitting procedure the incidence time series was divided into $J=13$ 
-epidemic 
-windows that corresponded to significant raises in incidence and normalized to 
-lie on the $[0,1]$ interval.
-Also, as the numerical integration routine needs to treat $\beta(t)$ as a
-continuous function of time because of the variable step size, we used linear 
-interpolation to obtain values of $R_t$ for any time point.
-
-We take a Bayesian approach to the estimation of $S_0$ for each window.
+We take a Bayesian approach to the estimation of $S_0$.
+First the incidence time series was divided into $J=13$ 
+epidemic windows that corresponded to significant raises in incidence and 
+normalized to lie on the $[0,1]$ interval.
 For a given interval $j = \{ t_j^{\text{start}}, t_j^{\text{end}} \} $ we 
 observe an incidence time series $\mathbf{Y_{j}}$.
 We are thus interested in the posterior distribution
 \begin{equation}
  \label{eq:S0post}
- p(S_{0j}|\mathbf{Y_{j}}) \propto l(\mathbf{Y_{j}}|S_{0j}, R_t, m,  \tau 
+ p(S_{0j}|\mathbf{Y_{j}}) \propto l(\mathbf{Y_{j}}|S_{0j}, R_t, m, \tau 
 )\pi(S_{0j}) 
 \end{equation}
 The likelihood $l(\mathbf{Y_{j}}|\cdot)$ is assumed to be a Normal distribution 
 with fixed variance $\sigma^2$.
 In this estimation procedure we kept $R_t$ fixed at fixed at the posterior mean 
-obtained as described in TextS1 and fixed $\tau = 1/7\: \text{days}^{-1}$.
-% \subsubsection*{Priors}
+obtained as described above and fixed $\tau = 1/7\: \text{days}^{-1}$.
 To complete the inference, we need to specify prior distributions for the 
 parameters of interest.
 We place a flat $\text{Beta}(1, 1)$ prior on $S_{0j}\:\forall j$
-% 
-% \begin{align}
-%  S_{0j} &\sim Beta(1, 1) \\
-%        m &\sim \\
-% \end{align}
-
-
-% \subsubsection*{Posterior approximation}
 
 To approximate the posterior in~(\ref{eq:S0post}) we use Markov chain Monte 
 Carlo techniques implemented in the Bayesian inference with Python 
-(BIP)~\cite{pone2011} available at 
+(BIP)~\cite{pone2011} available at  
 \url{http://code.google.com/p/bayesian-inference/}.
 BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\cite{vrugt2008} 
 scheme that efficiently samples from high-dimensional joint distributions using 
 multiple adaptive chains running in parallel with delayed rejection.
+Also, as the numerical integration routine implemented within BIP needs 
+$\beta(t)$ to be available at 
+arbitrary values of $t$, i.e., as continuous function of time because of the 
+variable step size, we used linear interpolation to obtain values of $R_t$ for 
+any time point.
 In this study we used one chain per parameter, i.e, 3 chains for each run.
 The chains were run until $5000$ samples were obtained after discarding $500$ 
 burn-in samples.
@@ -447,19 +439,18 @@ by the size of the population at risk.
 
 \begin{equation}
 \label{eq:AR}
-A=\frac{cases}{Pop.\, at\, risk} 
+A=\frac{\text{\# cases}}{\text{Population at risk}} 
 \end{equation}
 
-Based on the what have been discussed so far, we can rewrite (\ref{eq:AR}) for 
+Based on the what has been discussed so far, we can rewrite (\ref{eq:AR}) for 
 each epidemic $j$ as
 \begin{equation}
 \label{eq:AR2}
  A_{j}=\frac{\sum Y_j}{S_{0j}}
 \end{equation}
-where $S_{0j}$ is the number of susceptibles before each epidemic $j$, 
+where $S_{0j}$ is the number of susceptibles before each epidemic $j$, which we
 estimated as described above.
 
-% Results and Discussion can be combined.
 \section*{Results and Discussion}
  
 The time series used for all the analyses consists of officially notified 
@@ -471,15 +462,19 @@ indistinguishable from 1.
 
 Figure \ref{Fig:S0}, shows the model from (\ref{eq:model}) fitted to the data. 
 In it we can see that the susceptibles series in each epidemic starts at the 
-estimated level of $S_0$. The proportion of susceptibles may seem low, but we 
+estimated level of $S_0$.
+The proportion of susceptibles may seem low, but we 
 must remember that these estimates are being affected by an unknown 
 underreporting factor, which experts suggest is somewhere between 5 and 10, 
-i.e. for every case observed there are 5 or 10 unobserved. Since this 
+i.e. for every case observed there are 5 or 10 unobserved.
+Since this 
 underreporting ration affects both the numerator and denominator of 
 (\ref{eq:AR}), its effects should cancel out, giving us an unbiased attack ratio 
-estimate. One other possible source of bias which would lead to the 
+estimate.
+One other possible source of bias which would lead to the 
 underestimation of $S_0$ could come from a significant part of the population 
-not being exposed to the disease. But, as we can see in figure xx\todo{add 
+not being exposed to the disease.
+But, as we can see in figure xx\todo{add 
 figure with the four maps}, the disease spreads pretty much homogeneously over 
 the entire city (in the last four epidemics, at least). 
 
@@ -491,7 +486,8 @@ epidemic/outbreak.
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
-posterior inference for $R(t)$. The authors are also grateful to Claudia T. 
+posterior inference for $R(t)$.
+The authors are also grateful to Claudia T. 
 Codeço for helpful discussions about the manuscript.
 
 \bibliography{lm1}
