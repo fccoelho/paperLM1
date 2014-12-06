@@ -93,7 +93,7 @@ if __name__ == "__main__":
     #        with open('export.txt','w') as g:
     #            g.write(f.read())
 
-    smod.DoStochSim(trajectories=1, mode='time', end=1000, method="direct", IsTrackPropensities=False)
+    smod.DoStochSim(trajectories=1, mode='time', end=1000, method="direct", IsTrackPropensities=True)
     #smod.DoCainStochSim(endtime=200,frames=10000,trajectories=1, solver="HomogeneousDirect2DSearch",IsTrackPropensities=False)
     smod.GetRegularGrid()
     smod.PlotSpeciesTimeSeries()

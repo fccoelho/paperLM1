@@ -524,7 +524,7 @@ Rec_I2341:
     
 
 #InitVar
-S = 100
+S = 10
 I1 = 50
 I2 = 50
 I3 = 50
@@ -579,7 +579,7 @@ beta = 400/52.0
 phi = 1
 sigma = 1/1.5
 gamma = 1
-delta = 0.5
+delta = 0.2
 
 
 #Event: denv4, _TIME_ > 40 , 0 {
