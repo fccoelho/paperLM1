@@ -41,7 +41,7 @@ Rt.beta <- function(d, gt = 3, alpha = .95, a0 = 2 , b0 = 3){
   return(data.frame(Rt, Rt2, CIs))
 }
 ###################################################
-rRtpost <- function(n, a = , b = ){ # let's sample from the distribution of R_t
+rRt <- function(n, a, b){ # let's sample from the distribution of R_t
   x <- rbeta(n, shape1 = a, shape2 = b)
   y <- x/(1-x) # yup! simple as that!
 return(y)
