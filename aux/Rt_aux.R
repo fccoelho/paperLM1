@@ -26,7 +26,7 @@ Rt.beta <- function(d, gt = 3, alpha = .95, a0 = 2 , b0 = 3){
     ac <- ac + d[(gt-i):(N-i)] 
   } 
   K <- length(ac)
-  jk1 <- ac[2:K] # J[k+1] 
+  jk1 <- ac[2:K] # J[k+1] s
   jk  <- ac[1:(K-1)]# J[k]  
   Rt <- Rt2 <- NA
   Rt[(gt + 1):N] <- jk1/jk
@@ -39,6 +39,12 @@ Rt.beta <- function(d, gt = 3, alpha = .95, a0 = 2 , b0 = 3){
                                   n = jk1[k] + jk[k], a = a0, b = b0 ))
   } 
   return(data.frame(Rt, Rt2, CIs))
+}
+###################################################
+rRtpost <- function(n, a = , b = ){ # let's sample from the distribution of R_t
+  x <- rbeta(n, shape1 = a, shape2 = b)
+  y <- x/(1-x) # yup! simple as that!
+return(y)
 }
 ###################################################
 Rt.gamma <- function(d, gt = 3, alpha = .95){
