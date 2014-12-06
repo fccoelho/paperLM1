@@ -249,8 +249,8 @@ of susceptibles throwing off any sequential estimation based on the incidence
 dynamics.
 
 The authors have applied similar methods as used here, to estimate the number 
-of susceptibles for the predominant strain of influenza at the beginning of  
-influenza seasons in europe~\cite{pone2011}.
+of susceptibles for the predominant strain of Influenza at the beginning of  
+Influenza seasons in europe~\cite{pone2011}.
 
 
 \section*{Methods}
@@ -267,12 +267,12 @@ of the numbers of susceptible to the main circulating Dengue viruses for each
 epidemic is detailed.
 Finally, we discuss how to estimate the attack ratio of each 
 epidemic using the estimated susceptible fraction and observed incidence.
-We employ these methods to analyze Dengue incidence time series for the city of 
-Rio de Janeiro from 1996 to 2014.
+We employ these methods to analyze Dengue weekly incidence time series for the 
+city of Rio de Janeiro from 1996 to 2014.
 
 \subsection*{Estimating the effective reproductive number ($R_t$)}
 
- In monitoring of infectious diseases, it is important to assess whether the 
+In monitoring of infectious diseases, it is important to assess whether the 
 incidence of a  particular disease is increasing significantly, in order to 
 decide to take preventive measures.
 The effective reproductive number at time $t$, \rr, can be understood as a 
@@ -290,7 +290,7 @@ R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
 where $n$ is taken to be the ratio between the length of reporting interval and 
 the mean generation time of the disease.
 Here we are interested in the simpler case $n=1$.
-If \rr is to be used as a decision tool, howeve, one needs to be able to 
+If \rr is to be used as a decision tool, however, one needs to be able to 
 quantify the 
 uncertainty about estimate in equation~\ref{eq:Rtestimate}. 
 Here we detail how to obtain credibility intervals for \rr under the assumption 
@@ -301,7 +301,7 @@ to obtain
 confidence intervals for the ratio of two Poisson counts. 
 Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
 and define $S = Y_{t} + Y_{t+1}$.
-The authors then proceed to note that by conditioning on the sum $S$
+The authors note that by conditioning on the sum $S$
 \begin{align}
 \label{eq:binlike}
 Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
@@ -311,13 +311,13 @@ Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that
 $Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
 Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that 
 $Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
-\cite{mantel} show that one can construct a $100\alpha \%$ confidence interval 
-for \rr by noting that
+Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha 
+\%$ confidence interval for \rr by noting that
 \begin{align}
- R_t^{(L)} &= \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})}\\
+\label{eq:confRt}
+ R_t^{(L)} &= \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})}\nonumber \\
  R_t^{(U)} &= \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}
 \end{align}
-
 Many authors have derived $c_{\alpha}(\theta_t)$ following orthodox approaches 
 such as those of \cite{wilson} and \cite{clopper}, mainly for simplicity.
 We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
@@ -329,37 +329,44 @@ $\theta_t$ is
 \label{eq:thetapost}
 p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
 \end{equation}
-Equation~(\ref{eq:thetapost}) tells us that the induced distribution of $R_t$ is 
-a beta prime with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 =  Y_t + b_0$.
-The density of this induced distribution  $f_P(R_t)$ is then 
+Combining equations~(\ref{eq:confRt}) and~(\ref{eq:thetapost}) 
+tells us that the induced posterior distribution of $R_t$ is 
+a beta prime (or inverted beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 
+=  Y_t + b_0$.
+The density of the induced distribution is then 
 \begin{equation}
 \label{eq:densityMantel}
 f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 - 
 1} (1 + R_t)^{-(a_1 + b_1)}
 \end{equation}
-Thus, the expectation of \rr under $f_P$ is $a_1/(b_1 - 1)$ and its variance is 
+Thus, the expectation of \rr is $a_1/(b_1 - 1)$ and its variance is 
 $a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
+Sampling from the posterior in~(\ref{eq:densityMantel}) can be made 
+straightforward by first sampling from~(\ref{eq:thetapost}) and then applying 
+the transform in~(\ref{eq:confRt}). 
 
-Since when $R_t > 1$ indicates sustained transmission, one may be interested in 
-computing the probability of this event.
+Also, since $R_t > 1$ indicates sustained transmission, one may be 
+interested in computing the probability of this event.
+This can be easily achieved by integrating~(\ref{eq:densityMantel}) over the 
+appropriate interval.
 By noting that
 \begin{align}
 \label{cumprobMantel}
 Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
             &= 1- Pr(\theta_t < \frac{1}{2})
 \end{align}
-one can avoid dealing with the density in~(\ref{eq:densityMantel}) directly.
+one can compute the desired probability while avoiding dealing with the density 
+in~(\ref{eq:densityMantel}) directly.
 
-The data used to fit the model consists of weekly incidence from 1996 to 2014 
-in the city of Rio de Janeiro, Brazil.
+\subsection*{Mathematical modeling} % The model
 
-\subsection*{The model}
-
-A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue dynamics.
+A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue 
+dynamics.
 In the traditional formulation of the model, transmission is governed by a 
 transmission rate $\beta$ and recovery happens at a rate $\tau$.
 
-As the epidemic progresses, the effective transmission  rate changes and is
+As the epidemic progresses, the effective transmission  rate changes and is 
+given by 
 \begin{equation} 
  \label{eq:effbeta}
  \beta(t) = \frac{R_t\cdot\tau}{S_0}
