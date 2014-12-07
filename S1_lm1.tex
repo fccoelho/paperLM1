@@ -43,36 +43,69 @@ Luiz Max de Carvalho \\
 distribution of $R_t$}
 \label{sec:tails}
 There are a number of approaches to deriving the distribution of \rr.
-One could for example  use the distribution in equation A6 of~\citet{nishiura} 
-or estimate \rr using the approach described in the main text~\citep{mantel}.
+Alternatively to the approach described in the main text~\citep{mantel}, one 
+could use the conditional distribution of \rr on 
+$Y_{t+1}$ and $Y_t$ as defined in equation A7 of \citet{nishiura}:
+\begin{equation}
+\label{seq:unorm}
+f_{R}(R_{t}) = (Y_tR_{t})^{Y_{t+1}} e^{-Y_tR_{t}}
+\end{equation}
+Noticing the kernel of (\ref{seq:unorm}) is that of a gamma distribution with 
+$a_2 = Y_{t+1}+1$ and $b_2 = Y_t$, we obtain a proper density from which to 
+construct $c_{\alpha}(R_t)$, simply by computing the appropriate quantiles of 
+said distribution.
+ This density is
+\begin{equation}
+\label{seq:densityNishiura}
+f_N(R_t| a_2, b_2) =  \frac{b_2^{a_2}}{\Gamma(a_2)} R_t^{a_2-1} e^{-b_2 R_t}
+\end{equation}
+
 In order to decide which approach to take, it may be of use analyzing the 
 variance and tail behavior of the derived distributions for \rr. 
 Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to 
 the conditional distribution proposed by~\citet{nishiura}, thus providing more 
-conservative confidence/credibility intervals.  
+conservative confidence/credibility intervals.
+To see that one needs simply take the ratio of the Beta prime and Gamma 
+(unnormalized) densities and evaluate the limit as $R_t$ goes to infinity:
+\begin{equation}
+ \label{seq:densityratio}
+ \lim_{R_t\to\infty}\frac{f_P(R_t| a_1, b_1)}{f_N(R_t| a_2, b_2)} =  
+\lim_{R_t\to\infty}\frac{e^{Y_{t}R_t}}{(1 +R_t)^{Y_{t} + Y_{t +1}+2}} = \infty
+\end{equation}
+
+
+
 As a side note, the Bayesian approach presented in this 
 paper will give similar results to those of 
 \citet{wilson} and \citet{wilson} for $Y_{t+1}$ and $Y_t >> 1$.
-Under the flat  uniform prior for $\theta_t$, the Bayesian posterior credibility interval is nearly indistinguishable from the confidence interval proposed by \citet{clopper} for $Y_{t+1}, Y_t > 20$.
-Note that the $Beta(1, 1)$ uniform prior for $\theta_t$ constitutes a poor prior choice mainly because the induced distribution for \rr is only well-defined for $b_0 > 2$.
+Under the flat  uniform prior for $\theta_t$, the Bayesian posterior credibility 
+interval is nearly indistinguishable from the confidence interval proposed by 
+\citet{clopper} for $Y_{t+1}, Y_t > 20$.
+Note that the $Beta(1, 1)$ uniform prior for $\theta_t$ constitutes a poor prior 
+choice mainly because the induced distribution for \rr is only well-defined for 
+$b_0 > 2$.
 
 An advantage of the Bayesian approach is that one can devise prior 
 distributions for $\theta_t$ taking advantage of the intuitive parameterization 
 and flexibility of the beta family of distributions.
-Prior elicitation can also be done for \rr and the hyperparameters directly plugged into the prior for $\theta_t$. 
-One can, for example, choose a priori mean and variance for \rr and find $a_0$ and $b_0$ that satisfy those conditions.
+Prior elicitation can also be done for \rr and the hyperparameters directly 
+plugged into the prior for $\theta_t$. 
+One can, for example, choose a priori mean and variance for \rr and find $a_0$ 
+and $b_0$ that satisfy those conditions.
 Let $m_0$ and $v_0$ be the prior expectation and variance for $R_t$. 
 After some tedious algebra one finds
 \begin{align}
-\label{eq:elicitation}
+\label{seq:elicitation}
 a_0 &= \frac{m_0v_0 + m_0^3 + m_0^2}{v_0} \\
 b_0 &= \frac{2v_0 + m_0^2 + m_0}{v_0}
 \end{align}
-If one wants only to specify $m_0$ and a coefficient of variation $c$ \footnote{$c = \sqrt{v_0}/ m_0$.} for $R_t$ \textit{a priori}, some less boring algebra gives:
+If one wants only to specify $m_0$ and a coefficient of variation $c$ 
+\footnote{$c = \sqrt{v_0}/ m_0$.} for $R_t$ \textit{a priori}, some less boring 
+algebra gives:
 \begin{align}
-\label{eq:elicitationcv}
+\label{seq:elicitationcv}
 a_0 &= \frac{m_0^3c^2 + m_0^3 + m_0^2}{m_0^2c^2} \\
 b_0 &= \frac{2m_0^2c^2 + m^2 + m}{m_0^2c^2}
 \end{align}
@@ -81,6 +114,8 @@ This approach thus makes possible to incorporate epidemiological knowledge
 about disease biology (e.g. the magnitude of $R_0$) into the computation of \rr.
 This may prove particularly important when disease counts are low and/or close 
 to the detection threshold.
+We provide an R script to perform the above elicitation at 
+\url{https://github.com/fccoelho/paperLM1/blob/master/aux/elicit_Rt_prior.R}.
 \newpage
 \section*{Multi-strain dynamics}
 
@@ -96,7 +131,7 @@ model.
 
           \begin{figure}
  \centering
- \includegraphics[width=16cm]{Dengue4.png}
+ \includegraphics[width=16cm]{plots/Dengue4.png}
 
  \caption{Block diagram detailing the stochastic model. Infected individuals 
 with different Dengue viruses are represented by different colors. Infections 
