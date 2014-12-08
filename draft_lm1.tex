@@ -343,7 +343,11 @@ Thus, the expectation of \rr is $a_1/(b_1 - 1)$ and its variance is
 $a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
 Sampling from the posterior in~(\ref{eq:densityMantel}) can be made 
 straightforward by first sampling from~(\ref{eq:thetapost}) and then applying 
-the transform in~(\ref{eq:confRt}). 
+the transform in~(\ref{eq:confRt}).
+Also, one can chose $a_0$ and $b_0$ so as elicit meaningful prior distributions
+for $R_t$.
+We show how to elicit the prior for $R_t$ from specified prior mean and variance
+or coefficient of variation in Text S1.
 
 Also, since $R_t > 1$ indicates sustained transmission, one may be 
 interested in computing the probability of this event.
