@@ -72,6 +72,8 @@
 % % % % % % % % % % % % % % % % % % % % % % % %
 
 \documentclass[10pt]{article}
+\usepackage{todonotes}
+\usepackage{subfigure}
 % amsmath package, useful for mathematical formulas
 \usepackage{amsmath}
 % amssymb package, useful for mathematical symbols
@@ -83,7 +85,6 @@
 \usepackage{lineno}
 % ligatures disabled
 \usepackage{microtype}
-\usepackage{todonotes}
 \DisableLigatures[f]{encoding = *, family = * }
 % rotating package for sideways tables
 %\usepackage{rotating}
@@ -128,8 +129,8 @@
 % Title must be 150 characters or less
 \begin{flushleft}
 {\Large
-\textbf{Estimating the Attack ratio of Dengue Epidemics without serotype 
-information}
+\textbf{Estimating the Attack ratio of Dengue Epidemics, under time-varying 
+force of infection, from aggregated case notification data}
 }
 % Insert Author names, affiliations and corresponding author email.
 \\
@@ -167,21 +168,23 @@ temperature, due to its effects on the
 vector reproduction, stands out as a strong predictor of 
 incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
 In places with sufficient temperature variation dengue is predominantly a 
-summer disease.
+summer disease. So it is fair to say that these environmental fluctuations play 
+a key role in determining beginning and end of epidemic periods through its 
+effects on the force of infection.
 
 The long term dynamics of dengue is also modulated by the alternation of virus 
-types in circulation Demographics also plays a role in replenishing the 
+types in circulation. Demographics also plays a role in replenishing the 
 population of susceptibles. 
 
-The Attack ratio of disease is a mesure of mobidity defined as the number of new
-cases divided byt the population at risk.
-For Dengue outbreaks and epidemics 
-this can be difficult to calculated due to the lack of information about the 
-population at risk. The population at risk in the case of dengue, is the number 
-of susceptibles to the circulating virus type(s) befor a given epidemic.
+The Attack ratio of disease is a measure of morbidity defined as the number of 
+new cases divided by the population at risk.
+For Dengue outbreaks and epidemics this can be difficult to calculated due to 
+the lack of information about the population at risk. The population at risk in 
+the case of dengue, is the number of susceptibles to the circulating virus 
+type(s) before a given epidemic.
 
 The main source of information about Dengue dynamics are the incidence 
-timeseries, which represent all the cases of Dengue reported by health 
+time series, which represent all the cases of Dengue reported by health 
 professionals with no discrimination of virus types.
 Only a very small sample 
 of the cases are ever examined to determined the virus type.
@@ -209,7 +212,7 @@ Thirdly, under-reporting is a serious issue in Brazil.
 Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
 the sensitivity of dengue reporting for hospitalized patients in 
 Belo-Horizonte, Brazil to be of 63\%, 
-meaning that aproximately 37\% of the suspected dengue cases go unreported.  
+meaning that approximately 37\% of the suspected dengue cases go unreported.  
 Lastly, demography and migrations affect the number of susceptible in ways which 
 are not easy to determine.
 
@@ -217,10 +220,10 @@ are not easy to determine.
 In this paper, we estimate the number of susceptibles before every major 
 outbreak ($S_{0, year}$) in the last 18 years.
 Due to the alternation of 
-ciculating serotypes, we detected fluctuating levels of susceptibility the 
+circulating serotypes, we detected fluctuating levels of susceptibility the 
 circulating virus(es).
 To estimate the susceptibles we have we have fixed the 
-tramissibility based on the $R_t$ series derived from data~\cite{nishiura}. 
+transmissibility based on the $R_t$ series derived from data~\cite{nishiura}. 
 Then, 
 from the incidence series and the population at risk, we could then calculate 
 the attack ratio for each epidemic.
@@ -481,6 +484,23 @@ not being exposed to the disease.
 But, as we can see in figure xx\todo{add 
 figure with the four maps}, the disease spreads pretty much homogeneously over 
 the entire city (in the last four epidemics, at least). 
+
+\begin{figure}
+ \subfigure[2010]{\includegraphics[width=8cm, 
+height=4.82cm]{./plots/heatmap2010.jpg}
+% heatmap2010.jpg: 1075x589 pixel, 96dpi, 28.44x15.58 cm, bb=0 0 806 442
+}
+  \subfigure[2011]{\includegraphics[width=8cm]{./plots/heatmap2011.jpg}}
+  \subfigure[2012]{\includegraphics[width=8cm]{./plots/heatmap2012.jpg}
+% heatmap2010.jpg: 1075x589 pixel, 96dpi, 28.44x15.58 cm, bb=0 0 806 442
+}
+  \subfigure[2013]{\includegraphics[width=8cm]{./plots/heatmap2013.jpg}}
+  \caption{{\bf Maps showing the incidence of dengue in the city of Rio de 
+Janeiro from 2010 to 2013.} Circles indicate individual notified cases. A 
+heatmap is overlayed on the maps showing absolute density of cases.}
+  \label{fig:mapas}
+\end{figure}
+
 
 Table \ref{tab:AR} contains the attack ratios calculated for each 
 epidemic/outbreak.
