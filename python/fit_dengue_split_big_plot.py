@@ -42,6 +42,7 @@ def create_tex_table(dbs):
     Create Latex table with the Attack ratios for each epidemic
     :return:
     """
+    p = {}; s = {}; o = {}
     pts = OrderedDict()
     series = OrderedDict()
     obs = OrderedDict()
@@ -49,15 +50,19 @@ def create_tex_table(dbs):
         y = db.split('_')[0][-4:]
         data, theta, srs = read_data(db)
         #print data
-        series[y] = srs
-        obs[y] = data.I
-        pts[y] = theta
-
+        s[y] = srs
+        o[y] = data.I
+        p[y] = theta
+    for y in sorted(s.keys()):
+        series[y] = s[y]
+        obs[y] = o[y]
+        pts[y] = p[y]
+    del p, s, o
     head = r"""\begin{center}
-\begin{tabular}{c|c}
+\begin{tabular}{c|c|c}
 \hline
 """
-    head += r"""Year & median Attack Ratio \\
+    head += r"""Year & median Attack Ratio $ $S_0$ \\
 \hline
 """
     bot = r"""
@@ -68,16 +73,19 @@ def create_tex_table(dbs):
     body = r""
     st = []
     # years = sorted(list(series.keys()))
-    for i, Y in enumerate(series.keys()):
+    print series.keys()
+    for i, (Y, V) in enumerate(series.items()):
         cases = obs[Y].sum()
-        first_week = series.values()[i].index[0]
+        first_week = V.index[0]
+        s0 = array(series[Y].S.ix[first_week])
         try:
-            ratio = 1.0*cases/array(series[Y].S.ix[first_week])
-            body += Y + r" & {:.2%} ({:.2%}-{:.2%})\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5))
+            ratio = 1.0*cases/s0
+            body += Y + r" & {:.2%} ({:.2%}-{:.2%}) & {:.3%}\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5), nanmedian(s0))
             body += "\n"
         except KeyError as e:
             print Y, first_week, e
-        
+        except ValueError as e:
+            print s0, e
 
     return head + body + bot
 
@@ -222,10 +230,10 @@ if __name__ == "__main__":
     font_manager.FontProperties().set_size('x-small')
     #~ series('Dengue_S0_big')
 
-    dbs = glob.glob("DengueS*.sqlite")
+    dbs = glob.glob("../DengueS*.sqlite")
     #plot_concat_series(dbs)
-    # print create_tex_table(dbs)
-    plot_rt_beta()
+    print create_tex_table(dbs)
+    #plot_rt_beta()
 
 
 

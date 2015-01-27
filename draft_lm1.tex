@@ -158,7 +158,7 @@ Our paper is just awesome.
 Dengue is a disease which is caused by 4 different types of viruses 
 which co-circulate between the vector and human populations. Immunity is 
 considered permanent after the exposure of humans to each of the viruses and 
-cross immunity is considered very limited[ref].
+cross immunity is considered very limited\cite{halstead_dengue_2007}.
 Thus, the proportions of viral types co-circulating at any point in time is 
 strongly dependent on previous incidence of the disease, which determines the 
 number of susceptibles for each viral type at any point in time.
@@ -170,7 +170,8 @@ incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
 In places with sufficient temperature variation dengue is predominantly a 
 summer disease. So it is fair to say that these environmental fluctuations play 
 a key role in determining beginning and end of epidemic periods through its 
-effects on the force of infection.
+effects on the force of infection, which cannot be taken as 
+constant\cite{reiner_time-varying_2014}
 
 The long term dynamics of dengue is also modulated by the alternation of virus 
 types in circulation. Demographics also plays a role in replenishing the 
@@ -219,9 +220,8 @@ are not easy to determine.
 
 In this paper, we estimate the number of susceptibles before every major 
 outbreak ($S_{0, year}$) in the last 18 years.
-Due to the alternation of 
-circulating serotypes, we detected fluctuating levels of susceptibility the 
-circulating virus(es).
+Due to the alternation of circulating serotypes, we detected fluctuating levels 
+of susceptibility the circulating virus(es).
 To estimate the susceptibles we have we have fixed the 
 transmissibility based on the $R_t$ series derived from data~\cite{nishiura}. 
 Then, 
@@ -243,8 +243,8 @@ before, for other diseases~\cite{bjornstad_dynamics_2002,
 wallinga_reconstruction_2003}.
 These methods try to reconstruct the entire 
 series of infectious and susceptibles for measles 
-outbreaks from case data.\todo[inline]{anyone else?}
-In the case of Dengue the 
+outbreaks from case data.
+In the case of Dengue, the full (multi-year/multi-epidemic)
 series of susceptibles to all possible serotypes, cannot be reconstructed based 
 solely on a deterministic transmission model, since the arrival/re-emergenge of 
 new serotypes (which are a stochastic events) can change drastically the pool 
@@ -278,7 +278,9 @@ The data used in this paper consists of  Dengue weekly notified cases time
 series for the city of Rio de Janeiro from 1996 to 2014. The cases are notified 
 based only on clinical symptoms. Laboratory confirmation and serotype 
 information are available only for a very small sample and only on recent 
-years (2010-2013).
+years (2010-2013). The incidence is normalized for the parameter estimation 
+procedures. The normalizatio was done by dividing the number os cases reported 
+by the total city population at each year as given by the census.
 
 \subsection*{Estimating the effective reproductive number ($R_t$)}
 
@@ -377,18 +379,20 @@ in~(\ref{eq:densityMantel}) directly.
 A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue 
 dynamics.
 In the traditional formulation of the model, transmission is governed by a 
-transmission rate $\beta$ and recovery happens at a rate $\tau$.
+constant transmission rate $\beta$ and recovery happens at a rate $\tau$.
 
-As the epidemic progresses, the effective transmission  rate changes and is 
+For our analysis we chose to let the force of infection vary with time, just 
+as it does in the actual epidemics, as seen in the data. So as the epidemic 
+progresses, the effective transmission  rate changes and is 
 given by 
 \begin{equation} 
  \label{eq:effbeta}
  \beta(t) = \frac{R_t\cdot\tau}{S_0}
 \end{equation}
-where $R_t$ is the effective reproductive number as defined 
+where $R_t$ is the effective reproductive number, estimated as 
 in~\ref{eq:Rtestimate}.
-We parameterize our model with the varying transmission using the system of 
-ordinary differential equations
+The complete model with the time-verying force of infection is given by
+the system of ordinary differential equations below.
 \begin{align}
    \label{eq:model}
  \frac{dS}{dt} &= -\beta(t)SI \\     \nonumber
@@ -467,12 +471,20 @@ estimated as described above.
 
 \section*{Results and Discussion}
  
-The time series used for all the analyses consists of officially notified 
-dengue cases aggregated weekly. 
-Figure XX  shows the $R_t$ series, according to 
+Figure \ref{fig:rtseries}  shows the $R_t$ series, according to 
 (\ref{eq:Rtestimate}). 
 It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
 indistinguishable from 1.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=16cm]{./plots/rt_series.png}
+
+ \caption{{\bf Estimated time-series for $R_t$, along with 95\% credible 
+intervals.} Top panel show reported cases from which $R_t$ is estimated.}
+ \label{fig:rtseries}
+\end{figure}
+
 
 Figure \ref{Fig:S0}, shows the model from (\ref{eq:model}) fitted to the data. 
 In it we can see that the susceptibles series in each epidemic starts at the 
@@ -488,8 +500,8 @@ estimate.
 One other possible source of bias which would lead to the 
 underestimation of $S_0$ could come from a significant part of the population 
 not being exposed to the disease.
-But, as we can see in figure xx\todo{add 
-figure with the four maps}, the disease spreads pretty much homogeneously over 
+However, as we can see in figure \ref{fig:mapas} , the disease spreads pretty 
+much homogeneously over 
 the entire city (in the last four epidemics, at least). 
 
 \begin{figure}
@@ -510,7 +522,8 @@ heatmap is overlayed on the maps showing absolute density of cases.}
 
 
 Table \ref{tab:AR} contains the attack ratios calculated for each 
-epidemic/outbreak.
+epidemic/outbreak. It is interesting to notice that the larger epidemics, in 
+terms of total number of cases are not the one with the greater attack ratios. 
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
 \section*{Discussion}
@@ -534,7 +547,7 @@ Codeço for helpful discussions about the manuscript.
 %\end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=.9\textwidth]{plots/concat_SI.png}
+\includegraphics[width=\textwidth]{plots/concat_SI.png}
 \end{center}
 \caption{
 {\bf Susceptibles and Infectious posterior curves.}  The curves were estimated 
@@ -571,11 +584,13 @@ of the entire population.
 
 \begin{table}[!ht]
 \caption{
-\bf{Median Attack ration calculated according to (\ref{eq:AR2})}}
+\bf{Median Attack ration calculated according to (\ref{eq:AR2})}. $^\dag$: Year 
+corresponds to the start of the epidemic. Sometimes the peak of cases occur in 
+the following year.}
 \begin{center}
 \begin{tabular}{l|r}
 \hline
-Year & Median Attack Ratio (\%) \\
+Year$^\dag$ & Median Attack Ratio (\%) \\
 \hline
 1996 & \textbf{38.64} (17.18-54.19)\\
 1997 & \textbf{87.31} (73.83-87.31)\\
