@@ -493,8 +493,7 @@ The proportion of susceptibles may seem low, but we
 must remember that these estimates are being affected by an unknown 
 underreporting factor, which experts suggest is somewhere between 5 and 10, 
 i.e. for every case observed there are 5 or 10 unobserved.
-Since this 
-underreporting ration affects both the numerator and denominator of 
+Since this underreporting affects both the numerator and denominator of 
 (\ref{eq:AR}), its effects should cancel out, giving us an unbiased attack ratio 
 estimate.
 One other possible source of bias which would lead to the 
@@ -521,18 +520,26 @@ heatmap is overlayed on the maps showing absolute density of cases.}
 \end{figure}
 
 
-Table \ref{tab:AR} contains the attack ratios calculated for each 
-epidemic/outbreak. It is interesting to notice that the larger epidemics, in 
-terms of total number of cases are not the one with the greater attack ratios. 
+Table \ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
+estimated for each epidemic/outbreak. It is interesting to notice that the 
+larger epidemics, in terms of total number of cases are not the one with the 
+greater attack ratios. This stresses the importance of knowing the imunological 
+structure of the population in order to truly assess the impact of eny 
+epidemic. 
+
+The authors hope that this evidence will motivate public health 
+outhorities to invest in annual serological surveys, to determine the profile 
+of susceptibility to each dengue virus as well as to estimate the 
+underreporting factor of the notification system.
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
-\section*{Discussion}
+%\section*{Discussion}
 % Do NOT remove this, even if you are not including acknowledgments.
 \section*{Acknowledgments}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
 posterior inference for $R(t)$.
 The authors are also grateful to Claudia T. 
-Codeço for helpful discussions about the manuscript.
+Code\c{c}o for helpful discussions about the manuscript.
 
 \bibliography{lm1}
 \section*{Figure Legends}
@@ -584,31 +591,31 @@ of the entire population.
 
 \begin{table}[!ht]
 \caption{
-\bf{Median Attack ration calculated according to (\ref{eq:AR2})}. $^\dag$: Year 
-corresponds to the start of the epidemic. Sometimes the peak of cases occur in 
-the following year.}
+\bf{Median Attack ratio and 95\% credibility intervals calculated according to 
+(\ref{eq:AR2})}. $^\dag$: Year corresponds to the start of the epidemic. 
+Sometimes the peak of cases occur in the following year.}
 \begin{center}
-\begin{tabular}{l|r}
+\begin{tabular}{c|c|c}
 \hline
-Year$^\dag$ & Median Attack Ratio (\%) \\
+Year$^\dag$ & median Attack Ratio & $S_0$ \\
 \hline
-1996 & \textbf{38.64} (17.18-54.19)\\
-1997 & \textbf{87.31} (73.83-87.31)\\
-1998 & \textbf{49.86} (49.19-49.86)\\
-1999 & \textbf{10.76} (3.72-20.24)\\
-2000 & \textbf{25.49} (24.47-26.98)\\
-2001 & \textbf{48.12} (46.57-49.15)\\
-2005 & \textbf{14.74} (10.23-21.38)\\
-2006 & \textbf{11.22} (8.00-14.41)\\
-2007 & \textbf{15.08} (14.76-15.38)\\
-2008 & \textbf{13.73} (3.10-30.84)\\
-2010 & \textbf{18.30} (17.34-19.33)\\
-2011 & \textbf{8.59} (8.20-9.36)\\
-2012 & \textbf{13.92} (12.71-14.92)\\
+1996 & 38.64\% (17.18\%-54.19\%) & 0.171\%\\
+1997 & 87.31\% (73.83\%-87.31\%) & 0.273\%\\
+1998 & 49.86\% (49.19\%-49.86\%) & 0.142\%\\
+1999 & 10.76\% (3.72\%-20.24\%) & 0.345\%\\
+2000 & 25.49\% (24.47\%-26.98\%) & 1.547\%\\
+2001 & 48.12\% (46.57\%-49.15\%) & 4.951\%\\
+2005 & 14.74\% (10.23\%-21.38\%) & 1.472\%\\
+2006 & 11.22\% (8.00\%-14.41\%) & 2.810\%\\
+2007 & 15.08\% (14.76\%-15.38\%) & 13.451\%\\
+2008 & 13.73\% (3.10\%-30.84\%) & 0.672\%\\
+2010 & 18.30\% (17.34\%-19.33\%) & 4.540\%\\
+2011 & 8.59\% (8.20\%-9.36\%) & 21.482\%\\
+2012 & 13.92\% (12.71\%-14.92\%) & 6.208\%\\
+
 \hline
 \end{tabular}
-\begin{flushleft} We report medians and 95\% credibility intervals.
-\end{flushleft}
+
 
 \end{center}
 
