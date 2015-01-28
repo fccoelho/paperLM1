@@ -273,13 +273,13 @@ Finally, we discuss how to estimate the attack ratio of each
 epidemic using the estimated susceptible fraction and observed incidence.
 
 
-\subsection{The dataset} 
+\subsection*{The data set} 
 The data used in this paper consists of  Dengue weekly notified cases time 
 series for the city of Rio de Janeiro from 1996 to 2014. The cases are notified 
 based only on clinical symptoms. Laboratory confirmation and serotype 
 information are available only for a very small sample and only on recent 
 years (2010-2013). The incidence is normalized for the parameter estimation 
-procedures. The normalizatio was done by dividing the number os cases reported 
+procedures. The normalization was done by dividing the number os cases reported 
 by the total city population at each year as given by the census.
 
 \subsection*{Estimating the effective reproductive number ($R_t$)}
@@ -325,11 +325,11 @@ Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that
 $Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
 Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha 
 \%$ confidence interval for \rr by noting that
-\begin{align}
+\begin{equation}
 \label{eq:confRt}
- R_t^{(L)} &= \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})}\nonumber \\
- R_t^{(U)} &= \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}
-\end{align}
+ R_t^{(L)} = \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})} \quad \text{and} \quad R_t^{(U)} = \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}\nonumber \\
+\end{equation}
+
 Many authors have derived $c_{\alpha}(\theta_t)$ following orthodox approaches  
 (see for example~\cite{wilson} and~\cite{clopper}) mainly for simplicity.
 We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
@@ -682,11 +682,12 @@ of the entire population.
 {\bf Median Attack ratio and 95\% credibility intervals calculated according to 
 (\ref{eq:AR2})}. Values are presented as percentage of total population. 
 $^\dag$: Year corresponds to the start of the epidemic. 
-Sometimes the peak of cases occur in the following year.}
+Sometimes the peak of cases occur in the following year.
+$^\ddag$: Susceptible fraction.}
 \begin{center}
 \begin{tabular}{c|c|c}
 \hline
-Year$^\dag$ & median Attack Ratio & $S_0$ \\
+Year$^\dag$ & Median attack ratio (\%) & $S_0^\ddag$ (\%)\\
 \hline
 1996 & 38.64 (17.18-54.19) & 0.171\\
 1997 & 87.31 (73.83-87.31) & 0.273\\
