@@ -17,7 +17,7 @@ import numpy as np
 
 DF = pd.read_csv("../DATA/data_Rt_dengue_complete.csv", header=0, delimiter=',', skiprows=[1, 2, 3], parse_dates=True)
 # Creating a date-time index  to facilitate date axes below.
-DF.index = pd.to_datetime(DF.start)# [datetime.datetime.strptime(d, "%Y-%m-%d") for d in DF.start]
+DF.index = pd.to_datetime(DF.start)
 # DF.set_index(['start'])
 print DF.info()
 
