@@ -460,21 +460,26 @@ by the size of the population at risk.
 A=\frac{\text{\# cases}}{\text{Population at risk}} 
 \end{equation}
 
-Based on the what has been discussed so far, we can rewrite (\ref{eq:AR}) for 
+Based on what has been discussed so far, we can rewrite (\ref{eq:AR}) for 
 each epidemic $j$ as
 \begin{equation}
 \label{eq:AR2}
  A_{j}=\frac{\sum Y_j}{S_{0j}}
 \end{equation}
 where $S_{0j}$ is the number of susceptibles before each epidemic $j$, which we
-estimated as described above.
+estimated before.
 
 \section*{Results and Discussion}
  
 Figure \ref{fig:rtseries}  shows the $R_t$ series, according to 
 (\ref{eq:Rtestimate}). 
 It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
-indistinguishable from 1.
+indistinguishable from 1. Due to the instrinsic variability of the \rr series, 
+the exmination of its credible intervals is essential to identify periods 
+of sustained transmission. The wider credible intervals for the interepidemic 
+periods are due to the scarsity of cases. Our methodology to derive the 
+probability distribution for \rr is an original contribution applicable to the 
+analysis of any incidence time-series of  any transmissible disease.
 
 \begin{figure}
  \centering
@@ -528,8 +533,8 @@ structure of the population in order to truly assess the impact of eny
 epidemic. 
 
 The authors hope that this evidence will motivate public health 
-outhorities to invest in annual serological surveys, to determine the profile 
-of susceptibility to each dengue virus as well as to estimate the 
+outhorities to invest in annual serological surveys, to determine the 
+susceptibility profile to each dengue virus as well as to estimate the 
 underreporting factor of the notification system.
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
 %\subsection*{Subsection 1}
@@ -642,7 +647,9 @@ We provide an R script to perform the above elicitation at
 only for the periods where $R_t> 1$.  The susceptible curves in the top panel 
 reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
 each epidemic/outbreak. In the lower panel see the posterior distribution 
-of infectious curves, represented by its Median and 95\% credible interval. 
+of infectious curves, represented by its Median and 95\% credible interval. The 
+credible intervals are very narrow, and can be hard to distiguish from the 
+median line. 
 Scatter plot shows the observed cases. Prevalences are scaled as fractions 
 of the entire population.
 }
