@@ -206,11 +206,12 @@ def plot_concat_series(dbs):
         i_upr = srs.I.groupby(level='time').aggregate(upr)
         i_lwr = srs.I.groupby(level='time').aggregate(lwr)
         P.fill_between(i_median.index, i_lwr, i_upr, facecolor=co, alpha=.2)
-        P.scatter(da.index,da.I,alpha=0.8, label='Observations')
+        da.I.plot(style='b.', alpha=0.3)
+        # P.plot_date(pd.to_datetime(da.index), da.I, 'b.', alpha=0.8, label='Observations')
     # P.legend(['Median', 'obs'])
     P.tight_layout()
-    P.savefig('concat_SI.svg')
-    P.savefig('concat_SI.png', dpi=400)
+    P.savefig('../plots/concat_SI.svg')
+    P.savefig('../plots/concat_SI.png', dpi=400)
 
 
 def plot_pt_corr(df):
@@ -231,8 +232,8 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("../DengueS*.sqlite")
-    #plot_concat_series(dbs)
-    print create_tex_table(dbs)
+    plot_concat_series(dbs)
+    # print create_tex_table(dbs)
     #plot_rt_beta()
 
 
