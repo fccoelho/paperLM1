@@ -329,9 +329,12 @@ Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha
 \label{eq:confRt}
  R_t^{(L)} = \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})} \quad \text{and} \quad R_t^{(U)} = \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}\nonumber \\
 \end{equation}
+Because the transform from $\theta$ to \rr is monotonically 
+increasing, the result holds for confidence and credibility intervals alike.
 
-Many authors have derived $c_{\alpha}(\theta_t)$ following orthodox approaches  
-(see for example~\cite{wilson} and~\cite{clopper}) mainly for simplicity.
+Many authors have chosen to quantify the uncertainty about $\theta$ 
+following orthodox approaches  (see for example~\cite{wilson} 
+and~\cite{clopper}) mainly for simplicity.
 We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
 posterior credibility interval for $\theta_t$ as $c_{\alpha}(\theta_t)$.
 If we choose the conjugate beta prior with parameters $a_0$ and $b_0$ for the 
@@ -359,7 +362,7 @@ the transform in~(\ref{eq:confRt}).
 Also, one can choose $a_0$ and $b_0$ so as to elicit meaningful prior distributions
 for $R_t$.
 We show how to elicit the prior for $R_t$ from specified prior mean and variance
-or coefficient of variation in Text S1.
+or coefficient of variation in the Appendix.
 
 Also, since $R_t > 1$ indicates sustained transmission, one may be 
 interested in computing the probability of this event.
@@ -392,7 +395,7 @@ given by
 where $R_t$ is the effective reproductive number, estimated as 
 in~\ref{eq:Rtestimate}.
 The complete model with the time-verying force of infection is given by
-the system of ordinary differential equations below.
+the system of ordinary differential equations:
 \begin{align}
    \label{eq:model}
  \frac{dS}{dt} &= -\beta(t)SI \\     \nonumber
@@ -409,7 +412,7 @@ Also, although there are multiple circulating serotypes, our approach
 can not discriminate between them due to the lack of serotype-specific data.
 Nevertheless, this modeling strategy can still provide some insight into the 
 disease dynamics and allows us to estimate the initial fraction of susceptibles 
-$S_0$.
+$S_0$, a key epidemiological parameter.
 
 \subsection*{Bayesian parameter estimation}
 We take a Bayesian approach to the estimation of $S_0$.
@@ -533,7 +536,7 @@ structure of the population in order to truly assess the impact of eny
 epidemic. 
 
 The authors hope that this evidence will motivate public health 
-outhorities to invest in annual serological surveys, to determine the 
+authorities to invest in annual serological surveys, to determine the 
 susceptibility profile to each dengue virus as well as to estimate the 
 underreporting factor of the notification system.
 % We only support three levels of headings, please do not create a heading level below \subsubsection.
@@ -551,7 +554,7 @@ Code\c{c}o for helpful discussions about the manuscript.
 distribution of $R_t$}
 \label{sec:tails}
 There are a number of approaches to deriving the distribution of \rr.
-Alternatively to the approach described in the main text\cite{mantel}, one 
+Alternatively to the approach described in the main text~\cite{mantel}, one 
 could use the conditional distribution of \rr on 
 $Y_{t+1}$ and $Y_t$ as defined in equation A7 of Nishiura et al.\cite{nishiura}:
 \begin{equation}
@@ -569,7 +572,7 @@ f_N(R_t| a_2, b_2) =  \frac{b_2^{a_2}}{\Gamma(a_2)} R_t^{a_2-1} e^{-b_2 R_t}
 \end{equation}
 
 In order to decide which approach to take, it may be of use analyzing the 
-variance and tail behavior of the derived distributions for \rr. 
+tail behavior of the derived distributions for \rr. 
 Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to 
@@ -582,17 +585,19 @@ To see that one needs simply take the ratio of the Beta prime and Gamma
  \lim_{R_t\to\infty}\frac{f_P(R_t| a_1, b_1)}{f_N(R_t| a_2, b_2)} =  
 \lim_{R_t\to\infty}\frac{e^{Y_{t}R_t}}{(1 +R_t)^{Y_{t} + Y_{t +1}+2}} = \infty
 \end{equation}
-
-
+Finally, note that we deliberately construct $c_{\alpha}(R_{t})$ as a 
+equal-tailed $100\alpha\%$ credible set, rather than a less conservative 
+highest posterior density (HPD) interval.
 
 As a side note, the Bayesian approach presented in this 
-paper will give similar results to those of 
-\cite{wilson} and \cite{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
+paper will give similar results to orthodox confidence intervals~\cite{wilson} 
+and~\cite{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
 Under the flat  uniform prior for $\theta_t$, the Bayesian posterior 
 credibility 
 interval is nearly indistinguishable from the confidence interval proposed by 
-\cite{clopper} for $Y_{t+1}, Y_t > 20$.
-Note that the $Beta(1, 1)$ uniform prior for $\theta_t$ constitutes a poor 
+Clopper \& Pearson (1931)~\cite{clopper} for $Y_{t+1}, Y_t > 20$.
+Note also that the uniform prior ($Beta(1, 1)$) for $\theta_t$ constitutes a 
+poor 
 prior 
 choice mainly because the induced distribution for \rr is only well-defined for 
 $b_0 > 2$.
@@ -602,7 +607,7 @@ distributions for $\theta_t$ taking advantage of the intuitive parameterization
 and flexibility of the beta family of distributions.
 Prior elicitation can also be done for \rr and the hyperparameters directly 
 plugged into the prior for $\theta_t$. 
-One can, for example, choose a priori mean and variance for \rr and find $a_0$ 
+One can, for example, choose prior mean and variance for \rr and find $a_0$ 
 and $b_0$ that satisfy those conditions.
 Let $m_0$ and $v_0$ be the prior expectation and variance for $R_t$. 
 After some tedious algebra one finds
