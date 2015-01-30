@@ -449,7 +449,7 @@ calculation of the Gelman-Rubin's R convergence diagnostic~\cite{brooks1998}.
 
 \subsection*{Calculating the attack ratio}
 
-The attack ratio of an epidemic is define by the number of infections divided 
+The attack ratio of an epidemic is defined by the number of infections divided 
 by the size of the population at risk.
 
 \begin{equation}
@@ -471,11 +471,11 @@ estimated before.
 Figure \ref{fig:rtseries}  shows the $R_t$ series, according to 
 (\ref{eq:Rtestimate}). 
 It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
-indistinguishable from 1. Due to the instrinsic variability of the \rr series, 
-the exmination of its credible intervals is essential to identify periods 
-of sustained transmission. The wider credible intervals for the interepidemic 
-periods are due to the scarsity of cases. Our methodology to derive the 
-probability distribution for \rr is an original contribution applicable to the 
+indistinguishable from 1. Due to the intrinsic variability of the \rr series, 
+the examination of its credible intervals is essential to identify periods 
+of sustained transmission. The wider intervals between epidemics are due to the 
+scarcity of cases during these periods. Our methodology to derive the 
+probability distribution of \rr is an original contribution applicable to the 
 analysis of any incidence time-series of  any transmissible disease.
 
 \begin{figure}
@@ -496,7 +496,8 @@ must remember that these estimates are being affected by an unknown
 underreporting factor, which experts suggest is somewhere between 5 and 10, 
 i.e. for every case observed there are 5 or 10 unobserved.
 Since this underreporting affects both the numerator and denominator of 
-(\ref{eq:AR}), its effects should cancel out, giving us an unbiased attack ratio 
+(\ref{eq:AR2}), its effects should cancel out, giving us an unbiased attack 
+ratio 
 estimate.
 One other possible source of bias which would lead to the 
 underestimation of $S_0$ could come from a significant part of the population 
@@ -524,7 +525,7 @@ heatmap is overlayed on the maps showing absolute density of cases.}
 
 Table \ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
 estimated for each epidemic/outbreak. It is interesting to notice that the 
-larger epidemics, in terms of total number of cases are not the one with the 
+larger epidemics, in terms of peak size are not the one with the 
 greater attack ratios. This stresses the importance of knowing the 
 immunological structure of the population in order to truly assess the impact 
 of any epidemic. 
@@ -599,7 +600,7 @@ $b_0 > 2$.
 An advantage of the Bayesian approach is that one can devise prior 
 distributions for $\theta_t$ taking advantage of the intuitive parameterization 
 and flexibility of the beta family of distributions.
-Prior elicitation can also be done for \rr and the hyperparameters directly 
+Prior elicitation can also be done for \rr and the hyper-parameters directly 
 plugged into the prior for $\theta_t$. 
 One can, for example, choose prior mean and variance for \rr and find $a_0$ 
 and $b_0$ that satisfy those conditions.
@@ -647,7 +648,7 @@ only for the periods where $R_t> 1$.  The susceptible curves in the top panel
 reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
 each epidemic/outbreak. In the lower panel see the posterior distribution 
 of infectious curves, represented by its Median and 95\% credible interval. The 
-credible intervals are very narrow, and can be hard to distiguish from the 
+credible intervals are very narrow, and can be hard to distinguish from the 
 median line. 
 Scatter plot shows the observed cases. Prevalences are scaled as fractions 
 of the entire population.
