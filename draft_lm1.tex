@@ -163,7 +163,7 @@ Thus, the proportions of viral types co-circulating at any point in time is
 strongly dependent on previous incidence of the disease, which determines the 
 number of susceptibles for each viral type at any point in time.
 
-Dengue transmission is modulated by environmental conditions, of which 
+Dengue transmission is also modulated by environmental conditions, among which, 
 temperature, due to its effects on the 
 vector reproduction, stands out as a strong predictor of 
 incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
@@ -177,62 +177,54 @@ The long term dynamics of dengue is also modulated by the alternation of virus
 types in circulation. Demographics also plays a role in replenishing the 
 population of susceptibles. 
 
-The Attack ratio of disease is a measure of morbidity defined as the number of 
-new cases divided by the population at risk.
-For Dengue outbreaks and epidemics this can be difficult to calculated due to 
-the lack of information about the population at risk. The population at risk in 
-the case of dengue, is the number of susceptibles to the circulating virus 
+The Attack ratio (AR) of a disease is a measure of morbidity defined as the 
+number of new cases divided by the population at risk.
+For Dengue outbreaks and epidemics, it can be difficult to calculate the AR due 
+to the lack of knowledge of the population at risk. The population at risk 
+in the case of dengue, is the number of susceptibles to the circulating virus 
 type(s) before a given epidemic.
-
-The main source of information about Dengue dynamics are the incidence 
-time series, which represent all the cases of Dengue reported by health 
-professionals with no discrimination of virus types.
-Only a very small sample 
-of the cases are ever examined to determined the virus type.
 
 In order to calculate the attack ratio, we need to determine the number of 
 susceptibles to the circulating virus types right before the epidemic.
-Without 
-regular virological surveys, it is virtually impossible to determine the 
-population at risk.
+Without regular virological surveys, it is virtually impossible to determine 
+the population at risk.
 
 The attack ratio is also influenced by the reproductive number of the disease 
-~\cite{bacaer_final_2009, katriel_attack_2012}.
-With Dengue, since transmission 
-is affected by environmental conditions as discussed above, the reproductive 
-number is also expected to vary with time.
+~\cite{bacaer_final_2009, katriel_attack_2012}, which is closely associated 
+with the force of infection. Thus the incorporation of the effective 
+reproduction number, \rr, as a function of time, is crucial to an accurate 
+estimation of the AR.
 
-Various challenges exist to assess the attack rate of a dengue epidemic. 
-One of 
-them is that there are a large number of asymptomatic cases in any epidemic, 
-which nevertheless acquire immunity.
-It is estimated that for 
-every case reported, 10-20 are not seen by health authorities (personnal 
-communication).
-Thirdly, under-reporting is a serious issue in Brazil. 
+There are other sources of uncertainty impinging on the estimation of the AR
+of a dengue epidemic. One of them is that there are a large number of 
+asymptomatic cases in any epidemic, which nevertheless acquire immunity.
+It is estimated that for every case reported, 10-20 are not seen by health 
+authorities (personal communication).
+Another is under-reporting, which is a serious issue in Brazil. 
 Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
 the sensitivity of dengue reporting for hospitalized patients in 
 Belo-Horizonte, Brazil to be of 63\%, 
 meaning that approximately 37\% of the suspected dengue cases go unreported.  
 Lastly, demography and migrations affect the number of susceptible in ways which 
-are not easy to determine.
+are not easy to fully determine.
 
 
 In this paper, we estimate the number of susceptibles before every major 
 outbreak ($S_{0, year}$) in the last 18 years.
 Due to the alternation of circulating serotypes, we detected fluctuating levels 
-of susceptibility the circulating virus(es).
-To estimate the susceptibles we have we have fixed the 
-transmissibility based on the $R_t$ series derived from data~\cite{nishiura}. 
+of susceptibility to the circulating virus(es).
+To estimate the susceptibles we have set the 
+transmissibility from the $R_t$ series derived from data~\cite{nishiura} 
+(\ref{eq:effbeta}). 
 Then, 
 from the incidence series and the population at risk, we could then calculate 
 the attack ratio for each epidemic.
 
 To accomplish the estimation of the $S_0$, we use a simplified model of 
-dengue transmission based on a single-strain Susceptible-Infecctious-Removed 
+dengue transmission based on a single-strain Susceptible-Infectious-Removed 
 (SIR) model.
 The reason for the choice of a single strain model, is the lack of 
-accurate information regarding the actual proportions of each virus in 
+ information regarding the actual proportions of each virus in 
 circulation.
 However, some information is available about the predominant 
 serotypes for some epidemics in the period 
@@ -263,23 +255,24 @@ Influenza seasons in europe~\cite{pone2011}.
 In this section we will start by describing the data and then the method used 
 to estimate the effective reproductive number, $R_t$, from the data and obtain 
 its posterior distribution. 
-We then proceed to describe Susceptible-infectious-recovered (SIR) model 
-used to represent the global disease incidence and how $R_t$ can be integrated 
-into the model to allow for time varying transmission. 
+We then proceed to describe the Susceptible-Infectious-Recovered (SIR) model 
+used to represent the aggregated disease incidence and how $R_t$ can be 
+integrated into the model to allow for time varying force of infection. 
 Next, an approach to approximate the posterior distributions 
 of the numbers of susceptible to the main circulating Dengue viruses for each 
 epidemic is detailed.
 Finally, we discuss how to estimate the attack ratio of each 
-epidemic using the estimated susceptible fraction and observed incidence.
+epidemic using the estimated susceptible fraction and the observed incidence.
 
 
 \subsection*{The data set} 
-The data used in this paper consists of  Dengue weekly notified cases time 
-series for the city of Rio de Janeiro from 1996 to 2014. The cases are notified 
-based only on clinical symptoms. Laboratory confirmation and serotype 
+The data used in this paper consists of time 
+series of weekly notified cases of Dengue for the 
+city of Rio de Janeiro from 1996 to 2014. The cases are notified 
+based only on clinical criteria. Laboratory confirmation and serotype 
 information are available only for a very small sample and only on recent 
 years (2010-2013). The incidence is normalized for the parameter estimation 
-procedures. The normalization was done by dividing the number os cases reported 
+procedures. The normalization was done by dividing the number of cases reported 
 by the total city population at each year as given by the census.
 
 \subsection*{Estimating the effective reproductive number ($R_t$)}
@@ -532,9 +525,9 @@ heatmap is overlayed on the maps showing absolute density of cases.}
 Table \ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
 estimated for each epidemic/outbreak. It is interesting to notice that the 
 larger epidemics, in terms of total number of cases are not the one with the 
-greater attack ratios. This stresses the importance of knowing the imunological 
-structure of the population in order to truly assess the impact of eny 
-epidemic. 
+greater attack ratios. This stresses the importance of knowing the 
+immunological structure of the population in order to truly assess the impact 
+of any epidemic. 
 
 The authors hope that this evidence will motivate public health 
 authorities to invest in annual serological surveys, to determine the 
