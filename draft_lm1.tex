@@ -177,12 +177,13 @@ series of infectious and susceptibles from case data using deterministic models
 and generally work well for measles because there is a one-to-one 
 relationship between exposure and immunity, since measles is caused by a 
 single-strain pathogen.
-In the case of dengue, the full (multi-year/multi-epidemic)
-series of susceptibles to all possible serotypes, cannot be reconstructed based 
-solely on a deterministic transmission model, since the arrival/re-emergence of 
-new serotypes, an intrinsically stochastic events, can drastically change the 
-pool of susceptibles, throwing off any sequential estimation based on the 
-incidence dynamics.
+Recently, methods in the same fashion were developed for dengue when 
+serotype-specific data is available~\cite{Reiner2014}.
+When such data is not available, the series of susceptibles to all possible
+serotypes, cannot be reconstructed based solely on a deterministic transmission 
+model, since the arrival/re-emergence of  new serotypes, an intrinsically 
+stochastic events, can drastically change the pool of susceptibles, throwing off 
+any sequential estimation based on the  incidence dynamics.
 
 In this paper, we propose a new approach to estimate the number (fraction) of 
 susceptibles using a simplified model of dengue transmission based on a 
@@ -218,14 +219,18 @@ Finally, we discuss how to estimate the attack ratio of each
 epidemic using the estimated susceptible fraction and the observed incidence.
 
 \subsection*{Data} 
+
 The data used in this paper consists of time 
 series of weekly notified cases of dengue for the 
 city of Rio de Janeiro from 1996 to 2014. The cases are notified 
-based only on clinical criteria. Laboratory confirmation and serotype 
+based only on clinical criteria.
+Laboratory confirmation and serotype 
 information are available only for a very small sample and only on recent 
-years (2010-2013). The incidence is normalized for the parameter estimation 
-procedures. The normalization was done by dividing the number of cases reported 
-by the total city population at each year as given by the census.
+years (2010-2013).
+For the parameter estimation  procedures incidence was normalized by dividing 
+the number of cases reported by the total city population at each year as given 
+by the census (Census Bureau, Brazilian Institute of Geography and Statistics, 
+\url{http://www.ibge.gov.br/english/}).
 
 \subsection*{Estimating the effective reproductive number ($R_t$)}
 
@@ -400,7 +405,8 @@ In this study we used one chain per parameter, i.e, 3 chains for each run.
 The chains were run until $5000$ samples were obtained after discarding $500$ 
 burn-in samples.
 Convergence of the parallel chains was verified at every 100 iterations by the 
-calculation of the Gelman-Rubin's R convergence diagnostic~\cite{brooks1998}.
+calculation of the Gelman-Rubin's R (potential scale 
+reduction), that approaches $1$ at convergence~\cite{brooks1998}.
 
 \subsection*{Calculating the attack ratio}
 
