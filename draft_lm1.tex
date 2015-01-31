@@ -10,67 +10,6 @@
 %
 % % % % % % % % % % % % % % % % % % % % % %
 %
-% -- IMPORTANT NOTE
-%
-% Be advised that this is merely a template 
-% designed to facilitate accurate translation of manuscript content 
-% into our production files. 
-%
-% This template contains extensive comments intended 
-% to minimize problems and delays during our production 
-% process. Please follow the template 
-% whenever possible.
-%
-% % % % % % % % % % % % % % % % % % % % % % % 
-%
-% Once your paper is accepted for publication and enters production, 
-% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
-% the final text of your manuscript.
-%
-% DO NOT ADD EXTRA PACKAGES TO THIS TEMPLATE unless absolutely necessary.
-% Packages included in this template are intentionally
-% limited and basic in order to reduce the possibility
-% of issues during our production process.
-%
-% % % % % % % % % % % % % % % % % % % % % % %
-%
-% -- FIGURES AND TABLES
-%
-% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
-% - Figures should be uploaded separately from your manuscript file. 
-% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
-% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
-% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
-%
-% Tables should be cell-based and may not contain:
-% - tabs/spacing/line breaks within cells to alter layout
-% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
-% - colors, shading, or graphic objects
-% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
-%
-% For sideways tables, use the {rotating} package and use \begin{sidewaystable} instead of \begin{table} in the appropriate section. PLOS guidelines do not accomodate sideways figures.
-%
-% % % % % % % % % % % % % % % % % % % % % % % %
-%
-% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
-%
-% IMPORTANT
-% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
-%
-% Please be sure to include all portions of an equation in the math environment, and for any superscripts or subscripts also include the base number/text. For example, use $mathrm{mm}^2$ instead of mm$^2$ (do not use \textsuperscript command).
-%
-% DO NOT USE the \rm command to render mathmode characters in roman font, instead use $\mathrm{}$
-% For bolding characters in mathmode, please use $\mathbf{}$ 
-%
-% Please add line breaks to long equations when possible in order to fit our 2-column layout. 
-%
-% For inline equations, please do not include punctuation within the math environment unless this is part of the equation.
-%
-% For spaces within the math environment please use the \; or \: commands, even within \text{} (do not use smaller spacing as this does not convert well).
-%
-%
-% % % % % % % % % % % % % % % % % % % % % % % %
-
 \documentclass[10pt]{article}
 \usepackage{todonotes}
 \usepackage{subfigure}
@@ -85,6 +24,7 @@
 \usepackage{lineno}
 % ligatures disabled
 \usepackage{microtype}
+\usepackage{indentfirst}
 \DisableLigatures[f]{encoding = *, family = * }
 % rotating package for sideways tables
 %\usepackage{rotating}
@@ -126,8 +66,8 @@
 % Title must be 150 characters or less
 \begin{flushleft}
 {\Large
-\textbf{Estimating the attack ratio of Dengue Epidemics, under time-varying 
-force of infection, from aggregated case notification data}
+\textbf{Estimating the Attack Ratio of Dengue Epidemics under Time-varying 
+Force of Infection using Aggregated Notification Data}
 }
 \\
 Flavio Code\c{c}o Coelho$^{1\ast}$, 
@@ -162,96 +102,106 @@ susceptibles and the attack ratio even in the absence of serotype specific data.
 
 \section*{Introduction}
 
-Dengue is a disease which is caused by 4 different types of viruses 
-which co-circulate between the vector and human populations. Immunity is 
-considered permanent after the exposure of humans to each of the viruses and 
-cross immunity is considered very limited\cite{halstead_dengue_2007}.
-Thus, the proportions of viral types co-circulating at any point in time is 
-strongly dependent on previous incidence of the disease, which determines the 
-number of susceptibles for each viral type at any point in time.
+Dengue is an arthropod-borne febrile disease caused by a flavivirus with four 
+serotypes which causes an estimated  $50$ million infections each 
+year~\cite{Guzman2010}.
+In humans, immunity against  a particular serotype is  considered permanent 
+after the exposure and cross immunity to there serotypes is considered short 
+lived~\cite{halstead_dengue_2007}.
+As a consequence, the proportions of viral serotypes co-circulating at any 
+point in time are strongly dependent on previous incidence patterns of the 
+disease, which determine the number of individuals susceptible to each serotype 
+at any point in time.
+% LM: Maybe a citation here?
 
 Dengue transmission is also modulated by environmental conditions, among which, 
 temperature, due to its effects on the 
 vector reproduction, stands out as a strong predictor of 
 incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
-In places with sufficient temperature variation dengue is predominantly a 
-summer disease. So it is fair to say that these environmental fluctuations play 
-a key role in determining beginning and end of epidemic periods through its 
-effects on the force of infection, which cannot be taken as 
-constant\cite{reiner_time-varying_2014}
-
+In places with sufficient seasonal temperature variation, dengue is 
+predominantly a  summer disease.
+So it is fair to say that these environmental 
+fluctuations play a key role in determining beginning and end of epidemic 
+periods.
+This climatic influence is exerted mainly through its effects on the force of 
+infection, which cannot be taken as constant~\cite{reiner_time-varying_2014} 
+but rather as a seasonal (oscillating) function of time.
 The long term dynamics of dengue is also modulated by the alternation of virus 
 types in circulation. Demographics also plays a role in replenishing the 
 population of susceptibles. 
 
 The attack ratio (AR) of a disease is a measure of morbidity defined as the 
 number of new cases divided by the population at risk.
-For Dengue outbreaks and epidemics, it can be difficult to calculate the AR due 
-to the lack of knowledge of the population at risk. The population at risk 
-in the case of dengue, is the number of susceptibles to the circulating virus 
-type(s) before a given epidemic.
-
-In order to calculate the attack ratio, we need to determine the number of 
-susceptibles to the circulating virus types right before the epidemic.
-Without regular virological surveys, it is virtually impossible to determine 
-the population at risk.
+% LM: Maybe a citation here? It's ridiculous I know, but referees can be a pain.
+For dengue epidemics, it can be difficult to calculate the AR due 
+to the lack of knowledge of the population at risk.
+The population at risk in this case is the number of susceptibles 
+to the circulating virus type(s) before a given epidemic. 
+Thus, in order to calculate the attack ratio, we need to determine the number 
+of susceptibles to the circulating virus types right before the epidemic, which 
+is virtually impossible without regular virological surveys.
 
 The attack ratio is also influenced by the reproductive number of the disease 
 ~\cite{bacaer_final_2009, katriel_attack_2012}, which is closely associated 
-with the force of infection. Thus the incorporation of the effective 
-reproduction number, \rr, as a function of time, is crucial to an accurate 
-estimation of the AR.
+with the force of infection.
+Thus the incorporation of the effective reproduction number, \rr, as a function 
+of time, is crucial to an accurate estimation of the AR of seasonal diseases 
+like dengue and Influenza.
 
-There are other sources of uncertainty impinging on the estimation of the AR
-of a dengue epidemic. One of them is that there are a large number of 
-asymptomatic cases in any epidemic, which nevertheless acquire immunity.
-It is estimated that for every case reported, 10-20 are not seen by health 
-authorities (personal communication).
-Another is under-reporting, which is a serious issue in Brazil. 
+It is also important to consider other sources of uncertainty impinging on the 
+estimation of the AR of a dengue epidemic. 
+For instance, in any given epidemic there is a large number of 
+mild and asymptomatic cases, which nevertheless acquire immunity.
+Depending on surveillance structure it is estimated that for every case 
+reported, up to 10-20 are not seen by health authorities (personal 
+communication).
+%LM: Best to name who gave that. Oswaldo perhaps?
+Another source of uncertainty is under-reporting, which is a serious issue in
+the health care systems of many underdeveloped countries such as Brazil. 
 Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
 the sensitivity of dengue reporting for hospitalized patients in 
-Belo-Horizonte, Brazil to be of 63\%, 
-meaning that approximately 37\% of the suspected dengue cases go unreported.  
-Lastly, demography and migrations affect the number of susceptible in ways which 
+Belo-Horizonte, Brazil to be of 63\%, meaning that approximately 37\% of the 
+suspected dengue cases go unreported.  
+Lastly, demography and migrations affect the number of susceptible in ways 
+which 
 are not easy to fully determine.
+%LM: Since this paragraph pretty much deals with possible limitations we may 
+% want to move it to the discussion. see #14
 
-In this paper, we estimate the number of susceptibles before every major 
-outbreak ($S_{0, year}$) in the last 18 years.
-Due to the alternation of circulating serotypes, we detected fluctuating levels 
-of susceptibility to the circulating virus(es).
-To estimate the susceptibles we have set the 
-transmissibility from the $R_t$ series derived from data~\cite{nishiura} 
-(\ref{eq:effbeta}). 
-Then, 
-from the incidence series and the population at risk, we could then calculate 
-the attack ratio for each epidemic.
-
-To accomplish the estimation of the $S_0$, we use a simplified model of 
-dengue transmission based on a single-strain Susceptible-Infectious-Removed 
-(SIR) model.
-The reason for the choice of a single strain model, is the lack of 
- information regarding the actual proportions of each virus in 
-circulation.
-However, some information is available about the predominant 
-serotypes for some epidemics in the period 
-of study~\cite{macedo_virological_2013}. 
-
-Methods for estimating the  number of susceptibles have been proposed 
-before, for other diseases~\cite{bjornstad_dynamics_2002, 
-wallinga_reconstruction_2003}.
+Other methods for estimating the  number of susceptibles while 
+accommodating time-varying force of infection have been proposed 
+before, for measles~\cite{bjornstad_dynamics_2002, 
+wallinga_reconstruction_2003}, a disease that shows remarkable seasonality.
 These methods try to reconstruct the entire 
-series of infectious and susceptibles for measles 
-outbreaks from case data.
-In the case of Dengue, the full (multi-year/multi-epidemic)
+series of infectious and susceptibles from case data using deterministic models 
+and generally work well for measles because there is a one-to-one 
+relationship between exposure and immunity, since measles is caused by a 
+single-strain pathogen.
+In the case of dengue, the full (multi-year/multi-epidemic)
 series of susceptibles to all possible serotypes, cannot be reconstructed based 
-solely on a deterministic transmission model, since the arrival/re-emergenge of 
-new serotypes (which are a stochastic events) can change drastically the pool 
-of susceptibles throwing off any sequential estimation based on the incidence
-dynamics.
+solely on a deterministic transmission model, since the arrival/re-emergence of 
+new serotypes, an intrinsically stochastic events, can drastically change the 
+pool of susceptibles, throwing off any sequential estimation based on the 
+incidence dynamics.
 
-The authors have applied similar methods as used here, to estimate the number 
-of susceptibles for the predominant strain of Influenza at the beginning of  
-Influenza seasons in europe~\cite{pone2011}.
+In this paper, we propose a new approach to estimate the number (fraction) of 
+susceptibles using a simplified model of dengue transmission based on a 
+single-strain Susceptible-Infectious-Removed (SIR) model with time-varying 
+infection rate.
+In order to bypass the limitations of not knowing the serotype-specific 
+seroprevalence and the exact behavior of the force of infection through time, we
+propose to inform the time-varying transmissibility using the \rr series 
+derived from the notification data~\cite{nishiura}.
+We extend a Bayesian framework previously used to estimate the number 
+of susceptibles in Influenza epidemics in Europe~\cite{pone2011} to include 
+time-varying force of infection and derive a probability distribution  for 
+\rr to accommodate uncertainty in the estimates. 
+Then, from the incidence series and the population at risk, we  calculate the 
+attack ratio for each epidemic.
+We apply our method to estimate $S_0$ before every major dengue epidemic in the 
+city of Rio de Janeiro, Brazil in the last 18 years.
+
+
 
 \section*{Methods}
 
@@ -262,14 +212,14 @@ We then proceed to describe the Susceptible-Infectious-Recovered (SIR) model
 used to represent the aggregated disease incidence and how $R_t$ can be 
 integrated into the model to allow for time varying force of infection. 
 Next, an approach to approximate the posterior distributions 
-of the numbers of susceptible to the main circulating Dengue viruses for each 
+of the numbers of susceptible to the main circulating dengue viruses for each 
 epidemic is detailed.
 Finally, we discuss how to estimate the attack ratio of each 
 epidemic using the estimated susceptible fraction and the observed incidence.
 
-\subsection*{The data set} 
+\subsection*{Data} 
 The data used in this paper consists of time 
-series of weekly notified cases of Dengue for the 
+series of weekly notified cases of dengue for the 
 city of Rio de Janeiro from 1996 to 2014. The cases are notified 
 based only on clinical criteria. Laboratory confirmation and serotype 
 information are available only for a very small sample and only on recent 
@@ -347,7 +297,8 @@ a beta prime (or inverted beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1
 The density of the induced distribution is then 
 \begin{equation}
 \label{eq:densityMantel}
-f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 - 
+f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 
+- 
 1} (1 + R_t)^{-(a_1 + b_1)}
 \end{equation}
 Thus, the expectation of \rr is $a_1/(b_1 - 1)$ and its variance is 
@@ -482,6 +433,26 @@ scarcity of cases during these periods. Our methodology to derive the
 probability distribution of \rr is an original contribution applicable to the 
 analysis of any incidence time-series of  any transmissible disease.
 
+Methods for estimating the  number of susceptibles have been proposed 
+before, for other diseases~\cite{bjornstad_dynamics_2002, 
+wallinga_reconstruction_2003}.
+These methods try to reconstruct the entire 
+series of infectious and susceptibles for measles 
+outbreaks from case data.
+In the case of dengue, the full (multi-year/multi-epidemic)
+series of susceptibles to all possible serotypes, cannot be reconstructed based 
+solely on a deterministic transmission model, since the arrival/re-emergenge of 
+new serotypes (which are a stochastic events) can change drastically the pool 
+of susceptibles throwing off any sequential estimation based on the incidence
+dynamics.
+
+The reason for the choice of a single strain model, is the lack of 
+information regarding the actual proportions of each virus in 
+circulation.
+However, some information is available about the predominant 
+serotypes for some epidemics in the period 
+of study~\cite{macedo_virological_2013}. 
+
 \begin{figure}
  \centering
  \includegraphics[width=16cm]{./plots/rt_series.png}
@@ -541,7 +512,7 @@ underreporting factor of the notification system.
 
 \section*{Acknowledgments}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
-posterior inference for $R(t)$.
+posterior inference for \rr.
 The authors are also grateful to Claudia T. 
 Code\c{c}o for helpful discussions about the manuscript.
 
@@ -612,8 +583,8 @@ After some tedious algebra one finds
 a_0 &= \frac{m_0v_0 + m_0^3 + m_0^2}{v_0} \\
 b_0 &= \frac{2v_0 + m_0^2 + m_0}{v_0}
 \end{align}
-If one wants only to specify $m_0$ and a coefficient of variation $c$ 
-\footnote{$c = \sqrt{v_0}/ m_0$.} for $R_t$ \textit{a priori}, some less boring 
+If one wants only to specify $m_0$ and the coefficient of variation $c = 
+\sqrt{v_0}/ m_0$ for $R_t$ \textit{a priori}, some less boring 
 algebra gives:
 \begin{align}
 \label{seq:elicitationcv}
@@ -621,12 +592,12 @@ a_0 &= \frac{m_0^3c^2 + m_0^3 + m_0^2}{m_0^2c^2} \\
 b_0 &= \frac{2m_0^2c^2 + m^2 + m}{m_0^2c^2}
 \end{align}
 
-This approach thus makes possible to incorporate epidemiological knowledge 
-about disease biology (e.g. the magnitude of $R_0$) into the computation of \rr.
+This approach thus makes it possible to incorporate epidemiological knowledge 
+about disease Biology (e.g. the magnitude of $R_0$) into the computation of \rr.
 This may prove particularly important when disease counts are low and/or close 
 to the detection threshold.
 We provide an R script to perform the above elicitation at 
-\url{https://github.com/fccoelho/paperLM1/blob/master/aux/elicit_Rt_prior.R}.
+\url{https://github.com/fccoelho/paperLM1/blob/master/R/elicit_Rt_prior.R}.
 
 \bibliography{lm1}
 \section*{Figure Legends}
