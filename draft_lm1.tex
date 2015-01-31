@@ -94,7 +94,6 @@
 % Use doublespacing - comment out for single spacing
 %\usepackage{setspace} 
 %\doublespacing
-% Text layout
 \topmargin 0.0cm
 \oddsidemargin 0.5cm
 \evensidemargin 0.5cm
@@ -122,9 +121,7 @@
 
 %% END MACROS SECTION
 
-
 \begin{document}
-
 
 % Title must be 150 characters or less
 \begin{flushleft}
@@ -132,7 +129,6 @@
 \textbf{Estimating the Attack ratio of Dengue Epidemics, under time-varying 
 force of infection, from aggregated case notification data}
 }
-% Insert Author names, affiliations and corresponding author email.
 \\
 Flavio Code\c{c}o Coelho$^{1\ast}$, 
 Luiz Max de Carvalho$^{2}$, 
@@ -140,20 +136,30 @@ Luiz Max de Carvalho$^{2}$,
 \bf{1} Escola de Matem\'atica Aplicada , Funda\c{c}\~ao Getulio Vargas (FGV), 
 Rio de Janeiro -- RJ, Brazil.
 \\
-\bf{2} Programa de Computa\c{c}\~ao Cient\'ifica (PROCC), Funda\c{c}\~ao Oswaldo Cruz, Rio de Janeiro -- RJ, Brazil.
+\bf{2} Programa de Computa\c{c}\~ao Cient\'ifica (PROCC), Funda\c{c}\~ao Oswaldo 
+Cruz, Rio de Janeiro -- RJ, Brazil.
 \\
 $\ast$ E-mail: fccoelho@fgv.br
 \end{flushleft}
 
-% Please keep the abstract between 250 and 300 words
 \section*{Abstract}
-A method for estimation of the Attack ratio of an epidemic and the initial 
-fraction of susceptibles, $S_0$, is proposed. The estimation methods obtain the 
-Bayesian posterior distributions of the parameters by fitting a 
-single-strain SIR transmission model with time-varying force of infection to 
-the aggregated incidence data.  The data consists of 18 years of dengue 
-incidence in the city of Rio de Janeiro, Brazil. An analytical method for 
-deriving the probability distribution of the effective reproductive number, \rr.
+
+Quantifying the attack ratio of disease is key to epidemiological inference and 
+Public Health planning.
+For multi-serotype pathogens, however, different levels of 
+serotype-specific immunity make it difficult to assess the population at risk. 
+In this paper we propose a Bayesian method for estimation of the attack ratio 
+of an epidemic and the initial fraction of susceptibles using aggregated 
+incidence data. 
+We derive the probability distribution of the effective reproductive number, 
+\rr, and use MCMC to obtain posterior 
+distributions of the parameters of a single-strain SIR transmission model with 
+time-varying force of infection.
+Our method is showcased in a data set consisting of 18 years of dengue 
+incidence in the city of Rio de Janeiro, Brazil.
+We demonstrate that it is possible to learn about the initial fraction of 
+susceptibles and the attack ratio even in the absence of serotype specific data.
+
 \section*{Author Summary}
 
 \section*{Introduction}
@@ -211,7 +217,6 @@ meaning that approximately 37\% of the suspected dengue cases go unreported.
 Lastly, demography and migrations affect the number of susceptible in ways which 
 are not easy to fully determine.
 
-
 In this paper, we estimate the number of susceptibles before every major 
 outbreak ($S_{0, year}$) in the last 18 years.
 Due to the alternation of circulating serotypes, we detected fluctuating levels 
@@ -250,10 +255,7 @@ The authors have applied similar methods as used here, to estimate the number
 of susceptibles for the predominant strain of Influenza at the beginning of  
 Influenza seasons in europe~\cite{pone2011}.
 
-
 \section*{Methods}
-
-
 
 In this section we will start by describing the data and then the method used 
 to estimate the effective reproductive number, $R_t$, from the data and obtain 
@@ -266,7 +268,6 @@ of the numbers of susceptible to the main circulating Dengue viruses for each
 epidemic is detailed.
 Finally, we discuss how to estimate the attack ratio of each 
 epidemic using the estimated susceptible fraction and the observed incidence.
-
 
 \subsection*{The data set} 
 The data used in this paper consists of time 
@@ -356,8 +357,8 @@ $a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
 Sampling from the posterior in~(\ref{eq:densityMantel}) can be made 
 straightforward by first sampling from~(\ref{eq:thetapost}) and then applying 
 the transform in~(\ref{eq:confRt}).
-Also, one can choose $a_0$ and $b_0$ so as to elicit meaningful prior distributions
-for $R_t$.
+Also, one can choose $a_0$ and $b_0$ so as to elicit meaningful prior 
+distributions for $R_t$.
 We show how to elicit the prior for $R_t$ from specified prior mean and variance
 or coefficient of variation in the Appendix.
 
@@ -412,6 +413,7 @@ disease dynamics and allows us to estimate the initial fraction of susceptibles
 $S_0$, a key epidemiological parameter.
 
 \subsection*{Bayesian parameter estimation}
+
 We take a Bayesian approach to the estimation of $S_0$.
 First the incidence time series was divided into $J=13$ 
 epidemic windows that corresponded to significant raises in incidence and 
@@ -537,10 +539,7 @@ The authors hope that this evidence will motivate public health
 authorities to invest in annual serological surveys, to determine the 
 susceptibility profile to each dengue virus as well as to estimate the 
 underreporting factor of the notification system.
-% We only support three levels of headings, please do not create a heading level below \subsubsection.
-%\subsection*{Subsection 1}
-%\section*{Discussion}
-% Do NOT remove this, even if you are not including acknowledgments.
+
 \section*{Acknowledgments}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
 posterior inference for $R(t)$.
@@ -632,15 +631,6 @@ We provide an R script to perform the above elicitation at
 
 \bibliography{lm1}
 \section*{Figure Legends}
-% This section is for figure legends only, do not include
-% graphics in your manuscript file.
-%
-%\begin{figure}
-%\caption{
-%{\bf Bold the first sentence.}  Rest of figure caption.  
-%}
-%\label{Figure_label}
-%\end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{plots/concat_SI.png}
@@ -659,26 +649,7 @@ of the entire population.
 \label{Fig:S0}
 \end{figure}
 
-
-
 \section*{Tables}
-% 
-% See introductory notes if you wish to include sideways tables.
-%
-% NOTE: Please look over our table guidelines at http://www.plosone.org/static/figureGuidelines#tables to make sure that your tables meet our requirements. Certain types of spacing, cell merging, and other formatting tricks may have unintended results and will be returned for revision.
-%
-%\begin{table}[!ht]
-%\caption{
-%\bf{Table title}}
-%\begin{tabular}{|c|c|c|}
-%table information
-%\end{tabular}
-%\begin{flushleft}Table caption
-%\end{flushleft}
-%\label{tab:label}
-% \end{table}
-
-
 
 \begin{table}[!ht]
 \caption{
@@ -709,23 +680,10 @@ Year$^\dag$ & Median attack ratio (\%) & $S_0^\ddag$ (\%)\\
 \hline
 \end{tabular}
 
-
 \end{center}
-
-
 
 \label{tab:AR}
 \end{table}
-
-%\section*{Supporting Information Legends}
-%
-% Please enter your Supporting Information captions below in the following format:
-%\item{\bf Figure SX. Enter mandatory title here.} Enter optional descriptive information here.
-% 
-%\begin{description}
-%\item {\bf}
-%\item {\bf}
-%\end{description}
 
 \end{document}
 
