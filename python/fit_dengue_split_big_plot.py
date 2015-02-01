@@ -80,7 +80,13 @@ def create_tex_table(dbs):
         s0 = array(series[Y].S.ix[first_week])
         try:
             ratio = 1.0*cases/s0
-            body += Y + r" & {:.2%} ({:.2%}-{:.2%}) & {:.3%}\\".format(nanmedian(ratio), stats.scoreatpercentile(ratio, 2.5), stats.scoreatpercentile(ratio, 97.5), nanmedian(s0))
+            body += Y + r" & {:.2} ({:.2}-{:.2}) & {:.3}({:.2}-{:.2})\\".format(nanmedian(ratio),
+                                                                                      stats.scoreatpercentile(ratio, 2.5),
+                                                                                      stats.scoreatpercentile(ratio, 97.5),
+                                                                                      nanmedian(s0),
+                                                                                      stats.scoreatpercentile(s0, 2.5),
+                                                                                      stats.scoreatpercentile(s0, 97.2)
+                                                                                      )
             body += "\n"
         except KeyError as e:
             print Y, first_week, e
@@ -232,8 +238,8 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("../DengueS*.sqlite")
-    plot_concat_series(dbs)
-    # print create_tex_table(dbs)
+    #plot_concat_series(dbs)
+    print create_tex_table(dbs)
     #plot_rt_beta()
 
 

@@ -7,7 +7,7 @@ import os
 from itertools import cycle
 import pylab as P
 import numpy as np
-from stochpy.modules import InterfaceCain
+# from stochpy.modules import InterfaceCain
 
 
 def plot(t, s, l):
