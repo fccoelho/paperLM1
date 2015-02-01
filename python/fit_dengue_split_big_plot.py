@@ -194,6 +194,7 @@ def plot_concat_series(dbs):
     lwr = lambda x: stats.scoreatpercentile(x, 2.5)
     c = cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k'])
     ax1 = P.subplot(211)
+
     for srs in series:
         co = c.next()
         s_median = srs.S.groupby(level='time').median()
@@ -204,6 +205,7 @@ def plot_concat_series(dbs):
         P.fill_between(s_median.index, s_lwr, s_upr, facecolor=co, alpha=.2)
 
     ax2 = P.subplot(212, sharex=ax1)
+    ax2.set_xlabel("Time (weeks)")
     for srs, da in zip(series, obs):
         co = c.next()
         i_median = srs.I.groupby(level='time').median()
