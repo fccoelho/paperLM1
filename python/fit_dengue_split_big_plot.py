@@ -96,6 +96,42 @@ def create_tex_table(dbs):
     return head + body + bot
 
 
+def plot_AR_S0(dbs):
+    """
+    Scatter plot of Attack ratio by S0 by year.
+    :param ar:
+    :param s0:
+    :return:
+    """
+    p = {}; s = {}; o = {}
+    pts = OrderedDict()
+    series = OrderedDict()
+    obs = OrderedDict()
+    for db in dbs:
+        y = db.split('_')[0][-4:]
+        data, theta, srs = read_data(db)
+        #print data
+        s[y] = srs
+        o[y] = data.I
+        p[y] = theta
+    for y in sorted(s.keys()):
+        series[y] = s[y]
+        obs[y] = o[y]
+        pts[y] = p[y]
+    del p, s, o
+    f, axes = P.subplots(7, 2, sharex='col', sharey='row')
+    for i, (Y, V) in enumerate(series.items()):
+        ax = axes.ravel()[i]
+        cases = obs[Y].sum()
+        first_week = V.index[0]
+        s0 = array(series[Y].S.ix[first_week])
+        ratio = 1.0*cases/s0
+        ax.set_title("${}$".format(Y))
+        ax.scatter(s0, ratio)
+    axes.ravel()[-2].set_xlabel("$S_0$")
+    axes.ravel()[-1].set_xlabel("$S_0$")
+
+
 
 
 def multiplot():
@@ -205,7 +241,7 @@ def plot_concat_series(dbs):
         P.fill_between(s_median.index, s_lwr, s_upr, facecolor=co, alpha=.2)
 
     ax2 = P.subplot(212, sharex=ax1)
-    ax2.set_xlabel("Time (weeks)")
+
     for srs, da in zip(series, obs):
         co = c.next()
         i_median = srs.I.groupby(level='time').median()
@@ -218,6 +254,7 @@ def plot_concat_series(dbs):
         # P.plot_date(pd.to_datetime(da.index), da.I, 'b.', alpha=0.8, label='Observations')
     # P.legend(['Median', 'obs'])
     P.tight_layout()
+    ax2.set_xlabel("Time (weeks)")
     P.savefig('../plots/concat_SI.svg')
     P.savefig('../plots/concat_SI.png', dpi=400)
 
@@ -240,14 +277,10 @@ if __name__ == "__main__":
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("../DengueS*.sqlite")
-    #plot_concat_series(dbs)
-    print create_tex_table(dbs)
-    #plot_rt_beta()
+    plot_concat_series(dbs)
+    # print create_tex_table(dbs)
+    # plot_AR_S0(dbs)
 
 
-
-    # sns.tsplot(series.S, time=series.time)
-
-    # series.groupby(level='time').plot()
     P.show()
 
