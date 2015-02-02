@@ -171,7 +171,8 @@ susceptibles using a simplified model of dengue transmission based on a
 single-strain Susceptible-Infectious-Removed (SIR) model with time-varying 
 infection rate.
 In order to bypass the limitations of not knowing the serotype-specific 
-seroprevalence and the exact behavior of the force of infection through time, we
+seroprevalence and the exact behaviour of the force of infection through time, 
+we
 propose to inform the time-varying transmissibility using the \rr series 
 derived from the notification data~\cite{nishiura}.
 We extend a Bayesian framework previously used to estimate the number 
@@ -311,7 +312,7 @@ Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
 one can compute the desired probability while avoiding dealing with the density 
 in~(\ref{eq:densityMantel}) directly.
 
-\subsection*{Mathematical modeling} % The model
+\subsection*{Mathematical modelling} % The model
 
 A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue 
 dynamics.
@@ -328,7 +329,7 @@ given by
 \end{equation}
 where $R_t$ is the effective reproductive number, estimated as 
 in~\ref{eq:Rtestimate}.
-The complete model with the time-verying force of infection is given by
+The complete model with the time-varying force of infection is given by
 the system of ordinary differential equations:
 \begin{align}
    \label{eq:model}
@@ -344,7 +345,7 @@ empirically derived $R_t$  to incorporate the effects of the fluctuating vector
 populations.
 Also, although there are multiple circulating serotypes, our approach
 can not discriminate between them due to the lack of serotype-specific data.
-Nevertheless, this modeling strategy can still provide some insight into the 
+Nevertheless, this modelling strategy can still provide some insight into the 
 disease dynamics and allows us to estimate the initial fraction of susceptibles 
 $S_0$, a key epidemiological parameter.
 
@@ -428,7 +429,7 @@ series of infectious and susceptibles for measles
 outbreaks from case data.
 In the case of dengue, the full (multi-year/multi-epidemic)
 series of susceptibles to all possible serotypes, cannot be reconstructed based 
-solely on a deterministic transmission model, since the arrival/re-emergenge of 
+solely on a deterministic transmission model, since the arrival/re-emergence of 
 new serotypes (which are a stochastic events) can change drastically the pool 
 of susceptibles throwing off any sequential estimation based on the incidence
 dynamics.
@@ -473,9 +474,9 @@ In it we can see that the susceptibles series in each epidemic starts at the
 estimated level of $S_0$.
 The proportion of susceptibles may seem low, but we 
 must remember that these estimates are being affected by an unknown 
-underreporting factor, which experts suggest is somewhere between 5 and 10, 
+under-reporting factor, which experts suggest is somewhere between 5 and 10, 
 i.e. for every case observed there are 5 or 10 unobserved.
-Since this underreporting affects both the numerator and denominator of 
+Since this under-reporting affects both the numerator and denominator of 
 (\ref{eq:AR2}), its effects should cancel out, giving us an unbiased attack 
 ratio 
 estimate.
@@ -513,16 +514,16 @@ of any epidemic.
 The authors hope that this evidence will motivate public health 
 authorities to invest in annual serological surveys, to determine the 
 susceptibility profile to each dengue virus as well as to estimate the 
-underreporting factor of the notification system.
+under-reporting factor of the notification system.
 
-\section*{Acknowledgments}
+\section*{Acknowledgements}
 LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
 posterior inference for \rr.
 The authors are also grateful to Claudia T. 
 Code\c{c}o for helpful discussions about the manuscript.
 
 \section*{Appendix}
-\subsection*{A remark on prior distributions and tail behavior of the 
+\subsection*{A remark on prior distributions and tail behaviour of the 
 distribution of $R_t$}
 \label{sec:tails}
 There are a number of approaches to deriving the distribution of \rr.
@@ -543,8 +544,8 @@ said distribution.
 f_N(R_t| a_2, b_2) =  \frac{b_2^{a_2}}{\Gamma(a_2)} R_t^{a_2-1} e^{-b_2 R_t}
 \end{equation}
 
-In order to decide which approach to take, it may be of use analyzing the 
-tail behavior of the derived distributions for \rr. 
+In order to decide which approach to take, it may be of use analysing the 
+tail behaviour of the derived distributions for \rr. 
 Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to 
@@ -575,7 +576,7 @@ choice mainly because the induced distribution for \rr is only well-defined for
 $b_0 > 2$.
 
 An advantage of the Bayesian approach is that one can devise prior 
-distributions for $\theta_t$ taking advantage of the intuitive parameterization 
+distributions for $\theta_t$ taking advantage of the intuitive parametrization 
 and flexibility of the beta family of distributions.
 Prior elicitation can also be done for \rr and the hyper-parameters directly 
 plugged into the prior for $\theta_t$. 
