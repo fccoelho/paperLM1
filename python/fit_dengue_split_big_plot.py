@@ -83,9 +83,9 @@ def create_tex_table(dbs):
             body += Y + r" & {:.2} ({:.2}-{:.2}) & {:.3}({:.2}-{:.2})\\".format(nanmedian(ratio),
                                                                                       stats.scoreatpercentile(ratio, 2.5),
                                                                                       stats.scoreatpercentile(ratio, 97.5),
-                                                                                      nanmedian(s0),
-                                                                                      stats.scoreatpercentile(s0, 2.5),
-                                                                                      stats.scoreatpercentile(s0, 97.2)
+                                                                                      nanmedian(s0)*100,
+                                                                                      stats.scoreatpercentile(s0, 2.5)*100,
+                                                                                      stats.scoreatpercentile(s0, 97.2)*100
                                                                                       )
             body += "\n"
         except KeyError as e:
@@ -239,7 +239,7 @@ def plot_concat_series(dbs):
         s_lwr = srs.S.groupby(level='time').aggregate(lwr)
         # P.legend(loc=0)
         P.fill_between(s_median.index, s_lwr, s_upr, facecolor=co, alpha=.2)
-
+    ax1.set_ylabel("Fraction of population")
     ax2 = P.subplot(212, sharex=ax1)
 
     for srs, da in zip(series, obs):
@@ -254,6 +254,7 @@ def plot_concat_series(dbs):
         # P.plot_date(pd.to_datetime(da.index), da.I, 'b.', alpha=0.8, label='Observations')
     # P.legend(['Median', 'obs'])
     P.tight_layout()
+    ax2.set_ylabel("Fraction of population")
     ax2.set_xlabel("Time (weeks)")
     P.savefig('../plots/concat_SI.svg')
     P.savefig('../plots/concat_SI.png', dpi=400)
@@ -278,7 +279,7 @@ if __name__ == "__main__":
 
     dbs = glob.glob("../DengueS*.sqlite")
     plot_concat_series(dbs)
-    # print create_tex_table(dbs)
+    print create_tex_table(dbs)
     # plot_AR_S0(dbs)
 
 
