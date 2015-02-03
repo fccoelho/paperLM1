@@ -37,19 +37,22 @@ def read_data(dbname):
     return df_data, df_pt, df_series
 
 
-def create_tex_table(dbs):
+def get_ordered_series(dbs):
     """
-    Create Latex table with the Attack ratios for each epidemic
+    Return three ordered dicts with the data ordered by year
+    :param dbs: list of filenames of the sqlite databases
     :return:
     """
-    p = {}; s = {}; o = {}
+    p = {}
+    s = {}
+    o = {}
     pts = OrderedDict()
     series = OrderedDict()
     obs = OrderedDict()
     for db in dbs:
         y = db.split('_')[0][-4:]
         data, theta, srs = read_data(db)
-        #print data
+        # print data
         s[y] = srs
         o[y] = data.I
         p[y] = theta
@@ -57,7 +60,16 @@ def create_tex_table(dbs):
         series[y] = s[y]
         obs[y] = o[y]
         pts[y] = p[y]
-    del p, s, o
+    return obs, series, pts
+
+
+def create_tex_table(dbs):
+    """
+    Create Latex table with the Attack ratios for each epidemic
+    :return:
+    """
+    obs, series, pts = get_ordered_series(dbs)
+
     head = r"""\begin{center}
 \begin{tabular}{c|c|c}
 \hline
@@ -103,22 +115,8 @@ def plot_AR_S0(dbs):
     :param s0:
     :return:
     """
-    p = {}; s = {}; o = {}
-    pts = OrderedDict()
-    series = OrderedDict()
-    obs = OrderedDict()
-    for db in dbs:
-        y = db.split('_')[0][-4:]
-        data, theta, srs = read_data(db)
-        #print data
-        s[y] = srs
-        o[y] = data.I
-        p[y] = theta
-    for y in sorted(s.keys()):
-        series[y] = s[y]
-        obs[y] = o[y]
-        pts[y] = p[y]
-    del p, s, o
+    obs, series, pts = get_ordered_series(dbs)
+
     f, axes = P.subplots(7, 2, sharex='col', sharey='row')
     for i, (Y, V) in enumerate(series.items()):
         ax = axes.ravel()[i]
@@ -131,47 +129,6 @@ def plot_AR_S0(dbs):
     axes.ravel()[-2].set_xlabel("$S_0$")
     axes.ravel()[-1].set_xlabel("$S_0$")
 
-
-
-
-def multiplot():
-    fig = P.figure()
-
-    wl = 7
-    for i, n in zip([1, 2, 3, 4], ["nl05-06", "nl06-07", "nl07-08", "nl08-09"]):
-        pt, series, predseries, obs, weeks = _read_results(n)
-        pt = [s.beta for s in pt]
-
-        ax = fig.add_subplot(2, 2, i)
-        ax.grid()
-        if n in ["nl05-06", "nl07-08"]:
-            ax.set_ylabel('Weekly Incidence')
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d, %Y'))
-
-        pred_new_cases(obs, predseries, weeks, names=['I'], title=n.replace('nl', '20'))
-        P.setp(ax.get_xticklabels(), rotation=30, fontsize=8)
-        P.setp(ax.get_yticklabels(), fontsize=8)
-        # plot_series2(array(obs['time']),obs,series, names=['I'],title=n)
-        ax1 = ax.twinx()
-        violin_plot(ax1, pt, array(obs['time'])[wl - 1::wl], bp=True)
-        ax1.set_ylabel(r'$\beta$')
-        #ax1.format_xdata = mdates.DateFormatter('%m-%d')t_manager.FontProperties().set_size('x-small')
-        #~ print
-        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d'))
-        P.setp(ax1.get_xticklabels(), rotation=30, fontsize=8)
-        P.setp(ax1.get_yticklabels(), fontsize=8)
-
-    fig2 = P.figure()
-    for i, n in zip([1, 2, 3, 4], ["nl05-06", "nl06-07", "nl07-08", "nl08-09"]):
-        pt, series, predseries, obs, weeks = _read_results(n)
-        ax2 = fig2.add_subplot(2, 2, i)
-        ax2.grid()
-        if n in ["nl05-06", "nl07-08"]:
-            ax2.set_ylabel('Incidence')
-        plot_series2(array(obs['time']), obs, series, names=['I'], title=n.replace('nl', '20'))
-        ax2.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d'))
-        P.setp(ax2.get_xticklabels(), rotation=30, fontsize=8)
-        P.setp(ax2.get_yticklabels(), fontsize=8)
 
 
 def series(nam='Dengue_S0'):
@@ -272,15 +229,25 @@ def plot_pt_corr(df):
                  diag_names=True, cmap=cmap, ax=ax)
     f.tight_layout()
 
+def calc_mse(dbs):
+    obs, series, pts = get_ordered_series(dbs)
+    mse = OrderedDict()
+    for Y, srs in series.iteritems():
+        n = len(obs[Y])
+        i_median = srs.I.groupby(level='time').median()
+        mse[Y] = (1./n) * sum((i_median-obs[Y])**2)
+    return mse
+
 if __name__ == "__main__":
     sns.set(style="darkgrid", palette="Set2")
     font_manager.FontProperties().set_size('x-small')
     #~ series('Dengue_S0_big')
 
     dbs = glob.glob("../DengueS*.sqlite")
-    plot_concat_series(dbs)
-    print create_tex_table(dbs)
+    #plot_concat_series(dbs)
+    #print create_tex_table(dbs)
     # plot_AR_S0(dbs)
+    print calc_mse(dbs)
 
 
     P.show()
