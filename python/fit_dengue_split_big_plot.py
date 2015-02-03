@@ -232,11 +232,15 @@ def plot_pt_corr(df):
 def calc_mse(dbs):
     obs, series, pts = get_ordered_series(dbs)
     mse = OrderedDict()
+    mae = OrderedDict()
+    mape = OrderedDict()
     for Y, srs in series.iteritems():
         n = len(obs[Y])
         i_median = srs.I.groupby(level='time').median()
-        mse[Y] = (1./n) * sum((i_median-obs[Y])**2)
-    return mse
+        mse[Y] = (1./n) * sum(((i_median-obs[Y])**2)/obs[Y]**2)
+        mae[Y] = (1./n) * sum(abs(i_median-obs[Y]))
+        mape[Y] = (1./n) * sum(abs((i_median-obs[Y])/obs[Y]))
+    return mse, mae, mape
 
 if __name__ == "__main__":
     sns.set(style="darkgrid", palette="Set2")
