@@ -420,10 +420,14 @@ available at~\url{https://github.com/fccoelho/paperLM1}.
 In this paper we propose a method to bypass the lack of serotype-specific case 
 data by informing the time-varying force of infection with the instantaneous 
 reproductive number, \rr which we calculate from aggregated data.
-Our contribution is two-fold: (i) we show a method to quantify uncertainty 
+The main contribution of this paper can be summarized in the following items: 
+(i) we show a method to quantify uncertainty 
 about \rr that is readily applicable to other diseases and; (ii) we propose to 
 use \rr to inform a dynamic epidemic model with time-varying force of infection 
-in order to gain insight into the attack ratio of each epidemic. 
+in order to gain insight into the attack ratio of each epidemic; (iii) We 
+propose an estimation procedure for circulating serotype's $S_0$ from 
+aggregate case data, which is robust to epidemic sizes; We estimate the AR 
+for 18 years of Dengue epidemics. 
 
 Figure~\ref{fig:rtseries}  shows the $R_t$ series, according to 
 (\ref{eq:Rtestimate})~\cite{nishiura} along with the confidence bands derived 
@@ -489,7 +493,7 @@ addressed in this analysis.
 For instance, in any given epidemic there is a large number of 
 mild and asymptomatic cases, which nevertheless acquire immunity.
 It is estimated that for every case reported, up to 10-20 are not seen by health 
-authorities (Oswaldo G. Cruz, personal communication).
+authorities~\cite{luz_disability_2009}.
 Another source of uncertainty is under-reporting of diagnosed cases, which is a 
 serious issue in the health care systems of many developing countries such as 
 Brazil. 
@@ -545,7 +549,9 @@ estimated for each epidemic/outbreak.
 It is interesting to notice that the larger epidemics, in terms of peak size are 
 not the one with the greater attack ratios.
 This stresses the importance of knowing the immunological structure of the 
-population in order to truly assess the impact of any epidemic. [WHY?]
+population. Knowing the $S_0$ for the circulating viruses we can order to more 
+accurately assess the potential impact of a coming epidemic, since particularly 
+virulent types, can be rendered less of a threat by a low $S_0$.
 
 We hope that the results presented in paper will motivate public 
 health authorities to invest in annual serological surveys, to determine the 
