@@ -19,6 +19,7 @@ We derive the probability distribution of the effective reproductive number, $R_
 Our method is showcased in a data set consisting of 18 years of dengue incidence in the city of Rio de Janeiro, Brazil.
 We demonstrate that it is possible to learn about the initial fraction of susceptibles and the attack ratio even in the absence of serotype specific data.
 On the other hand, the information provided by this approach is limited, stressing the need for detailed serological surveys to characterise the distribution of serotype-specific immunity in the population.
+[Arxviv](http://arxiv.org/abs/1502.01236)
 
 ![](plots/rt_series.png)
 **Dengue cases and the calculated $R_t$ along with 95% confidence bands**
