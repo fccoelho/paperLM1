@@ -10,7 +10,7 @@ In this paper we address the problem of learning about the attack ratio of a mul
 We propose to inform time-varying transmission using the effective reproductive number R_t and propose a way to quantify uncertainty about its estimates.
 We couple these developments with a Susceptible-Infectious-Removed (SIR) model and Bayesian parameter estimation implemented in [BIP](http://bayesian-inference.googlecode.com/hg/trunk/BIP/Docs/build/html/index.html) to calculate the attack ratio of dengue epidemics in Rio de Janeiro.
 
-### Abstract 
+### Abstract [Arxviv](http://arxiv.org/abs/1502.01236)
 Quantifying the attack ratio of disease is key to epidemiological inference and Public Health planning.
 For multi-serotype pathogens, however, different levels of serotype-specific immunity make it difficult to assess the population at risk. 
 In this paper we propose a Bayesian method for estimation of the attack ratio of an epidemic and the initial fraction of susceptibles using aggregated 
@@ -19,7 +19,6 @@ We derive the probability distribution of the effective reproductive number, R_t
 Our method is showcased in a data set consisting of 18 years of dengue incidence in the city of Rio de Janeiro, Brazil.
 We demonstrate that it is possible to learn about the initial fraction of susceptibles and the attack ratio even in the absence of serotype specific data.
 On the other hand, the information provided by this approach is limited, stressing the need for detailed serological surveys to characterise the distribution of serotype-specific immunity in the population.
-[Arxviv](http://arxiv.org/abs/1502.01236)
 
 ![](plots/rt_series.png)
 **Dengue cases and the calculated R_t along with 95% confidence bands**
