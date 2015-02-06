@@ -6,11 +6,13 @@ Flavio Coelho<sup>1</sup> and Luiz Max de Carvalho<sup>2</sup>
 <sup>2</sup> Program for Scientific Computing, Oswaldo Cruz Foundation, Rio de Janeiro -- RJ, Brazil.
 
 ### Quick Summary
+------------------
 In this paper we address the problem of learning about the attack ratio of a multi-strain disease like dengue.
 We propose to inform time-varying transmission using the effective reproductive number R_t and propose a way to quantify uncertainty about its estimates.
 We couple these developments with a Susceptible-Infectious-Removed (SIR) model and Bayesian parameter estimation implemented in [BIP](http://bayesian-inference.googlecode.com/hg/trunk/BIP/Docs/build/html/index.html) to calculate the attack ratio of dengue epidemics in Rio de Janeiro.
 
-### Abstract [Arxviv](http://arxiv.org/abs/1502.01236)
+### Abstract ([Arxviv](http://arxiv.org/abs/1502.01236))
+--------------------------------------------------------
 Quantifying the attack ratio of disease is key to epidemiological inference and Public Health planning.
 For multi-serotype pathogens, however, different levels of serotype-specific immunity make it difficult to assess the population at risk. 
 In this paper we propose a Bayesian method for estimation of the attack ratio of an epidemic and the initial fraction of susceptibles using aggregated 
