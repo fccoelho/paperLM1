@@ -18,7 +18,7 @@
 % amssymb package, useful for mathematical symbols
 \usepackage{amssymb}
 % cite package, to clean up citations in the main text. Do not remove.
-\usepackage{cite}
+\usepackage[numbers]{natbib}
 \usepackage{hyperref}
 % line numbers
 \usepackage{lineno}
@@ -43,7 +43,7 @@
 % Captions will be left justified
 \usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
 % Use the PLoS provided BiBTeX style
-\bibliographystyle{plos2009}
+\bibliographystyle{naturemag}
 % Remove brackets from numbering in List of References
 \makeatletter
 \renewcommand{\@biblabel}[1]{\quad#1.}
@@ -107,10 +107,10 @@ distribution of serotype-specific immunity in the population.
 
 Dengue is an arthropod-borne febrile disease caused by a flavivirus with four 
 serotypes which causes an estimated  $50$ million infections each 
-year~\cite{Guzman2010}.
+year~\citep{Guzman2010}.
 In humans, immunity against  a particular serotype is  considered permanent 
 after the exposure and cross immunity to there serotypes is considered short 
-lived~\cite{halstead_dengue_2007}.
+lived~\citep{halstead_dengue_2007}.
 As a consequence, the proportions of viral serotypes co-circulating at any 
 point in time are strongly dependent on previous incidence patterns of the 
 disease, which determine the number of individuals susceptible to each serotype 
@@ -120,14 +120,14 @@ at any point in time.
 Dengue transmission is also modulated by environmental conditions, among which, 
 temperature, due to its effects on the 
 vector reproduction, stands out as a strong predictor of 
-incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
+incidence~\citep{honorio_temporal_2009,wu_higher_2009}.
 In places with sufficient seasonal temperature variation, dengue is 
 predominantly a  summer disease.
 So it is fair to say that these environmental 
 fluctuations play a key role in determining beginning and end of epidemic 
 periods.
 This climatic influence is exerted mainly through its effects on the force of 
-infection, which cannot be taken as constant~\cite{reiner_time-varying_2014} 
+infection, which cannot be taken as constant~\citep{reiner_time-varying_2014} 
 but rather as a seasonal (oscillating) function of time.
 The long term dynamics of dengue is also modulated by the alternation of virus 
 types in circulation. Demographics also plays a role in replenishing the 
@@ -145,7 +145,7 @@ of susceptibles to the circulating virus types right before the epidemic, which
 is virtually impossible without regular virological surveys.
 
 The attack ratio is also influenced by the reproductive number of the disease 
-~\cite{bacaer_final_2009, katriel_attack_2012}, which is closely associated 
+~\citep{bacaer_final_2009, katriel_attack_2012}, which is closely associated 
 with the force of infection.
 Thus the incorporation of the effective reproduction number, \rr, as a function 
 of time, is crucial to an accurate estimation of the AR of seasonal diseases 
@@ -153,7 +153,7 @@ like dengue and Influenza.
 
 Other methods for estimating the  number of susceptibles while 
 accommodating time-varying force of infection have been proposed 
-before, for measles~\cite{bjornstad_dynamics_2002, 
+before, for measles~\citep{bjornstad_dynamics_2002, 
 wallinga_reconstruction_2003}, a disease that shows remarkable seasonality.
 These methods try to reconstruct the entire 
 series of infectious and susceptibles from case data using deterministic models 
@@ -161,7 +161,7 @@ and generally work well for measles because there is a one-to-one
 relationship between exposure and immunity, since measles is caused by a 
 single-strain pathogen.
 Recently, methods in the same fashion were developed for dengue when 
-serotype-specific data is available~\cite{Reiner2014}.
+serotype-specific data is available~\citep{Reiner2014}.
 When such data is not available, the series of susceptibles to all possible
 serotypes, cannot be reconstructed based solely on a deterministic transmission 
 model, since the arrival/re-emergence of  new serotypes, an intrinsically 
@@ -176,9 +176,9 @@ In order to bypass the limitations of not knowing the serotype-specific
 seroprevalence and the exact behaviour of the force of infection through time, 
 we
 propose to inform the time-varying transmissibility using the \rr series 
-derived from the notification data~\cite{nishiura}.
+derived from the notification data~\citep{nishiura}.
 We extend a Bayesian framework previously used to estimate the number 
-of susceptibles in Influenza epidemics in Europe~\cite{pone2011} to include 
+of susceptibles in Influenza epidemics in Europe~\citep{pone2011} to include 
 time-varying force of infection and derive a probability distribution  for 
 \rr to accommodate uncertainty in the estimates. 
 Then, from the incidence series and the population at risk, we  calculate the 
@@ -225,8 +225,8 @@ the average number of secondary cases per primary case at time $t$.
 
 Let $Y_t$ be the number of reported disease cases for a particular time $t \in 
 (0, T)$.
-Nishiura el al. (2010)~\cite{nishiura} extend the theory developed by 
-Stallybrass et al. (1931)~\cite{stallybrass} and propose to estimate \rr as
+Nishiura el al. (2010)~\citep{nishiura} extend the theory developed by 
+Stallybrass et al. (1931)~\citep{stallybrass} and propose to estimate \rr as
 \begin{equation}
 \label{eq:Rtestimate}
 R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
@@ -240,7 +240,7 @@ uncertainty about estimate in equation~\ref{eq:Rtestimate}.
 Here we detail how to obtain credibility intervals for \rr under the assumption 
 that the counts $Y_t$ are Poisson distributed for all $t$.
 
-We explore the approach of Ederer and Mantel~\cite{mantel}, whose objective is 
+We explore the approach of Ederer and Mantel~\citep{mantel}, whose objective is 
 to obtain 
 confidence intervals for the ratio of two Poisson counts. 
 Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
@@ -255,7 +255,8 @@ Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that
 $Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
 Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that 
 $Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
-Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha 
+Ederer and Mantel (1974)~\citep{mantel} show that one can construct a 
+$100\alpha 
 \%$ confidence interval for \rr by noting that
 \begin{equation}
 \label{eq:confRt}
@@ -266,8 +267,8 @@ Because the transform from $\theta$ to \rr is monotonically
 increasing, the result holds for confidence and credibility intervals alike.
 
 Many authors have chosen to quantify the uncertainty about $\theta$ 
-following orthodox approaches  (see for example~\cite{wilson} 
-and~\cite{clopper}) mainly for simplicity.
+following orthodox approaches  (see for example~\citep{wilson} 
+and~\citep{clopper}) mainly for simplicity.
 We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
 posterior credibility interval for $\theta_t$ as $c_{\alpha}(\theta_t)$.
 If we choose the conjugate beta prior with parameters $a_0$ and $b_0$ for the 
@@ -280,7 +281,7 @@ p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
 Combining equations~(\ref{eq:confRt}) and~(\ref{eq:thetapost}) 
 tells us that the induced posterior distribution of $R_t$ is 
 a beta prime (or inverted beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 
-=  Y_t + b_0$~\cite{dubey1970}.
+=  Y_t + b_0$~\citep{dubey1970}.
 The density of the induced distribution is then 
 \begin{equation}
 \label{eq:densityMantel}
@@ -373,9 +374,9 @@ We place a flat $\text{Beta}(1, 1)$ prior on $S_{0j}\:\forall j$
 
 To approximate the posterior in~(\ref{eq:S0post}) we use Markov chain Monte 
 Carlo techniques implemented in the Bayesian inference with Python 
-(BIP)~\cite{pone2011} available at  
+(BIP)~\citep{pone2011} available at  
 \url{http://code.google.com/p/bayesian-inference/}.
-BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\cite{vrugt2008} 
+BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\citep{vrugt2008} 
 scheme that efficiently samples from high-dimensional joint distributions using 
 multiple adaptive chains running in parallel with delayed rejection.
 Also, as the numerical integration routine implemented within BIP needs 
@@ -388,7 +389,7 @@ The chains were run until $5000$ samples were obtained after discarding $500$
 burn-in samples.
 Convergence of the parallel chains was verified at every 100 iterations by the 
 calculation of the Gelman-Rubin's R (potential scale 
-reduction factor), which approaches $1$ at convergence~\cite{brooks1998}.
+reduction factor), which approaches $1$ at convergence~\citep{brooks1998}.
 
 \subsection*{Calculating the attack ratio}
 
@@ -427,7 +428,7 @@ aggregate case data, which is robust to epidemic sizes; (iv) We estimate the AR
 for 18 years of Dengue epidemics. 
 
 Figure~\ref{fig:rtseries}  shows the $R_t$ series, according to 
-(\ref{eq:Rtestimate})~\cite{nishiura} along with the confidence bands derived 
+(\ref{eq:Rtestimate})~\citep{nishiura} along with the confidence bands derived 
 in this paper. 
 It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
 indistinguishable from 1.
@@ -461,7 +462,7 @@ dengue is every naive (to a particular serotype) individual in the population.
 Estimating the initial susceptible fraction $S_0$ for each epidemic is thus 
 central to the estimation of the AR.
 Methods for estimating the  number of susceptibles have been proposed 
-before, for other diseases~\cite{bjornstad_dynamics_2002, 
+before, for other diseases~\citep{bjornstad_dynamics_2002, 
 wallinga_reconstruction_2003}.
 These methods try to reconstruct the entire 
 series of infectious and susceptibles for measles 
@@ -476,7 +477,7 @@ dynamics.
 Since there is very limited information regarding the actual proportions of 
 each virus in circulation and most information available is about the 
 predominant serotypes for some epidemics in the period of 
-study only~\cite{macedo_virological_2013}, we propose the use of a 
+study only~\citep{macedo_virological_2013}, we propose the use of a 
 simplified a single strain model.
 The main argument we put forward is that by conditioning on the \rr series, we 
 implicitly take into account the variability introduced by the 
@@ -488,11 +489,11 @@ addressed in this analysis.
 For instance, in any given epidemic there is a large number of 
 mild and asymptomatic cases, which nevertheless acquire immunity.
 It is estimated that for every case reported, up to 10-20 are not seen by health 
-authorities~\cite{luz_disability_2009}.
+authorities~\citep{luz_disability_2009}.
 Another source of uncertainty is under-reporting of diagnosed cases, which is a 
 serious issue in the health care systems of many developing countries such as 
 Brazil. 
-Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
+Duarte and Fran\c{c}a (2006)~\citep{duarte_data_2006}, estimated 
 the sensitivity of Dengue reporting for hospitalized patients in 
 Belo-Horizonte, Brazil to be of 63\%, meaning that approximately 37\% of the 
 suspected Dengue cases go unreported.  
@@ -621,10 +622,10 @@ Code\c{c}o for helpful discussions about the manuscript.
 distribution of $R_t$}
 \label{sec:tails}
 There are a number of approaches to deriving the distribution of \rr.
-Alternatively to the approach described in the main text~\cite{mantel}, one 
+Alternatively to the approach described in the main text~\citep{mantel}, one 
 could use the conditional distribution of \rr on 
 $Y_{t+1}$ and $Y_t$ as defined in equation A7 of Nishiura et 
-al.~\cite{nishiura}:
+al.~\citep{nishiura}:
 \begin{equation}
 \label{seq:unorm}
 f_{R}(R_{t}) = (Y_tR_{t})^{Y_{t+1}} e^{-Y_tR_{t}}
@@ -644,7 +645,7 @@ tail behaviour of the derived distributions for \rr.
 Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to 
-the conditional distribution proposed by~\cite{nishiura}, thus providing more 
+the conditional distribution proposed by~\citep{nishiura}, thus providing more 
 conservative confidence/credibility intervals.
 To see that one needs simply take the ratio of the Beta prime and Gamma 
 (unnormalized) densities and evaluate the limit as $R_t$ goes to infinity:
@@ -658,12 +659,12 @@ equal-tailed $100\alpha\%$ credible set, rather than a less conservative
 highest posterior density (HPD) interval.
 
 As a side note, the Bayesian approach presented in this 
-paper will give similar results to orthodox confidence intervals~\cite{wilson} 
-and~\cite{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
+paper will give similar results to orthodox confidence intervals~\citep{wilson} 
+and~\citep{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
 Under the flat  uniform prior for $\theta_t$, the Bayesian posterior 
 credibility 
 interval is nearly indistinguishable from the confidence interval proposed by 
-Clopper \& Pearson (1931)~\cite{clopper} for $Y_{t+1}, Y_t > 20$.
+Clopper \& Pearson (1931)~\citep{clopper} for $Y_{t+1}, Y_t > 20$.
 Note also that the uniform prior ($Beta(1, 1)$) for $\theta_t$ constitutes a 
 poor 
 prior 
