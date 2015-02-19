@@ -1,0 +1,107 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[numbers]{natbib}
+\bibliographystyle{naturemag}
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+\usepackage{url}
+% Our defs 
+\def \rr {$R_{t}\:$}
+%opening
+\title{Supplementary material to ``Estimating the Attack Ratio of Dengue 
+Epidemics under Time-varying 
+Force of Infection using Aggregated Notification Data''}
+\author{Flavio Code\c{c}o Coelho and Luiz Max de Carvalho}
+
+\begin{document}
+
+\maketitle
+
+\section*{A remark on prior distributions and tail behaviour of the 
+distribution of $R_t$}
+\label{sec:tails}
+There are a number of approaches to deriving the distribution of \rr.
+Alternatively to the approach described in the main text~\cite{mantel}, one 
+could use the conditional distribution of \rr on 
+$Y_{t+1}$ and $Y_t$ as defined in equation A7 of Nishiura et 
+al.~\cite{nishiura}:
+\begin{equation}
+\label{seq:unorm}
+f_{R}(R_{t}) = (Y_tR_{t})^{Y_{t+1}} e^{-Y_tR_{t}}
+\end{equation}
+Noticing the kernel of (\ref{seq:unorm}) is that of a gamma distribution with 
+$a_2 = Y_{t+1}+1$ and $b_2 = Y_t$, we obtain a proper density from which to 
+construct $c_{\alpha}(R_t)$, simply by computing the appropriate quantiles of 
+said distribution.
+ This density is
+\begin{equation}
+\label{seq:densityNishiura}
+f_N(R_t| a_2, b_2) =  \frac{b_2^{a_2}}{\Gamma(a_2)} R_t^{a_2-1} e^{-b_2 R_t}
+\end{equation}
+
+In order to decide which approach to take, it may be of use analysing the 
+tail behaviour of the derived distributions for \rr. 
+Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
+With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
+The beta prime (inverse beta distribution) will have heavier tails compared to 
+the conditional distribution proposed by~\cite{nishiura}, thus providing more 
+conservative confidence/credibility intervals.
+To see that one needs simply take the ratio of the Beta prime and Gamma 
+(unnormalized) densities and evaluate the limit as $R_t$ goes to infinity:
+\begin{equation}
+ \label{seq:densityratio}
+ \lim_{R_t\to\infty}\frac{f_P(R_t| a_1, b_1)}{f_N(R_t| a_2, b_2)} =  
+\lim_{R_t\to\infty}\frac{e^{Y_{t}R_t}}{(1 +R_t)^{Y_{t} + Y_{t +1}+2}} = \infty
+\end{equation}
+Finally, note that we deliberately construct $c_{\alpha}(R_{t})$ as a 
+equal-tailed $100\alpha\%$ credible set, rather than a less conservative 
+highest posterior density (HPD) interval.
+
+As a side note, the Bayesian approach presented in this 
+paper will give similar results to orthodox confidence intervals~\cite{wilson} 
+and~\cite{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
+Under the flat  uniform prior for $\theta_t$, the Bayesian posterior 
+credibility 
+interval is nearly indistinguishable from the confidence interval proposed by 
+Clopper \& Pearson (1931)~\cite{clopper} for $Y_{t+1}, Y_t > 20$.
+Note also that the uniform prior ($Beta(1, 1)$) for $\theta_t$ constitutes a 
+poor 
+prior 
+choice mainly because the induced distribution for \rr is only well-defined for 
+$b_0 > 2$.
+
+An advantage of the Bayesian approach is that one can devise prior 
+distributions for $\theta_t$ taking advantage of the intuitive parametrization 
+and flexibility of the beta family of distributions.
+Prior elicitation can also be done for \rr and the hyper-parameters directly 
+plugged into the prior for $\theta_t$. 
+One can, for example, choose prior mean and variance for \rr and find $a_0$ 
+and $b_0$ that satisfy those conditions.
+Let $m_0$ and $v_0$ be the prior expectation and variance for $R_t$. 
+After some tedious algebra one finds
+\begin{align}
+\label{seq:elicitation}
+a_0 &= \frac{m_0v_0 + m_0^3 + m_0^2}{v_0} \\
+b_0 &= \frac{2v_0 + m_0^2 + m_0}{v_0}
+\end{align}
+If one wants only to specify $m_0$ and the coefficient of variation $c = 
+\sqrt{v_0}/ m_0$ for $R_t$ \textit{a priori}, some less boring 
+algebra gives:
+\begin{align}
+\label{seq:elicitationcv}
+a_0 &= \frac{m_0^3c^2 + m_0^3 + m_0^2}{m_0^2c^2} \\
+b_0 &= \frac{2m_0^2c^2 + m^2 + m}{m_0^2c^2}
+\end{align}
+
+This approach thus makes it possible to incorporate epidemiological knowledge 
+about disease Biology (e.g. the magnitude of $R_0$) into the computation of \rr.
+This may prove particularly important when disease counts are low and/or close 
+to the detection threshold.
+We provide an R script to perform the above elicitation at 
+\url{https://github.com/fccoelho/paperLM1/blob/master/R/elicit_Rt_prior.R}.
+
+\bibliography{lm1}
+
+\end{document}
