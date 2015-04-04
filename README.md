@@ -11,7 +11,7 @@ In this paper we address the problem of learning about the attack ratio of a mul
 We propose to inform time-varying transmission using the effective reproductive number R_t and propose a way to quantify uncertainty about its estimates.
 We couple these developments with a Susceptible-Infectious-Removed (SIR) model and Bayesian parameter estimation implemented in [BIP](http://bayesian-inference.googlecode.com/hg/trunk/BIP/Docs/build/html/index.html) to calculate the attack ratio of dengue epidemics in Rio de Janeiro.
 
-### Abstract ([Arxviv](http://arxiv.org/abs/1502.01236))
+### Abstract ([Arxiv](http://arxiv.org/abs/1502.01236))
 
 Quantifying the attack ratio of disease is key to epidemiological inference and Public Health planning.
 For multi-serotype pathogens, however, different levels of serotype-specific immunity make it difficult to assess the population at risk. 
