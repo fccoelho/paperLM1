@@ -74,7 +74,7 @@ time-series, $Y_t$:
 \label{eq:Rtestimate}
 R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
 \end{equation}
-Where $n$ is the ration between the length of reporting interval and 
+Where $n$ is the ratio between the length of reporting interval and 
 the mean generation time of the disease.
 \begin{flushright}
  Nishiura et. al. (2010)
@@ -83,21 +83,73 @@ the mean generation time of the disease.
 
 \begin{frame}
 \frametitle{\rr's uncertainty}
-But what about the uncertainty about \rr?
+But what about the uncertainty about \rr\footnote{Coelho, FC and Carvalho, LM 
+(Submitted)}?
 
-If we assume that the counts $Y_t$ are Poisson distributed for all $t$, we can 
-derive the probability distribution of \rr\footnote{Coelho, FC and Carvalho, LM 
-(Submitted)}
+We explore the approach of Ederer and Mantel\cite{mantel}, whose objective is 
+to obtain 
+confidence intervals for the ratio of two Poisson counts. 
+Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
+and define $S = Y_{t} + Y_{t+1}$.
+The authors note that by conditioning on the sum $S$
+\begin{align}
+\label{eq:binlike}
+Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
+\theta_t &= \frac{\lambda_{t+1}}{\lambda_{t} + \lambda_{t+1}}
+\end{align}
+\end{frame}
+
+\begin{frame}
+\frametitle{\rr's Uncertainty}
+Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that 
+$Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
+Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that 
+$Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
+
+Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha 
+\%$ confidence interval for \rr by noting that
+\begin{equation}
+\label{eq:confRt}
+ R_t^{(L)} = \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})} \quad \text{and} \quad 
+R_t^{(U)} = \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}\\
+\end{equation}
+\end{frame}
+
+\begin{frame}
+\frametitle{\rr's Uncertainty}
+Taking a Bayesian conjugate distribution approach, If we choose a
+Beta conjugate prior with parameters $a_0$ and $b_0$ for the 
+Binomial likelihood in (\ref{eq:binlike}), the posterior distribution for 
+$\theta_t$ is
+\begin{equation}
+\label{eq:thetapost}
+p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
+\end{equation}
+Combining equations~(\ref{eq:confRt}) and~(\ref{eq:thetapost}) 
+tells us that the induced posterior distribution of $R_t$ is 
+a Beta prime (or inverted Beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 
+=  Y_t + b_0$~\cite{dubey1970}.
+The density of the induced distribution is then 
+\begin{equation}
+\label{eq:densityMantel}
+f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 
+- 
+1} (1 + R_t)^{-(a_1 + b_1)}
+\end{equation}
+Thus, the expectation of \rr is $a_1/(b_1 - 1)$ and its variance is 
+$a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{\rr's Uncertainty}
 \begin{center}
 \begin{figure}
   \includegraphics[width=9cm]{./rt_series.png}
 \end{figure}
 \end{center}
-
-
 \end{frame}
-
-
 \subsection{Vector dynamics}
 \begin{frame}
 \frametitle{Environmental determinants}
@@ -175,7 +227,7 @@ Bayesian framework:
 fiting the model to data (Rio de janeiro) to estimate $S_0$\footnote{Coelho 
 FC et al., 2011}.
 
- \includegraphics[width=\textwidth]{concat_SI.png}
+\includegraphics[width=\textwidth]{concat_SI.png}
  
  \begin{small}Posterior distribution for Susceptible (S) and infectious (I) 
 individuous. Blue dots are data. \end{small}
@@ -252,6 +304,14 @@ Epidemics under Time-varying Force of Infection using Aggregated Notification
 Data
 \newblock Arxiv. \url{http://arxiv.org/abs/1502.01236}
 %\bibAnnoteFile{pone2011}
+
+\bibitem{mantel}
+Ederer, F. and Mantel, N. (1974)
+\newblock Confidence limits on the ratio of two poisson
+  variables.
+\newblock \emph{American Journal of Epidemiology}
+  \textbf{volume 100:}, pages 165--167
+
 \end{thebibliography}
 
 \end{frame}

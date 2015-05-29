@@ -52,7 +52,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-
+*.build/
 .idea/*
 .idea/
 # Latex garbage
@@ -65,3 +65,24 @@ docs/_build/
 *.RData
 *-concordance.tex
 *.synctex.gz
+*.vrb
+*.nav
+*.snm
+
+#binary stuff
+*.png
+*.jpg
+*.pickle
+*.svg
+*.sqlite
+
+#os
+.directory
+*.backup
+*.exe
+
+#data
+*.csv
+
+#git stuff
+*.orig

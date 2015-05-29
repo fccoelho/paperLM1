@@ -1,0 +1,817 @@
+\documentclass[10pt]{article}
+\usepackage{todonotes}
+\usepackage{subfigure}
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+% line numbers
+\usepackage{lineno}
+% ligatures disabled
+\usepackage{microtype}
+\usepackage{indentfirst}
+\DisableLigatures[f]{encoding = *, family = * }
+% rotating package for sideways tables
+%\usepackage{rotating}
+% If you wish to include algorithms, please use one of the packages below. Also, please see the algorithm section of our LaTeX guidelines (http://www.plosone.org/static/latexGuidelines) for important information about required formatting.
+%\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+% Use doublespacing - comment out for single spacing
+%\usepackage{setspace} 
+%\doublespacing
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{naturemag}
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Our defs 
+\def \rr {$R_{t}\:$}
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+
+%% Include all macros below. Please limit the use of macros.
+
+%% END MACROS SECTION
+
+\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Estimating the Attack Ratio of Dengue Epidemics under Time-varying 
+Force of Infection using Aggregated Notification Data}
+}
+\\
+Flavio Code\c{c}o Coelho$^{1\ast}$, 
+Luiz Max de Carvalho$^{2}$, 
+\\
+\bf{1} Escola de Matem\'atica Aplicada , Funda\c{c}\~ao Getulio Vargas (FGV), 
+Rio de Janeiro -- RJ, Brazil.
+\\
+\bf{2} Programa de Computa\c{c}\~ao Cient\'ifica (PROCC), Funda\c{c}\~ao Oswaldo 
+Cruz, Rio de Janeiro -- RJ, Brazil.
+\\
+$\ast$ E-mail: fccoelho@fgv.br
+\end{flushleft}
+
+\section*{Abstract}
+
+Quantifying the attack ratio of disease is key to epidemiological inference and 
+Public Health planning.
+For multi-serotype pathogens, however, different levels of 
+serotype-specific immunity make it difficult to assess the population at risk. 
+In this paper we propose a Bayesian method for estimation of the attack ratio 
+of an epidemic and the initial fraction of susceptibles using aggregated 
+incidence data. 
+We derive the probability distribution of the effective reproductive number, 
+\rr, and use MCMC to obtain posterior 
+distributions of the parameters of a single-strain SIR transmission model with 
+time-varying force of infection.
+Our method is showcased in a data set consisting of 18 years of dengue 
+incidence in the city of Rio de Janeiro, Brazil.
+We demonstrate that it is possible to learn about the initial fraction of 
+susceptibles and the attack ratio even in the absence of serotype specific data.
+On the other hand, the information provided by this approach is limited, 
+stressing the need for detailed serological surveys to characterise the 
+distribution of serotype-specific immunity in the population.
+
+\section*{Introduction}
+
+Dengue is an arthropod-borne febrile disease caused by a flavivirus with four 
+serotypes which causes an estimated  $50$ million infections each 
+year~\cite{Guzman2010}.
+In humans, immunity against  a particular serotype is  considered permanent 
+after the exposure and cross immunity to there serotypes is considered short 
+lived~\cite{halstead_dengue_2007}.
+As a consequence, the proportions of viral serotypes co-circulating at any 
+point in time are strongly dependent on previous incidence patterns of the 
+disease, which determine the number of individuals susceptible to each serotype 
+at any point in time.
+% LM: Maybe a citation here?
+
+Dengue transmission is also modulated by environmental conditions, among which, 
+temperature, due to its effects on the 
+vector reproduction, stands out as a strong predictor of 
+incidence~\cite{honorio_temporal_2009,wu_higher_2009}.
+In places with sufficient seasonal temperature variation, dengue is 
+predominantly a  summer disease.
+So it is fair to say that these environmental 
+fluctuations play a key role in determining beginning and end of epidemic 
+periods.
+This climatic influence is exerted mainly through its effects on the force of 
+infection, which cannot be taken as constant~\cite{reiner_time-varying_2014} 
+but rather as a seasonal (oscillating) function of time.
+The long term dynamics of dengue is also modulated by the alternation of virus 
+types in circulation. Demographics also plays a role in replenishing the 
+population of susceptibles. 
+
+The attack ratio (AR) of a disease is a measure of morbidity defined as the 
+number of new cases divided by the population at risk.
+% LM: Maybe a citation here? It's ridiculous I know, but referees can be a pain.
+For dengue epidemics, it can be difficult to calculate the AR due 
+to the lack of knowledge of the population at risk.
+The population at risk in this case is the number of susceptibles 
+to the circulating virus type(s) before a given epidemic. 
+Thus, in order to calculate the attack ratio, we need to determine the number 
+of susceptibles to the circulating virus types right before the epidemic, which 
+is virtually impossible without regular virological surveys.
+
+The attack ratio is also influenced by the reproductive number of the disease 
+~\cite{bacaer_final_2009, katriel_attack_2012}, which is closely associated 
+with the force of infection.
+Thus the incorporation of the effective reproduction number, \rr, as a function 
+of time, is crucial to an accurate estimation of the AR of seasonal diseases 
+like dengue and Influenza.
+
+Other methods for estimating the  number of susceptibles while 
+accommodating time-varying force of infection have been proposed 
+before, for measles~\cite{bjornstad_dynamics_2002, 
+wallinga_reconstruction_2003}, a disease that shows remarkable seasonality.
+These methods try to reconstruct the entire 
+series of infectious and susceptibles from case data using deterministic models 
+and generally work well for measles because there is a one-to-one 
+relationship between exposure and immunity, since measles is caused by a 
+single-strain pathogen.
+Recently, methods in the same fashion were developed for dengue when 
+serotype-specific data is available~\cite{Reiner2014}.
+When such data is not available, the series of susceptibles to all possible
+serotypes, cannot be reconstructed based solely on a deterministic transmission 
+model, since the arrival/re-emergence of  new serotypes, an intrinsically 
+stochastic events, can drastically change the pool of susceptibles, throwing off 
+any sequential estimation based on the  incidence dynamics.
+
+In this paper, we propose a new approach to estimate the number (fraction) of 
+susceptibles using a simplified model of dengue transmission based on a 
+single-strain Susceptible-Infectious-Removed (SIR) model with time-varying 
+infection rate.
+In order to bypass the limitations of not knowing the serotype-specific 
+seroprevalence and the exact behaviour of the force of infection through time, 
+we
+propose to inform the time-varying transmissibility using the \rr series 
+derived from the notification data~\cite{nishiura}.
+We extend a Bayesian framework previously used to estimate the number 
+of susceptibles in Influenza epidemics in Europe~\cite{pone2011} to include 
+time-varying force of infection and derive a probability distribution  for 
+\rr to accommodate uncertainty in the estimates. 
+Then, from the incidence series and the population at risk, we  calculate the 
+attack ratio for each epidemic.
+We apply our method to estimate $S_0$ before every major dengue epidemic in the 
+city of Rio de Janeiro, Brazil in the last 18 years.
+
+\section*{Methods}
+
+In this section we will start by describing the data and then the method used 
+to estimate the effective reproductive number, $R_t$, from the data and obtain 
+its posterior distribution. 
+We then proceed to describe the Susceptible-Infectious-Recovered (SIR) model 
+used to represent the aggregated disease incidence and how $R_t$ can be 
+integrated into the model to allow for time varying force of infection. 
+Next, an approach to approximate the posterior distributions 
+of the numbers of susceptible to the main circulating dengue viruses for each 
+epidemic is detailed.
+Finally, we discuss how to estimate the attack ratio of each 
+epidemic using the estimated susceptible fraction and the observed incidence.
+
+\subsection*{Data} 
+
+The data used in this paper consists of time 
+series of weekly notified cases of dengue for the 
+city of Rio de Janeiro from 1996 to 2014. The cases are notified 
+based only on clinical criteria.
+Laboratory confirmation and serotype 
+information are available only for a very small sample and only on recent 
+years (2010-2013).
+For the parameter estimation  procedures incidence was normalized by dividing 
+the number of cases reported by the total city population at each year as given 
+by the census (Census Bureau, Brazilian Institute of Geography and Statistics, 
+\url{http://www.ibge.gov.br/english/}).
+
+\subsection*{Estimating the effective reproductive number ($R_t$)}
+
+In monitoring of infectious diseases, it is important to assess whether the 
+incidence of a  particular disease is increasing significantly, in order to 
+decide to take preventive measures.
+The effective reproductive number at time $t$, \rr, can be understood as a 
+real-time estimate of the basic reproductive number ($R_{0}$) and is defined as 
+the average number of secondary cases per primary case at time $t$.
+
+Let $Y_t$ be the number of reported disease cases for a particular time $t \in 
+(0, T)$.
+Nishiura el al. (2010)~\cite{nishiura} extend the theory developed by 
+Stallybrass et al. (1931)~\cite{stallybrass} and propose to estimate \rr as
+\begin{equation}
+\label{eq:Rtestimate}
+R_t = \left( \frac{Y_{t+1}}{Y_t}\right)^{1/n}
+\end{equation}
+where $n$ is taken to be the ratio between the length of reporting interval and 
+the mean generation time of the disease.
+Here we are interested in the simpler case $n=1$.
+If \rr is to be used as a decision tool, however, one needs to be able to 
+quantify the 
+uncertainty about estimate in equation~\ref{eq:Rtestimate}. 
+Here we detail how to obtain credibility intervals for \rr under the assumption 
+that the counts $Y_t$ are Poisson distributed for all $t$.
+
+We explore the approach of Ederer and Mantel~\cite{mantel}, whose objective is 
+to obtain 
+confidence intervals for the ratio of two Poisson counts. 
+Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
+and define $S = Y_{t} + Y_{t+1}$.
+The authors note that by conditioning on the sum $S$
+\begin{align}
+\label{eq:binlike}
+Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
+\theta_t &= \frac{\lambda_{t+1}}{\lambda_{t} + \lambda_{t+1}}
+\end{align}
+Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that 
+$Pr(\theta_t^{(L)}<\theta_t <\theta_t^{(U)}) = \alpha$.
+Analogously, define $c_{\alpha}(R_t) = \{R_t^{(L)} , R_t^{(U)} \}$ such that 
+$Pr(R_t^{(L)}<R_t<R_t^{(U)}) = \alpha$.
+Ederer and Mantel (1974)~\cite{mantel} show that one can construct a $100\alpha 
+\%$ confidence interval for \rr by noting that
+\begin{equation}
+\label{eq:confRt}
+ R_t^{(L)} = \frac{\theta_t^{(L)}}{(1-\theta_t^{(L)})} \quad \text{and} \quad 
+R_t^{(U)} = \frac{\theta_t^{(U)}}{(1-\theta_t^{(U)})}\\
+\end{equation}
+Because the transform from $\theta$ to \rr is monotonically 
+increasing, the result holds for confidence and credibility intervals alike.
+
+Many authors have chosen to quantify the uncertainty about $\theta$ 
+following orthodox approaches  (see for example~\cite{wilson} 
+and~\cite{clopper}) mainly for simplicity.
+We choose instead to take a Bayesian approach and use the  $100\alpha \%$ 
+posterior credibility interval for $\theta_t$ as $c_{\alpha}(\theta_t)$.
+If we choose the conjugate beta prior with parameters $a_0$ and $b_0$ for the 
+binomial likelihood in (\ref{eq:binlike}), the posterior distribution for 
+$\theta_t$ is
+\begin{equation}
+\label{eq:thetapost}
+p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
+\end{equation}
+Combining equations~(\ref{eq:confRt}) and~(\ref{eq:thetapost}) 
+tells us that the induced posterior distribution of $R_t$ is 
+a beta prime (or inverted beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 
+=  Y_t + b_0$~\cite{dubey1970}.
+The density of the induced distribution is then 
+\begin{equation}
+\label{eq:densityMantel}
+f_P(R_t| a_1, b_1) = \frac{\Gamma(a_1 + b_1)}{\Gamma(a_1)\Gamma(b_1)} R_t^{a_1 
+- 
+1} (1 + R_t)^{-(a_1 + b_1)}
+\end{equation}
+Thus, the expectation of \rr is $a_1/(b_1 - 1)$ and its variance is 
+$a_1(a_1 + b_1 - 1)/\left((b_1 - 2)(b_1 - 1)^2 \right) $.
+Note that this result holds only for $n = 1$.
+Sampling from the posterior in~(\ref{eq:densityMantel}) can be made 
+straightforward by first sampling from~(\ref{eq:thetapost}) and then applying 
+the transform in~(\ref{eq:confRt}).
+Also, one can choose $a_0$ and $b_0$ so as to elicit meaningful prior 
+distributions for $R_t$.
+We show how to elicit the prior for $R_t$ from specified prior mean and variance
+or coefficient of variation in the Appendix.
+
+Also, since $R_t > 1$ indicates sustained transmission, one may be 
+interested in computing the probability of this event.
+This can be easily achieved by integrating~(\ref{eq:densityMantel}) over the 
+appropriate interval.
+By noting that
+\begin{align}
+\label{cumprobMantel}
+Pr(R_t > 1) &= 1 - \int_0^1 f_P(r)dr \\
+            &= 1- Pr(\theta_t < \frac{1}{2})
+\end{align}
+one can compute the desired probability while avoiding dealing with the density 
+in~(\ref{eq:densityMantel}) directly.
+
+\subsection*{Mathematical modelling} % The model
+
+A Susceptible-Infectious-Removed (SIR) model is proposed to model dengue 
+dynamics.
+In the traditional formulation of the model, transmission is governed by a 
+constant transmission rate $\beta$ and recovery happens at a rate $\tau$.
+
+For our analysis we chose to let the force of infection vary with time, just 
+as it does in the actual epidemics, as seen in the data. So as the epidemic 
+progresses, the effective transmission  rate changes and is 
+given by 
+\begin{equation} 
+ \label{eq:effbeta}
+ \beta(t) = \frac{R_t\cdot\tau}{S_0}
+\end{equation}
+where $R_t$ is the effective reproductive number, estimated as 
+in~\ref{eq:Rtestimate}.
+The complete model with the time-varying force of infection is given by
+the system of ordinary differential equations:
+\begin{align}
+   \label{eq:model}
+ \frac{dS}{dt} &= -\beta(t)SI \\     \nonumber
+ \frac{dI}{dt} &= \beta(t)SI - \tau I&\\      \nonumber
+ \frac{dR}{dt} &= \tau I&
+\end{align}  
+where $S + I + R = 1 \: \forall\: t$. % \in [T_0, T_1]$. 
+Of course, this is a rather simplified model, in which, for instance, the 
+vector is omitted.
+The rationale for this simplification is based on the ability of the 
+empirically derived $R_t$  to incorporate the effects of the fluctuating vector 
+populations.
+Also, although there are multiple circulating serotypes, our approach
+can not discriminate between them due to the lack of serotype-specific data.
+Nevertheless, this modelling strategy can still provide some insight into the 
+disease dynamics and allows us to estimate the initial fraction of susceptibles 
+$S_0$, a key epidemiological parameter.
+
+\subsection*{Bayesian parameter estimation}
+
+We take a Bayesian approach to the estimation of $S_0$.
+First the incidence time series was divided into $J=13$ 
+epidemic windows that corresponded to significant raises in incidence and 
+normalized to lie on the $[0,1]$ interval.
+For a given interval $j = \{ t_j^{\text{start}}, t_j^{\text{end}} \} $ we 
+observe an incidence time series $\mathbf{Y_{j}}$.
+We are thus interested in the posterior distribution
+\begin{equation}
+ \label{eq:S0post}
+ p(S_{0j}|\mathbf{Y_{j}}) \propto l(\mathbf{Y_{j}}|S_{0j}, R_t, m, \tau 
+)\pi(S_{0j}) 
+\end{equation}
+The likelihood $l(\mathbf{Y_{j}}|\cdot)$ is assumed to be a Normal distribution 
+with fixed variance $\sigma^2$.
+In this estimation procedure we kept $R_t$ fixed at fixed at the posterior mean 
+obtained as described above and fixed $\tau = 1/7\: \text{days}^{-1}$.
+To complete the inference, we need to specify prior distributions for the 
+parameters of interest.
+We place a flat $\text{Beta}(1, 1)$ prior on $S_{0j}\:\forall j$
+
+To approximate the posterior in~(\ref{eq:S0post}) we use Markov chain Monte 
+Carlo techniques implemented in the Bayesian inference with Python 
+(BIP)~\cite{pone2011} available at  
+\url{http://code.google.com/p/bayesian-inference/}.
+BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\cite{vrugt2008} 
+scheme that efficiently samples from high-dimensional joint distributions using 
+multiple adaptive chains running in parallel with delayed rejection.
+Also, as the numerical integration routine implemented within BIP needs 
+$\beta(t)$ to be available at 
+arbitrary values of $t$, i.e., as continuous function of time because of the 
+variable step size, we used linear interpolation to obtain values of $R_t$ for 
+any time point.
+In this study we used one chain per parameter, i.e, 3 chains for each run.
+The chains were run until $5000$ samples were obtained after discarding $500$ 
+burn-in samples.
+Convergence of the parallel chains was verified at every 100 iterations by the 
+calculation of the Gelman-Rubin's R (potential scale 
+reduction factor), which approaches $1$ at convergence~\cite{brooks1998}.
+
+\subsection*{Calculating the attack ratio}
+
+The attack ratio of an epidemic is defined by the number of infections divided 
+by the size of the population at risk.
+
+\begin{equation}
+\label{eq:AR}
+A=\frac{\text{\# cases}}{\text{Population at risk}} 
+\end{equation}
+
+Based on what has been discussed so far, we can rewrite (\ref{eq:AR}) for 
+each epidemic $j$ as
+\begin{equation}
+\label{eq:AR2}
+ A_{j}=\frac{\sum Y_j}{S_{0j}}
+\end{equation}
+where $S_{0j}$ is the number of susceptibles before each epidemic $j$, which we
+estimated before.
+
+Python and R code to perform all the analyses described above is publicly 
+available at~\url{https://github.com/fccoelho/paperLM1}.
+
+\section*{Results and Discussion}
+
+In this paper we propose a method to bypass the lack of serotype-specific case 
+data by informing the time-varying force of infection with the instantaneous 
+reproductive number, \rr which we calculate from aggregated data.
+The main contribution of this paper can be summarized in the following items: 
+(i) we show a method to quantify uncertainty 
+about \rr that is readily applicable to other diseases and; (ii) we propose to 
+use \rr to inform a dynamic epidemic model with time-varying force of infection 
+in order to gain insight into the attack ratio of each epidemic; (iii) We 
+propose an estimation procedure for circulating serotype's $S_0$ from 
+aggregate case data, which is robust to epidemic sizes; (iv) We estimate the AR 
+for 18 years of Dengue epidemics. 
+
+Figure~\ref{fig:rtseries}  shows the $R_t$ series, according to 
+(\ref{eq:Rtestimate})~\cite{nishiura} along with the confidence bands derived 
+in this paper. 
+It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
+indistinguishable from 1.
+Due to the intrinsic variability of the \rr series, the examination of its 
+credible intervals is essential to identify periods of sustained transmission.
+The wider intervals between epidemics are due to the scarcity of cases during 
+these periods.
+The method to quantify uncertainty proposed here provides more conservative 
+credibility intervals, and therefore offers protection against false alarms.
+\begin{center}
+\begin{figure}[!h]
+ \centering
+ \includegraphics[width=16cm]{./plots/rt_series.png}
+ \caption{{\bf Estimated time-series for $R_t$, along with 95\% credible 
+intervals.} Top panel show reported cases from which $R_t$ is estimated.
+As expected, uncertainty about \rr is greater when the case counts are low, for 
+instance in the period $2003$--$2006$, which represented a big hiatus between 
+major epidemics.
+The intrinsic variability of \rr can be used to inform the time-varying force 
+of infection, since it reflects variation in the vector population and other 
+environmental factors such as temperature and seasonal variation.}
+\label{fig:rtseries}
+\end{figure}
+\end{center}
+
+A key epidemiological quantity is the attack ratio (AR) of an epidemic, a 
+measure of morbidity and speed of spread which can be used to predict epidemic 
+size and help efficient Public Health planning.
+The AR depends fundamentally on the population at risk, which in the case of 
+dengue is every naive (to a particular serotype) individual in the population.
+Estimating the initial susceptible fraction $S_0$ for each epidemic is thus 
+central to the estimation of the AR.
+Methods for estimating the  number of susceptibles have been proposed 
+before, for other diseases~\cite{bjornstad_dynamics_2002, 
+wallinga_reconstruction_2003}.
+These methods try to reconstruct the entire 
+series of infectious and susceptibles for measles 
+outbreaks from case data.
+In the case of dengue, the full (multi-year/multi-epidemic)
+series of susceptibles to all possible serotypes, cannot be reconstructed based 
+solely on a deterministic transmission model, since the arrival/re-emergence of 
+new serotypes (which are a stochastic events) can change drastically the pool 
+of susceptibles throwing off any sequential estimation based on the incidence
+dynamics.
+
+Since there is very limited information regarding the actual proportions of 
+each virus in circulation and most information available is about the 
+predominant serotypes for some epidemics in the period of 
+study only~\cite{macedo_virological_2013}, we propose the use of a 
+simplified a single strain model.
+The main argument we put forward is that by conditioning on the \rr series, we 
+implicitly take into account the variability introduced by the 
+co-circulation of multiple serotypes and heterogeneous levels of immunity in 
+the general population.
+We sought to deal with all important sources of uncertainty impinging on the 
+estimation of the AR of a dengue epidemic, but not all could be satisfactorily 
+addressed in this analysis.
+For instance, in any given epidemic there is a large number of 
+mild and asymptomatic cases, which nevertheless acquire immunity.
+It is estimated that for every case reported, up to 10-20 are not seen by health 
+authorities~\cite{luz_disability_2009}.
+Another source of uncertainty is under-reporting of diagnosed cases, which is a 
+serious issue in the health care systems of many developing countries such as 
+Brazil. 
+Duarte and Fran\c{c}a (2006)~\cite{duarte_data_2006}, estimated 
+the sensitivity of Dengue reporting for hospitalized patients in 
+Belo-Horizonte, Brazil to be of 63\%, meaning that approximately 37\% of the 
+suspected Dengue cases go unreported.  
+Lastly, demography and migrations affect the number of susceptible in ways 
+which are not easy to fully determine.
+
+Figure~\ref{Fig:S0}, shows the model from (\ref{eq:model}) fitted to the data.
+Despite its limitations, our simplified model fits the data well.
+In it we can see that the susceptibles series in each epidemic starts at the 
+estimated level of $S_0$.
+The proportion of susceptibles may seem low, but we 
+must remember that these estimates are being affected by an unknown 
+under-reporting factor, which experts suggest is somewhere between 5 and 10, 
+i.e. for every case observed there are 5 or 10 unobserved.
+Since this under-reporting affects both the numerator and denominator of 
+(\ref{eq:AR2}), its effects should cancel out, giving us an unbiased attack 
+ratio estimate.
+One other possible source of bias which would lead to the underestimation of 
+$S_0$ could come from a significant part of the population not being exposed to 
+the disease.
+However, as we can see in Figure~\ref{fig:mapas}, despite the differences in 
+intensity (incidence), the entire city seems to be at risk, with no 
+particularly ``protected'' areas, at least in the last four epidemics. 
+
+\begin{center}
+\begin{figure}
+\includegraphics[width=\textwidth]{./plots/figure-2-coelho.jpg}
+
+  \caption{{\bf Maps showing the incidence of dengue in the city of Rio de 
+Janeiro from 2010 to 2013(left-to-right, rowise).} Circles indicate individual 
+notified cases. A 
+heatmap is overlayed on the maps showing absolute density of cases.
+It can be seen that several areas of the city were affected and no region seems 
+to be free of transmission risk.
+This suggests that although transmission risk varies spatially, there is 
+significant exposure over the entire city. Maps were made with QGis GIS 
+software(\url{qgis.org})}
+  \label{fig:mapas}
+\end{figure}
+\end{center}
+
+Table~\ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
+estimated for each epidemic/outbreak.
+It is interesting to notice that the larger epidemics, in terms of peak size are 
+not the one with the greater attack ratios.
+This stresses the importance of knowing the immunological structure of the 
+population. Knowing the $S_0$ for the circulating viruses we can order to more 
+accurately assess the potential impact of a coming epidemic, since particularly 
+virulent types, can be rendered less of a threat by a low $S_0$.
+
+We hope that the results presented in paper will motivate public 
+health authorities to invest in annual serological surveys, to determine the 
+susceptibility profile to each dengue virus as well as to estimate the 
+under-reporting factor of the notification system.
+
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=\textwidth]{plots/concat_SI.png}
+\end{center}
+\caption{
+{\bf Susceptibles and Infectious posterior curves.}  The curves were estimated 
+only for the periods where $R_t> 1$.  The susceptible curves in the top panel 
+reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
+each epidemic/outbreak.
+In the lower panel, we see the posterior distribution 
+of infectious curves, represented by its median and 95\% credible interval.
+Credible intervals are very narrow, and can be hard to distinguish from the 
+median line. 
+Dots show the observed cases, scaled as fractions of the entire 
+population.
+}
+\label{Fig:S0}
+\end{figure}
+
+\begin{table}[!ht]
+\caption{
+{\bf Median attack ratio and 95\% credibility intervals calculated according to 
+(\ref{eq:AR2})}. 
+Values are presented as percentage of total population. 
+$^\dag$: Year corresponds to the start of the epidemic, however the peak of cases
+may occur in the following year.
+$^\ddag$: Susceptible fraction.
+These results show considerable variation in AR between epidemics, consistent with
+the accquiring and loss of serotype-specific immunity.}
+\begin{center}
+\begin{tabular}{c|c|c}
+\hline
+Year$^\dag$ & median Attack Ratio & $S_0^\ddag$ \\
+\hline
+1996 & 0.39 (0.17-0.54) & 0.00171(0.0012-0.0038)\\
+1997 & 0.87 (0.74-0.87) & 0.00273(0.0027-0.0032)\\
+1998 & 0.5 (0.49-0.5) & 0.00142(0.0014-0.0014)\\
+1999 & 0.11 (0.037-0.2) & 0.00345(0.0018-0.01)\\
+2000 & 0.25 (0.24-0.27) & 0.0155(0.015-0.016)\\
+2001 & 0.48 (0.47-0.49) & 0.0495(0.048-0.051)\\
+2005 & 0.15 (0.1-0.21) & 0.0147(0.01-0.021)\\
+2006 & 0.11 (0.08-0.14) & 0.0281(0.022-0.037)\\
+2007 & 0.15 (0.15-0.15) & 0.135(0.13-0.14)\\
+2008 & 0.14 (0.031-0.31) & 0.00672(0.003-0.024)\\
+2010 & 0.18 (0.17-0.19) & 0.0454(0.043-0.048)\\
+2011 & 0.086 (0.082-0.094) & 0.215(0.2-0.23)\\
+2012 & 0.14 (0.13-0.15) & 0.0621(0.058-0.068)\\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:AR}
+\end{table}
+
+\newpage
+\section*{Acknowledgements}
+LMC is grateful to Dr. Leonardo Bastos for useful discussions on the 
+posterior inference for \rr.
+The authors are also grateful to Claudia T. 
+Code\c{c}o for helpful discussions about the manuscript.
+
+\newpage
+\begin{thebibliography}{10}
+
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\providecommand{\bibinfo}[2]{#2}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{Guzman2010}
+\bibinfo{author}{Guzman, M.~G.} \emph{et~al.}
+\newblock \bibinfo{title}{{{D}engue: a continuing global threat}}.
+\newblock \emph{\bibinfo{journal}{Nat. Rev. Microbiol.}}
+  \textbf{\bibinfo{volume}{8}}, \bibinfo{pages}{7--16} (\bibinfo{year}{2010}).
+
+\bibitem{halstead_dengue_2007}
+\bibinfo{author}{Halstead, S.~B.}
+\newblock \bibinfo{title}{Dengue}.
+\newblock \emph{\bibinfo{journal}{The Lancet}} \textbf{\bibinfo{volume}{370}},
+  \bibinfo{pages}{1644--1652} (\bibinfo{year}{2007}).
+\newblock
+  
+\urlprefix\url{
+http://www.sciencedirect.com/science/article/pii/S0140673607616870}.
+
+\bibitem{honorio_temporal_2009}
+\bibinfo{author}{Hon\'orio, N.~A.}, \bibinfo{author}{Code\c{c}o, C.~T.},
+  \bibinfo{author}{Alves, F.~C.}, \bibinfo{author}{Magalh\~aes, M.} \&
+  \bibinfo{author}{Louren\c{c}o-De-Oliveira, R.}
+\newblock \bibinfo{title}{Temporal distribution of aedes aegypti in different
+  districts of rio de janeiro, brazil, measured by two types of traps}.
+\newblock \emph{\bibinfo{journal}{Journal of Medical Entomology}}
+  \textbf{\bibinfo{volume}{46}}, \bibinfo{pages}{1001--1014}
+  (\bibinfo{year}{2009}).
+\newblock \urlprefix\url{http://www.bioone.org/doi/abs/10.1603/033.046.0505}.
+
+\bibitem{wu_higher_2009}
+\bibinfo{author}{Wu, P.-C.} \emph{et~al.}
+\newblock \bibinfo{title}{Higher temperature and urbanization affect the
+  spatial patterns of dengue fever transmission in subtropical taiwan}.
+\newblock \emph{\bibinfo{journal}{Science of The Total Environment}}
+  \textbf{\bibinfo{volume}{407}}, \bibinfo{pages}{2224--2233}
+  (\bibinfo{year}{2009}).
+\newblock
+  
+\urlprefix\url{
+http://www.sciencedirect.com/science/article/pii/S0048969708011509}.
+
+\bibitem{reiner_time-varying_2014}
+\bibinfo{author}{Reiner, R.~C.} \emph{et~al.}
+\newblock \bibinfo{title}{Time-varying, serotype-specific force of infection of
+  dengue virus}.
+\newblock \emph{\bibinfo{journal}{Proceedings of the National Academy of
+  Sciences of the United States of America}} \textbf{\bibinfo{volume}{111}},
+  \bibinfo{pages}{E2694--E2702} (\bibinfo{year}{2014}).
+\newblock \urlprefix\url{http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4084484/}.
+
+\bibitem{bacaer_final_2009}
+\bibinfo{author}{Baca\"er, N.} \& \bibinfo{author}{Gomes, M. G.~M.}
+\newblock \bibinfo{title}{On the final size of epidemics with seasonality}.
+\newblock \emph{\bibinfo{journal}{Bulletin of Mathematical Biology}}
+  \textbf{\bibinfo{volume}{71}}, \bibinfo{pages}{1954--1966}
+  (\bibinfo{year}{2009}).
+\newblock
+  \urlprefix\url{http://link.springer.com/article/10.1007/s11538-009-9433-7}.
+
+\bibitem{katriel_attack_2012}
+\bibinfo{author}{Katriel, G.} \& \bibinfo{author}{Stone, L.}
+\newblock \bibinfo{title}{Attack rates of seasonal epidemics}.
+\newblock \emph{\bibinfo{journal}{Mathematical Biosciences}}
+  \textbf{\bibinfo{volume}{235}}, \bibinfo{pages}{56--65}
+  (\bibinfo{year}{2012}).
+\newblock
+  
+\urlprefix\url{
+http://www.sciencedirect.com/science/article/pii/S0025556411001532}.
+
+\bibitem{bjornstad_dynamics_2002}
+\bibinfo{author}{Bjørnstad, O.}, \bibinfo{author}{Finkenstädt, B.} \&
+  \bibinfo{author}{Grenfell, B.}
+\newblock \bibinfo{title}{Dynamics of measles epidemics: Estimating scaling of
+  transmission rates using a time series {SIR} model}.
+\newblock \emph{\bibinfo{journal}{Ecological Monographs}}
+  \textbf{\bibinfo{volume}{72}}, \bibinfo{pages}{169--184}
+  (\bibinfo{year}{2002}).
+
+\bibitem{wallinga_reconstruction_2003}
+\bibinfo{author}{Wallinga, J.}, \bibinfo{author}{Teunis, P.} \&
+  \bibinfo{author}{Kretzschmar, M.}
+\newblock \bibinfo{title}{Reconstruction of measles dynamics in a vaccinated
+  population}.
+\newblock \emph{\bibinfo{journal}{Vaccine}} \textbf{\bibinfo{volume}{21}},
+  \bibinfo{pages}{2643--2650} (\bibinfo{year}{2003}).
+
+\bibitem{Reiner2014}
+\bibinfo{author}{Reiner, R.~C.} \emph{et~al.}
+\newblock \bibinfo{title}{{{T}ime-varying, serotype-specific force of infection
+  of dengue virus}}.
+\newblock \emph{\bibinfo{journal}{Proc. Natl. Acad. Sci. U.S.A.}}
+  \textbf{\bibinfo{volume}{111}}, \bibinfo{pages}{E2694--2702}
+  (\bibinfo{year}{2014}).
+
+\bibitem{nishiura}
+\bibinfo{author}{Nishiura, H.}, \bibinfo{author}{Chowell, G.},
+  \bibinfo{author}{Heesterbeek, H.} \& \bibinfo{author}{Wallinga, J.}
+\newblock \bibinfo{title}{{{T}he ideal reporting interval for an epidemic to
+  objectively interpret the epidemiological time course}}.
+\newblock \emph{\bibinfo{journal}{J R Soc Interface}}
+  \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{297--307}
+  (\bibinfo{year}{2010}).
+
+\bibitem{pone2011}
+\bibinfo{author}{Coelho, F.~C.}, \bibinfo{author}{Code\c{c}o, C.~T.} \&
+  \bibinfo{author}{Gomes, M.~G.}
+\newblock \bibinfo{title}{{A} {B}ayesian framework for parameter estimation in
+  dynamical models}.
+\newblock \emph{\bibinfo{journal}{PLoS ONE}} \textbf{\bibinfo{volume}{6}},
+  \bibinfo{pages}{e19616} (\bibinfo{year}{2011}).
+
+\bibitem{stallybrass}
+\bibinfo{author}{Stallybrass, C.~O.} \emph{et~al.}
+\newblock \bibinfo{title}{The principles of epidemiology and the process of
+  infection.}
+\newblock \emph{\bibinfo{journal}{The Principles of Epidemiology and the
+  Process of Infection.}}  (\bibinfo{year}{1931}).
+
+\bibitem{mantel}
+\bibinfo{author}{Ederer, F.} \& \bibinfo{author}{Mantel, N.}
+\newblock \bibinfo{title}{Confidence limits on the ratio of two poisson
+  variables}.
+\newblock \emph{\bibinfo{journal}{American Journal of Epidemiology}}
+  \textbf{\bibinfo{volume}{100}}, \bibinfo{pages}{165--167}
+  (\bibinfo{year}{1974}).
+
+\bibitem{wilson}
+\bibinfo{author}{Wilson, E.~B.}
+\newblock \bibinfo{title}{Probable inference, the law of succession, and
+  statistical inference}.
+\newblock \emph{\bibinfo{journal}{Journal of the American Statistical
+  Association}} \textbf{\bibinfo{volume}{22}}, \bibinfo{pages}{209--212}
+  (\bibinfo{year}{1927}).
+
+\bibitem{clopper}
+\bibinfo{author}{Clopper, C.} \& \bibinfo{author}{Pearson, E.~S.}
+\newblock \bibinfo{title}{The use of confidence or fiducial limits illustrated
+  in the case of the binomial}.
+\newblock \emph{\bibinfo{journal}{Biometrika}} \bibinfo{pages}{404--413}
+  (\bibinfo{year}{1934}).
+
+\bibitem{dubey1970}
+\bibinfo{author}{Dubey, S.~D.}
+\newblock \bibinfo{title}{Compound gamma, beta and f distributions}.
+\newblock \emph{\bibinfo{journal}{Metrika}} \textbf{\bibinfo{volume}{16}},
+  \bibinfo{pages}{27--31} (\bibinfo{year}{1970}).
+
+\bibitem{vrugt2008}
+\bibinfo{author}{Vrugt, J.~A.} \emph{et~al.}
+\newblock \bibinfo{title}{Accelerating markov chain monte carlo simulation by
+  differential evolution with self-adaptive randomized subspace sampling}.
+\newblock \bibinfo{type}{Tech. Rep.}, \bibinfo{institution}{Citeseer}
+  (\bibinfo{year}{2008}).
+
+\bibitem{brooks1998}
+\bibinfo{author}{Brooks, S.~P.} \& \bibinfo{author}{Gelman, A.}
+\newblock \bibinfo{title}{General methods for monitoring convergence of
+  iterative simulations}.
+\newblock \emph{\bibinfo{journal}{Journal of computational and graphical
+  statistics}} \textbf{\bibinfo{volume}{7}}, \bibinfo{pages}{434--455}
+  (\bibinfo{year}{1998}).
+
+\bibitem{macedo_virological_2013}
+\bibinfo{author}{Macedo, G.~A.} \emph{et~al.}
+\newblock \bibinfo{title}{Virological surveillance for early warning of dengue
+  epidemics in the state of rio de janeiro, brazil}.
+\newblock \emph{\bibinfo{journal}{Transactions of the Royal Society of Tropical
+  Medicine and Hygiene}} \textbf{\bibinfo{volume}{107}},
+  \bibinfo{pages}{141--146} (\bibinfo{year}{2013}).
+
+\bibitem{luz_disability_2009}
+\bibinfo{author}{Luz, P.~M.}, \bibinfo{author}{Grinsztejn, B.} \&
+  \bibinfo{author}{Galvani, A.~P.}
+\newblock \bibinfo{title}{Disability adjusted life years lost to dengue in
+  brazil}.
+\newblock \emph{\bibinfo{journal}{Tropical Medicine \& International Health}}
+  \textbf{\bibinfo{volume}{14}}, \bibinfo{pages}{237--246}
+  (\bibinfo{year}{2009}).
+\newblock
+  
+\urlprefix\url{
+http://onlinelibrary.wiley.com/doi/10.1111/j.1365-3156.2008.02203.x/abstract}.
+
+\bibitem{duarte_data_2006}
+\bibinfo{author}{Duarte, H. H.~P.} \& \bibinfo{author}{Fran\c{c}a, E.~B.}
+\newblock \bibinfo{title}{Data quality of dengue epidemiological surveillance
+  in belo horizonte, southeastern brazil}.
+\newblock \emph{\bibinfo{journal}{Revista de Sa\'ude P\'ublica}}
+  \textbf{\bibinfo{volume}{40}}, \bibinfo{pages}{134--142}
+  (\bibinfo{year}{2006}).
+\newblock
+  
+\urlprefix\url{
+http://www.scielosp.org/scielo.php?script=sci_abstract&pid=S0034-891020060001000
+  21&lng=en&nrm=iso&tlng=en}.
+
+
+\end{thebibliography}
+
+\section*{Authors Contributions}
+FCC and LMC wrote the main manuscript. LMC and FCC did the analyses. FCC 
+prepared the figures. All authors reviewed the manuscript.
+
+\section*{Additional Information}
+\subsection*{Competing financial interests}
+The author(s) declare no competing financial interests.
+
+
+
+\end{document}
+
