@@ -133,13 +133,13 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     data = pd.read_csv(fname, header=0, delimiter=',', skiprows=[1, 2, 3], parse_dates=True)
     # slicing to the desired period
     data = data[sday:eday]
-    pop = pd.read_csv("pop_rio_1980-2012.csv", header=0, delimiter=',', index_col=0)
+    pop = pd.read_csv("../DATA/pop_rio_1980-2012.csv", header=0, delimiter=',', index_col=0)
 
     dates = [datetime.datetime.strptime(d, "%Y-%m-%d") for d in data.start]
     pop_d = np.array([pop.loc[d.year] for d in dates])  # population on each date
 
-    eday = len(df) if eday is None else eday
-    # print data.dtype.names
+    eday = len(data) if eday is None else eday
+
     incidence = data.cases  # daily incidence
     # Converting incidence to Prevalence
     dur = 1. / tau  # infectious period
@@ -161,9 +161,10 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': Rt}
     return d
 
-def get_simulated_data():
+def get_simulated_data(t0, tf, pars):
+    y = model(pars)
 
-
+    return y
 
 @np.vectorize
 def fix_rt(rt):
@@ -182,7 +183,7 @@ def fix_rt(rt):
 # # running the analysys
 if __name__ == "__main__":
     # dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
-    dt = prepdata('data_Rt_dengue_complete.csv', 0, 971, 1)
+    dt = prepdata('../DATA/data_Rt_dengue_complete.csv', 0, 971, 1)
 
 
     # Defining start and end of the simulations
@@ -222,7 +223,7 @@ if __name__ == "__main__":
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
 
     P.plot(dt['Rt'], '*', label='$R_t$')
-    print dt['I']/dt['I'].max()
+    #print (dt['I']/dt['I'].max())
     P.plot(dt['I']/dt['I'].max(), 'k-+', label='log(Cases)')
     P.plot(np.arange(0, dt['Rt'].size, .2), [iRt(t) for t in np.arange(0, dt['Rt'].size, .2)])
     P.legend()
@@ -236,14 +237,13 @@ if __name__ == "__main__":
     nw = len(dt['time']) / wl  #number of windows
     tf = wl * nw  #total duration of simulation
 
-    #~ print calc_R0s()
+
     inicio = t0s[0]
     fim = tfs[-1]
-    #~ y = model([.999*N, 1e-6, 1])
-    #print y
-    #~ P.figure()
+    #y = model([.0495*N, 1e-6, 1])
+    #P.figure()
     #~ P.plot(dt['I'], '*')
-    #~ P.plot(y[:, 1])
+    #P.plot(y[:, :2])
     #~ top = y[:, 1].max()
     #~ P.vlines(t0s,0,top, colors='g')
     #~ P.vlines(tfs,0,top, colors='r')
@@ -254,19 +254,22 @@ if __name__ == "__main__":
 
 
 
-    for inicio, fim in zip(t0s, tfs)[3:4]:  # Slice to force start from a different point
-        dt = prepdata('data_Rt_dengue_complete.csv', inicio, fim, 1)
+    for inicio, fim in list(zip(t0s, tfs))[4:5]:  # Optional Slice to allow the fitting of a subset of years
+        dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
+        # get simulated data
+        y = get_simulated_data(inicio, fim, [.0495, 1e-6, 1])
+        dt['I'] = y[:, 1]
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
         ano = dt['time'][0].year
         mes = dt['time'][0].month
-        modname = "DengueS{}_{}".format(ano, mes)
+        modname = "Sim_DengueS{}_{}".format(ano, mes)
         tnames = ['s_{}_{}'.format(ano, mes), 'm', 'tau']
 
         nt = len(tnames)
         pnames = ['S', 'I', 'R']
         nph = len(pnames)
-        wl = fim - inicio
+        wl = fim - inicioP.plot(y[:, 1])
         nw = 1
 
         tpars = [(1, 1), (0, 5e-6), (.9999, .0002)]
@@ -283,9 +286,9 @@ if __name__ == "__main__":
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        # F.run(dt, 'DREAM', likvar=1e-10, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
-        #~ print F.AIC, F.BIC, F.DIC
+        F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        #~ print(F.AIC, F.BIC, F.DIC)
         #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
-        # F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
+        F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
         P.clf()
         P.clf()
