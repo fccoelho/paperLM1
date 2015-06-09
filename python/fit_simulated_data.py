@@ -1,7 +1,8 @@
-#
-# Multi-year fit of dengue epidemics
-#
-import pyximport;
+"""
+This script applies the inference to simulated data to validate
+the methodology.
+"""
+import pyximport
 
 pyximport.install(pyimport=False)
 from BIP.Bayes.Melding import FitModel
@@ -57,6 +58,13 @@ def sir(y, t, *pars):
 
 #@jit
 def jac(y, t, *pars):
+    """
+    Jacobian of the model
+    :param y:
+    :param t:
+    :param pars:
+    :return:
+    """
     S, I, R = y
     s0, m, tau = pars
     beta = 0 if t > 728 else iRt(t) * tau / s0
@@ -67,6 +75,11 @@ def jac(y, t, *pars):
 
 #@jit
 def model(theta):
+    """
+    Wrap-up function which is called at every step of the MCMC by BIP's FitModel.
+    :param theta: tuple of parameter values
+    :return: the output of the model
+    """
     # setting parameters
     s0, m, tau = theta
 
@@ -147,6 +160,9 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     prev.shape = (prev.size,)
     d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': Rt}
     return d
+
+def get_simulated_data():
+
 
 
 @np.vectorize
