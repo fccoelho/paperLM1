@@ -518,6 +518,39 @@ However, as we can see in Figure~\ref{fig:mapas}, despite the differences in
 intensity (incidence), the entire city seems to be at risk, with no 
 particularly ``protected'' areas, at least in the last four epidemics. 
 
+\begin{figure}[!ht]
+\begin{center}
+\includegraphics[width=\textwidth]{plots/concat_SI.png}
+\end{center}
+\caption{
+{\bf Susceptibles and Infectious posterior curves.}  The curves were estimated 
+only for the periods where $R_t> 1$.  The susceptible curves in the top panel 
+reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
+each epidemic/outbreak.
+In the lower panel, we see the posterior distribution 
+of infectious curves, represented by its median and 95\% credible interval.
+Credible intervals are very narrow, and can be hard to distinguish from the 
+median line. 
+Dots show the observed cases, scaled as fractions of the entire 
+population.
+}
+\label{Fig:S0}
+\end{figure}
+
+Table~\ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
+estimated for each epidemic/outbreak.
+It is interesting to notice that the larger epidemics, in terms of peak size are 
+not the one with the greater attack ratios.
+This stresses the importance of knowing the immunological structure of the 
+population. Knowing the $S_0$ for the circulating viruses we can order to more 
+accurately assess the potential impact of a coming epidemic, since particularly 
+virulent types, can be rendered less of a threat by a low $S_0$.
+
+We hope that the results presented in paper will motivate public 
+health authorities to invest in annual serological surveys, to determine the 
+susceptibility profile to each dengue virus as well as to estimate the 
+under-reporting factor of the notification system.
+
 \begin{center}
 \begin{figure}
  \subfigure[2010]{\includegraphics[width=8cm, 
@@ -540,38 +573,6 @@ significant exposure over the entire city.}
 \end{figure}
 \end{center}
 
-Table~\ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
-estimated for each epidemic/outbreak.
-It is interesting to notice that the larger epidemics, in terms of peak size are 
-not the one with the greater attack ratios.
-This stresses the importance of knowing the immunological structure of the 
-population. Knowing the $S_0$ for the circulating viruses we can order to more 
-accurately assess the potential impact of a coming epidemic, since particularly 
-virulent types, can be rendered less of a threat by a low $S_0$.
-
-We hope that the results presented in paper will motivate public 
-health authorities to invest in annual serological surveys, to determine the 
-susceptibility profile to each dengue virus as well as to estimate the 
-under-reporting factor of the notification system.
-
-\begin{figure}[!ht]
-\begin{center}
-\includegraphics[width=\textwidth]{plots/concat_SI.png}
-\end{center}
-\caption{
-{\bf Susceptibles and Infectious posterior curves.}  The curves were estimated 
-only for the periods where $R_t> 1$.  The susceptible curves in the top panel 
-reflect the prevalence of fraction of susceptibles to circulating strain(s) for 
-each epidemic/outbreak.
-In the lower panel, we see the posterior distribution 
-of infectious curves, represented by its median and 95\% credible interval.
-Credible intervals are very narrow, and can be hard to distinguish from the 
-median line. 
-Dots show the observed cases, scaled as fractions of the entire 
-population.
-}
-\label{Fig:S0}
-\end{figure}
 
 \begin{table}[!ht]
 \caption{
@@ -702,4 +703,3 @@ We provide an R script to perform the above elicitation at
 \url{https://github.com/fccoelho/paperLM1/blob/master/R/elicit_Rt_prior.R}.
 
 \end{document}
-
