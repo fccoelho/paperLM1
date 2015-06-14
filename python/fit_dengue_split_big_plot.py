@@ -191,7 +191,7 @@ def plot_concat_series(dbs):
     for srs in series:
         co = c.next()
         s_median = srs.S.groupby(level='time').median()
-        s_median.plot(style='k-', label='Median')
+        s_median.plot(style='k-', label='Median S')
         s_upr = srs.S.groupby(level='time').aggregate(upr)
         s_lwr = srs.S.groupby(level='time').aggregate(lwr)
         # P.legend(loc=0)
@@ -202,7 +202,7 @@ def plot_concat_series(dbs):
     for srs, da in zip(series, obs):
         co = c.next()
         i_median = srs.I.groupby(level='time').median()
-        i_median.plot(style='k-')
+        i_median.plot(style='k-', label="Median I")
         # da.I.plot(style='ro', alpha=.5, label='obs')
         i_upr = srs.I.groupby(level='time').aggregate(upr)
         i_lwr = srs.I.groupby(level='time').aggregate(lwr)

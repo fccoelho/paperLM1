@@ -16,6 +16,7 @@ from collections import defaultdict
 import datetime
 import sys
 import pandas as pd
+from sqlalchemy import create_engine
 import seaborn as sns
 # import numba
 #from numba import jit
@@ -60,10 +61,10 @@ def sir(y, t, *pars):
 def jac(y, t, *pars):
     """
     Jacobian of the model
-    :param y:
-    :param t:
-    :param pars:
-    :return:
+    :param y: State of the system
+    :param t: current time
+    :param pars: tuple of parameters
+    :return: the jacobian matrix at time t
     """
     S, I, R = y
     s0, m, tau = pars
@@ -84,12 +85,12 @@ def model(theta):
     s0, m, tau = theta
 
     t0 = 0
-    tf = fim
+    tf = fim-inicio
     Y = np.zeros((tf - t0, 3))
 
 
     # Initial conditions
-    #print inits, m
+
     inits[0] = s0  # Define S0
     inits[-1] = N - sum(inits[:2])  # Define R(0)
     Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  #,tcrit=tcrit)
@@ -180,6 +181,20 @@ def fix_rt(rt):
     else:
         return rt
 
+
+def read_data(dbname):
+    """
+    Returns dataframes from tables of the sqlite database with the results of the inference
+    :param dbname: sqlite3 database name
+    :return: list of pandas dataframes
+    """
+    eng = create_engine('sqlite:///{}'.format(dbname))
+    df_data = pd.read_sql_table('data', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_pt = pd.read_sql_table('post_theta', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    df_series = pd.read_sql_table('series', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
+    return df_data, df_pt, df_series
+
+
 # # running the analysys
 if __name__ == "__main__":
     # dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
@@ -218,18 +233,9 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2012, 11, 11)),  # end of the 2012 epidemic
            dt['time'].index(datetime.datetime(2013, 8, 25)),  # end of the 2013 epidemic
     ]
-    # print tfs
+
     # Interpolated Rt
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
-
-    P.plot(dt['Rt'], '*', label='$R_t$')
-    #print (dt['I']/dt['I'].max())
-    P.plot(dt['I']/dt['I'].max(), 'k-+', label='log(Cases)')
-    P.plot(np.arange(0, dt['Rt'].size, .2), [iRt(t) for t in np.arange(0, dt['Rt'].size, .2)])
-    P.legend()
-    #print type(dt['Rt'])
-    #print [iRt(t) for t in np.arange(0, 728, .2)]
-
 
     pnames = ['S', 'I', 'R']
 
@@ -237,27 +243,11 @@ if __name__ == "__main__":
     nw = len(dt['time']) / wl  #number of windows
     tf = wl * nw  #total duration of simulation
 
-
-    inicio = t0s[0]
-    fim = tfs[-1]
-    #y = model([.0495*N, 1e-6, 1])
-    #P.figure()
-    #~ P.plot(dt['I'], '*')
-    #P.plot(y[:, :2])
-    #~ top = y[:, 1].max()
-    #~ P.vlines(t0s,0,top, colors='g')
-    #~ P.vlines(tfs,0,top, colors='r')
-    #~ P.legend([pnames[1]])
-    P.show()
-    #Priors and limits for all countries
-
-
-
-
-    for inicio, fim in list(zip(t0s, tfs))[4:5]:  # Optional Slice to allow the fitting of a subset of years
+    for inicio, fim in list(zip(t0s, tfs))[12:13]:  # Optional Slice to allow the fitting of a subset of years
         dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # get simulated data
-        y = get_simulated_data(inicio, fim, [.0495, 1e-6, 1])
+        inits = [1 - dt['I'][0], dt['I'][0], 0]
+        y = get_simulated_data(inicio, fim, [.0621, 2e-6, 1])
         dt['I'] = y[:, 1]
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
@@ -269,26 +259,31 @@ if __name__ == "__main__":
         nt = len(tnames)
         pnames = ['S', 'I', 'R']
         nph = len(pnames)
-        wl = fim - inicioP.plot(y[:, 1])
+        wl = fim - inicio
+        # Taking a a look at the simulated S curve before inference
+        P.plot(dt['time'],y[:, 0], label='S')
+        P.figure()
+        P.plot(dt['time'],y[:, 1])
+        P.plot(dt['time'],dt['I'], 'ro')
+        P.show()
         nw = 1
 
-        tpars = [(1, 1), (0, 5e-6), (.9999, .0002)]
-        tlims = [(0, 1), (0, 5e-6), (.9999, 1.0001)]
-
-        inits = [1 - dt['I'][0], dt['I'][0], 0]
+        tpars = [(1, 1), (0, 3e-6), (.99999, .5)]
+        tlims = [(0, 1), (0, 3e-6), (.99999, 1.5)]
+        del dt['Rt']
         dt2 = copy.deepcopy(dt)
         #print inits
 
-        F = FitModel(5000, model, inits, fim - inicio, tnames, pnames,
-                     wl, nw, verbose=1, burnin=1000, constraints=[])
+        F = FitModel(3000, model, inits, fim - inicio, tnames, pnames,
+                     wl, nw, verbose=1, burnin=1100, constraints=[])
         F.set_priors(tdists=[st.beta, st.uniform, st.uniform],
                      tpars=tpars,
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-8, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
         #~ print(F.AIC, F.BIC, F.DIC)
-        #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
+        #print (F.optimize(data=dt, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
         P.clf()
         P.clf()
