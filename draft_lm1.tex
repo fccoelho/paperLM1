@@ -378,7 +378,8 @@ Carlo techniques implemented in the Bayesian inference with Python
 \url{http://code.google.com/p/bayesian-inference/}.
 BIP uses a Differential Evolution Adaptive Metropolis (DREAM)~\citep{vrugt2008} 
 scheme that efficiently samples from high-dimensional joint distributions using 
-multiple adaptive chains running in parallel with delayed rejection.
+multiple adaptive chains running in parallel with delayed rejection (see 
+\textbf{Appendix} for details).
 Also, as the numerical integration routine implemented within BIP needs 
 $\beta(t)$ to be available at 
 arbitrary values of $t$, i.e., as continuous function of time because of the 
@@ -699,7 +700,37 @@ This approach thus makes it possible to incorporate epidemiological knowledge
 about disease Biology (e.g. the magnitude of $R_0$) into the computation of \rr.
 This may prove particularly important when disease counts are low and/or close 
 to the detection threshold.
-We provide an R script to perform the above elicitation at 
+We provide an R script to perform the elicitation described above at 
 \url{https://github.com/fccoelho/paperLM1/blob/master/R/elicit_Rt_prior.R}.
+
+\subsection*{DiffeRential Evolution Adaptive Metropolis (DREAM)}
+
+Since the posterior distributions desired in this paper are not available in 
+closed-form, we need to resort to numerical methods to obtain 
+approximations.
+We employ an adaptive Markov chain Monte Carlo (MCMC) algorithm, proposed
+by~\cite{vrugt2008}, called  DiffeRential Evolution Adaptive Metropolis (DREAM).
+
+DREAM draws on the basic structure of Differential Evolution Markov Chain 
+(DE-MC) which runs $N$ independent chains in parallel and accepts moves 
+proportional to the difference of two randomly sampled members (chains), thus 
+differentially evolving conditional on the proposal variances.
+An additional aspect of DREAM is the so-called delayed rejection.
+This procedure adapts the original Metropolis-Hastings algorithm by attempting 
+new moves whenever a proposal is rejected (instead of setting the current state 
+to the previously accepted one), thus delaying the rejection of proposals. 
+This potentially decreases autocorrelation and improves mixing 
+(see~\cite{mira2001} for details). 
+
+A desirable property of DREAM is that one can scale the algorithm with model 
+complexity, meaning one can initialise as many parallel chains as there are 
+parameters in the model, thus exploiting the multi-core architecture of modern 
+computers to speed up convergence of the MCMC.
+
+A Python implementation of DREAM for dynamic models is available in the package 
+Bayesian inference with Python (BIP)~\citep{pone2011} available at 
+\url{http://code.google.com/p/bayesian-inference/}.
+The code to produce the results presented in this paper is available 
+at~\url{https://github.com/fccoelho/paperLM1/tree/master/python}.
 
 \end{document}
