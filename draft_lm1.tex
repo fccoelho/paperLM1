@@ -244,11 +244,11 @@ We explore the approach of Ederer and Mantel~\citep{mantel}, whose objective is
 to obtain 
 confidence intervals for the ratio of two Poisson counts. 
 Let $Y_{t} \sim Poisson(\lambda_t)$ and $Y_{t+1} \sim Poisson(\lambda_{t+1})$ 
-and define $S = Y_{t} + Y_{t+1}$.
-The authors note that by conditioning on the sum $S$
+and define $W = Y_{t} + Y_{t+1}$.
+The authors note that by conditioning on the sum $W$
 \begin{align}
 \label{eq:binlike}
-Y_{t+1} | S &\sim Binomial(S, \theta_t) \\
+Y_{t+1} | S &\sim Binomial(W, \theta_t) \\
 \theta_t &= \frac{\lambda_{t+1}}{\lambda_{t} + \lambda_{t+1}}
 \end{align}
 Let $c_{\alpha}(\theta_t) = \{\theta_t^{(L)} , \theta_t^{(U)} \}$ be such that 
@@ -276,11 +276,11 @@ binomial likelihood in (\ref{eq:binlike}), the posterior distribution for
 $\theta_t$ is
 \begin{equation}
 \label{eq:thetapost}
-p(\theta_t| Y_{t+1}, S) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
+p(\theta_t| Y_{t+1}, W) \sim Beta(Y_{t+1} + a_0, Y_t + b_0)
 \end{equation}
 Combining equations~(\ref{eq:confRt}) and~(\ref{eq:thetapost}) 
 tells us that the induced posterior distribution of $R_t$ is 
-a beta prime (or inverted beta) with parameters $ a_1 = Y_{t+1} + a_0$ and $b_1 
+a beta prime (or inverted beta) with parameters $a_1 = Y_{t+1} + a_0$ and $b_1 
 =  Y_t + b_0$~\citep{dubey1970}.
 The density of the induced distribution is then 
 \begin{equation}
