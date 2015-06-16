@@ -19,7 +19,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import seaborn as sns
 # import numba
-#from numba import jit
+# from numba import jit
 
 
 beta = 1.0  # Transmission coefficient
@@ -34,14 +34,14 @@ tau = 1  # recovery rate. FIXED
 N = 1  # Population of Rio
 
 inicio = 0
-#~ Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
+# ~ Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
 
 
 # Initial conditions
 inits = np.array([0.999, 0.001, 0.0])  # initial values for state variables.
 
 
-#@jit
+# @jit
 def sir(y, t, *pars):
     '''ODE model'''
     S, I, R = y
@@ -51,13 +51,13 @@ def sir(y, t, *pars):
 
     lamb = beta * (I + m) * S
 
-    return np.array([-lamb,  #dS/dt
-                     lamb - tau * I,  #dI/dt
-                     tau * I,  #dR/dt
-    ])
+    return np.array([-lamb,  # dS/dt
+                     lamb - tau * I,  # dI/dt
+                     tau * I,  # dR/dt
+                     ])
 
 
-#@jit
+# @jit
 def jac(y, t, *pars):
     """
     Jacobian of the model
@@ -74,7 +74,7 @@ def jac(y, t, *pars):
                      [0, tau, 0]])
 
 
-#@jit
+# @jit
 def model(theta):
     """
     Wrap-up function which is called at every step of the MCMC by BIP's FitModel.
@@ -85,7 +85,7 @@ def model(theta):
     s0, m, tau = theta
 
     t0 = 0
-    tf = fim-inicio
+    tf = fim - inicio
     Y = np.zeros((tf - t0, 3))
 
 
@@ -93,8 +93,8 @@ def model(theta):
 
     inits[0] = s0  # Define S0
     inits[-1] = N - sum(inits[:2])  # Define R(0)
-    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  #,tcrit=tcrit)
-    #inits = Y[-1, :]
+    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  # ,tcrit=tcrit)
+    # inits = Y[-1, :]
     Y[t0:tf, 1] = Y[t0:tf, 1] / 1  # Adjusting the output to just the reported I to compare with data
     return Y
 
@@ -151,8 +151,8 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     # plot_data(data, dates, incidence, rawprev)
     # Doing moving average of order mao
     if mao > 1:
-        sw = np.ones(mao, dtype=float) / mao  #smoothing window
-        prev = np.convolve(rawprev, sw, 'same')  #Smoothing data (ma)
+        sw = np.ones(mao, dtype=float) / mao  # smoothing window
+        prev = np.convolve(rawprev, sw, 'same')  # Smoothing data (ma)
     else:
         prev = rawprev
     # sw = np.ones(6, dtype=float) / 6  #smoothing window
@@ -162,10 +162,12 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     d = {'time': dates, 'I': np.nan_to_num(prev), 'Rt': Rt}
     return d
 
+
 def get_simulated_data(t0, tf, pars):
     y = model(pars)
 
     return y
+
 
 @np.vectorize
 def fix_rt(rt):
@@ -194,7 +196,6 @@ def read_data(dbname):
     df_series = pd.read_sql_table('series', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
     return df_data, df_pt, df_series
 
-
 # # running the analysys
 if __name__ == "__main__":
     # dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
@@ -216,7 +217,7 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2010, 10, 17)),  # Start of the 2011 epidemic
            dt['time'].index(datetime.datetime(2011, 8, 28)),  # Start of the 2012 epidemic
            dt['time'].index(datetime.datetime(2012, 11, 11)),  # Start of the 2013 epidemic
-    ]
+           ]
     tfs = t0s[1:] + [len(dt['time'])]
     tfs = [dt['time'].index(datetime.datetime(1996, 7, 29)),  # end of the 1996 epidemic
            dt['time'].index(datetime.datetime(1998, 10, 12)),  # end of the 1998 epidemic
@@ -232,22 +233,23 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2011, 8, 28)),  # end of the 2011 epidemic
            dt['time'].index(datetime.datetime(2012, 11, 11)),  # end of the 2012 epidemic
            dt['time'].index(datetime.datetime(2013, 8, 25)),  # end of the 2013 epidemic
-    ]
+           ]
 
     # Interpolated Rt
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
 
     pnames = ['S', 'I', 'R']
 
-    wl = dt['I'].shape[0]  #window length
-    nw = len(dt['time']) / wl  #number of windows
-    tf = wl * nw  #total duration of simulation
+    wl = dt['I'].shape[0]  # window length
+    nw = len(dt['time']) / wl  # number of windows
+    tf = wl * nw  # total duration of simulation
 
     for inicio, fim in list(zip(t0s, tfs))[12:13]:  # Optional Slice to allow the fitting of a subset of years
+        fim =fim - 13
         dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # get simulated data
         inits = [1 - dt['I'][0], dt['I'][0], 0]
-        y = get_simulated_data(inicio, fim, [.0621, 2e-6, 1])
+        y = get_simulated_data(inicio, fim, [.0621, 0, 1])
         dt['I'] = y[:, 1]
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
@@ -261,29 +263,29 @@ if __name__ == "__main__":
         nph = len(pnames)
         wl = fim - inicio
         # Taking a a look at the simulated S curve before inference
-        P.plot(dt['time'],y[:, 0], label='S')
+        P.plot(dt['time'], y[:, 0], label='S')
         P.figure()
-        P.plot(dt['time'],y[:, 1])
-        P.plot(dt['time'],dt['I'], 'ro')
+        P.plot(dt['time'], y[:, 1])
+        P.plot(dt['time'], dt['I'], 'ro')
         P.show()
         nw = 1
 
-        tpars = [(1, 1), (0, 3e-6), (.99999, .5)]
-        tlims = [(0, 1), (0, 3e-6), (.99999, 1.5)]
+        tpars = [(1, 1), (0, 5e-6), (.9999, .0002)]
+        tlims = [(0, 1), (0, 5e-6), (.9999, 1.0001)]
         del dt['Rt']
         dt2 = copy.deepcopy(dt)
-        #print inits
+        # print inits
 
-        F = FitModel(3000, model, inits, fim - inicio, tnames, pnames,
+        F = FitModel(5000, model, inits, fim - inicio, tnames, pnames,
                      wl, nw, verbose=1, burnin=1100, constraints=[])
         F.set_priors(tdists=[st.beta, st.uniform, st.uniform],
                      tpars=tpars,
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        F.run(dt, 'DREAM', likvar=1e-8, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
-        #~ print(F.AIC, F.BIC, F.DIC)
-        #print (F.optimize(data=dt, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
+        F.run(dt, 'DREAM', likvar=1e-10, likfun='Normal', pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        # ~ print(F.AIC, F.BIC, F.DIC)
+        # print (F.optimize(data=dt, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
         P.clf()
         P.clf()
