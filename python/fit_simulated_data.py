@@ -99,28 +99,6 @@ def model(theta):
     return Y
 
 
-def plot_data(data, dates, incidence, rawprev):
-    """
-    Plot the data loaded from disk
-    :param data:
-    :param dates:
-    :param incidence:
-    :param rawprev:
-    :return:
-    """
-    P.plot(dates, incidence, label='Incidence')
-    P.plot(dates, rawprev, label='Prevalence')
-    P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
-    P.grid()
-    P.legend()
-    P.figure()
-    P.plot(dates, data.Rt, label=r'$R_t$')
-    P.plot(dates, data.lwr, 'r-.')
-    P.plot(dates, data.upr, 'r-.')
-    P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
-    P.show()
-
-
 def prepdata(fname, sday=0, eday=None, mao=7):
     """
     Prepare the data for the analysis.
@@ -163,7 +141,7 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     return d
 
 
-def get_simulated_data(t0, tf, pars):
+def get_simulated_data( pars):
     y = model(pars)
 
     return y
@@ -195,6 +173,30 @@ def read_data(dbname):
     df_pt = pd.read_sql_table('post_theta', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
     df_series = pd.read_sql_table('series', eng, index_col=['time'], parse_dates={'time': '%Y-%m-%d %H:%M:%S'})
     return df_data, df_pt, df_series
+
+def plot_data(dbname):
+    """
+    Plot the data loaded from disk
+    :param data:
+    :param dates:
+    :param incidence:
+    :param rawprev:
+    :return:
+    """
+    data, theta, series = read_data(dbname + '.sqlite')
+    print(series.columns)
+    P.plot(pd.to_datetime(series.index), series.I, alpha=0.7, label='Incidence')
+
+    P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
+    P.grid()
+    P.legend()
+    # P.figure()
+    # P.plot(dates, data.Rt, label=r'$R_t$')
+    # P.plot(dates, data.lwr, 'r-.')
+    # P.plot(dates, data.upr, 'r-.')
+    # P.setp(P.gca().xaxis.get_majorticklabels(), rotation=45)
+    P.show()
+
 
 # # running the analysys
 if __name__ == "__main__":
@@ -237,6 +239,7 @@ if __name__ == "__main__":
 
     # Interpolated Rt
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
+    # print([iRt(i) for i in range(0, 971)])
 
     pnames = ['S', 'I', 'R']
 
@@ -246,10 +249,11 @@ if __name__ == "__main__":
 
     for inicio, fim in list(zip(t0s, tfs))[12:13]:  # Optional Slice to allow the fitting of a subset of years
         fim =fim - 13
+        # print(inicio, fim)
         dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # get simulated data
         inits = [1 - dt['I'][0], dt['I'][0], 0]
-        y = get_simulated_data(inicio, fim, [.0621, 0, 1])
+        y = get_simulated_data([.0621, 1e-6, 1.0])
         dt['I'] = y[:, 1]
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
@@ -265,13 +269,17 @@ if __name__ == "__main__":
         # Taking a a look at the simulated S curve before inference
         P.plot(dt['time'], y[:, 0], label='S')
         P.figure()
-        P.plot(dt['time'], y[:, 1])
-        P.plot(dt['time'], dt['I'], 'ro')
+        P.plot(dt['time'], y[:, 1], label='I')
+        P.plot(dt['time'], dt['I'], 'ro', label='data')
+        # P.plot(dt['time'], dt['Rt'], 'r^', label='Rt')
+        # print([iRt(t) for t in np.arange(0, fim-inicio)])
+        # P.plot(dt['time'], [iRt(t) for t in np.arange(0, fim-inicio)], label='iRt')
+        P.legend(loc=0)
         P.show()
         nw = 1
 
-        tpars = [(1, 1), (0, 5e-6), (.9999, .0002)]
-        tlims = [(0, 1), (0, 5e-6), (.9999, 1.0001)]
+        tpars = [(1, 1), (0, 5e-6), (.9999, .7)]
+        tlims = [(0, 1), (0, 5e-6), (.9999, 1.7)]
         del dt['Rt']
         dt2 = copy.deepcopy(dt)
         # print inits
@@ -283,9 +291,11 @@ if __name__ == "__main__":
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        F.run(dt, 'DREAM', likvar=1e-10, likfun='Normal', pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-9, likfun='Normal', pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
         # ~ print(F.AIC, F.BIC, F.DIC)
-        # print (F.optimize(data=dt, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
+        # print (F.optimize(data=dt2, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
+        P.plot(dt['time'], y[:, 1], label='I')
+        plot_data(modname)
         P.clf()
         P.clf()
