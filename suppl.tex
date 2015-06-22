@@ -7,6 +7,7 @@
 % amssymb package, useful for mathematical symbols
 \usepackage{amssymb}
 \usepackage{url}
+\usepackage{graphicx}
 % Our defs 
 \def \rr {$R_{t}\:$}
 %opening
@@ -101,6 +102,28 @@ This may prove particularly important when disease counts are low and/or close
 to the detection threshold.
 We provide an R script to perform the above elicitation at 
 \url{https://github.com/fccoelho/paperLM1/blob/master/R/elicit_Rt_prior.R}.
+
+\section*{Estimating $S_0$ from simulated data}
+In order to make absolutely clear that the inference methodology proposed can 
+recover the true parameter values of the underlying simulation model, we have 
+devised a simple simulation experiment. Using the SIR model presented in the 
+main paper we have simulated the incidence curve of the  2013 epidemic (2012 in 
+table 1 of the article), using $S_0 = 0.0621$ and \rr, as estimated from the 
+actual incidence data, and $\tau=1$. Figure \ref{fig:sim_data} shows the 
+posterior $S$ and $I$ alongside with the simulated incidence data. It is clear 
+the inference can recover the correct value for $S_0$ used to   simulate 
+incidence. The script to generate the simulated data and run the inference is in 
+the paper's Github repository(\verb|fit_simulated_data.py|).
+
+\begin{figure}
+ \centering
+ \includegraphics[width=14cm]{./plots/Sim_DengueS2012_11_series.png}
+ % Sim_DengueS2012_11_series.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{$S$ and $I$ series fitted to simulated incidence data(blue dots) 
+with $S_0=0.0621$, and \rr estimated from real incidence data.}
+ \label{fig:sim_data}
+\end{figure}
+
 
 \bibliography{lm1}
 
