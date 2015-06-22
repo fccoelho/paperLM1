@@ -120,12 +120,12 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     data = pd.read_csv(fname, header=0, delimiter=',', skiprows=[1, 2, 3], parse_dates=True)
     # slicing to the desired period
     data = data[sday:eday]
-    pop = pd.read_csv("pop_rio_1980-2012.csv", header=0, delimiter=',', index_col=0)
+    pop = pd.read_csv("../DATA/pop_rio_1980-2012.csv", header=0, delimiter=',', index_col=0)
 
     dates = [datetime.datetime.strptime(d, "%Y-%m-%d") for d in data.start]
     pop_d = np.array([pop.loc[d.year] for d in dates])  # population on each date
 
-    eday = len(df) if eday is None else eday
+    eday = len(data) if eday is None else eday
     # print data.dtype.names
     incidence = data.cases  # daily incidence
     # Converting incidence to Prevalence
@@ -166,7 +166,7 @@ def fix_rt(rt):
 # # running the analysys
 if __name__ == "__main__":
     # dt = prepdata('aux/data_Rt_dengue_big.csv', 0, 728, 1)
-    dt = prepdata('data_Rt_dengue_complete.csv', 0, 971, 1)
+    dt = prepdata('../DATA/data_Rt_dengue_complete.csv', 0, 971, 1)
 
 
     # Defining start and end of the simulations
@@ -206,7 +206,7 @@ if __name__ == "__main__":
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
 
     P.plot(dt['Rt'], '*', label='$R_t$')
-    print dt['I']/dt['I'].max()
+    print (dt['I']/dt['I'].max())
     P.plot(dt['I']/dt['I'].max(), 'k-+', label='log(Cases)')
     P.plot(np.arange(0, dt['Rt'].size, .2), [iRt(t) for t in np.arange(0, dt['Rt'].size, .2)])
     P.legend()
@@ -238,8 +238,8 @@ if __name__ == "__main__":
 
 
 
-    for inicio, fim in zip(t0s, tfs)[3:4]:  # Slice to force start from a different point
-        dt = prepdata('data_Rt_dengue_complete.csv', inicio, fim, 1)
+    for inicio, fim in zip(t0s, tfs):#[3:4]:  # Slice to force start from a different point
+        dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
         ano = dt['time'][0].year
@@ -267,7 +267,7 @@ if __name__ == "__main__":
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        # F.run(dt, 'DREAM', likvar=1e-10, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
         #~ print F.AIC, F.BIC, F.DIC
         #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
         # F.plot_results(['S', 'I'], dbname=modname, savefigs=1)

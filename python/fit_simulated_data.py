@@ -29,7 +29,7 @@ eta = .0  # infectivity of asymptomatic infections relative to clinical ones. FI
 
 mu = 0  # nat/mortality rate
 m = 1e-6  # influx of cases
-tau = 1  # recovery rate. FIXED
+tau = 1.  # recovery rate. FIXED
 
 N = 1  # Population of Rio
 
@@ -45,9 +45,8 @@ inits = np.array([0.999, 0.001, 0.0])  # initial values for state variables.
 def sir(y, t, *pars):
     '''ODE model'''
     S, I, R = y
-    s0, m, tau = pars
-    beta = 0 if t > 728 else iRt(t) * tau / s0
-    # print S, I, beta
+    s0, m = pars
+    beta = 0 if t > 728 else iRt(t)*tau / 0.0621
 
     lamb = beta * (I + m) * S
 
@@ -67,8 +66,8 @@ def jac(y, t, *pars):
     :return: the jacobian matrix at time t
     """
     S, I, R = y
-    s0, m, tau = pars
-    beta = 0 if t > 728 else iRt(t) * tau / s0
+    s0, m = pars
+    beta = 0 if t > 728 else iRt(t)*tau / 0.0621
     return np.array([[-(I + m) * beta, -S * beta, 0],
                      [(I + m) * beta, S * beta - tau, 0],
                      [0, tau, 0]])
@@ -82,18 +81,18 @@ def model(theta):
     :return: the output of the model
     """
     # setting parameters
-    s0, m, tau = theta
+    s0, m = theta
 
     t0 = 0
     tf = fim - inicio
     Y = np.zeros((tf - t0, 3))
 
-
+    # print(iRt(np.arange(t0, tf, 1)))
     # Initial conditions
 
     inits[0] = s0  # Define S0
     inits[-1] = N - sum(inits[:2])  # Define R(0)
-    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  # ,tcrit=tcrit)
+    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m), Dfun=jac)  # ,tcrit=tcrit)
     # inits = Y[-1, :]
     Y[t0:tf, 1] = Y[t0:tf, 1] / 1  # Adjusting the output to just the reported I to compare with data
     return Y
@@ -121,7 +120,7 @@ def prepdata(fname, sday=0, eday=None, mao=7):
 
     incidence = data.cases  # daily incidence
     # Converting incidence to Prevalence
-    dur = 1. / tau  # infectious period
+    dur = 1./ tau  # infectious period
     rawprev = np.convolve(incidence, np.ones(dur), 'same')
     rawprev.shape = rawprev.size, 1
     rawprev /= pop_d
@@ -238,7 +237,7 @@ if __name__ == "__main__":
            ]
 
     # Interpolated Rt
-    iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
+    # iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
     # print([iRt(i) for i in range(0, 971)])
 
     pnames = ['S', 'I', 'R']
@@ -248,19 +247,20 @@ if __name__ == "__main__":
     tf = wl * nw  # total duration of simulation
 
     for inicio, fim in list(zip(t0s, tfs))[12:13]:  # Optional Slice to allow the fitting of a subset of years
-        fim =fim - 13
-        # print(inicio, fim)
+        print(inicio, fim)
         dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # get simulated data
         inits = [1 - dt['I'][0], dt['I'][0], 0]
-        y = get_simulated_data([.0621, 1e-6, 1.0])
-        dt['I'] = y[:, 1]
+        # print(iRt(np.arange(0, fim-inicio, 1)))
+
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
+        y = get_simulated_data([.0621, 1e-6])
+        dt['I'] = y[:, 1]
         ano = dt['time'][0].year
         mes = dt['time'][0].month
         modname = "Sim_DengueS{}_{}".format(ano, mes)
-        tnames = ['s_{}_{}'.format(ano, mes), 'm', 'tau']
+        tnames = ['s_{}_{}'.format(ano, mes), 'm']
 
         nt = len(tnames)
         pnames = ['S', 'I', 'R']
@@ -278,23 +278,25 @@ if __name__ == "__main__":
         P.show()
         nw = 1
 
-        tpars = [(1, 1), (0, 5e-6), (.9999, .7)]
-        tlims = [(0, 1), (0, 5e-6), (.9999, 1.7)]
+        tpars = [(1, 1), (1e-6, 1e-8)]
+        tlims = [(0.03, .1), (0, 5e-6)]
         del dt['Rt']
         dt2 = copy.deepcopy(dt)
         # print inits
 
         F = FitModel(5000, model, inits, fim - inicio, tnames, pnames,
                      wl, nw, verbose=1, burnin=1100, constraints=[])
-        F.set_priors(tdists=[st.beta, st.uniform, st.uniform],
+        F.set_priors(tdists=[st.beta, st.norm],
                      tpars=tpars,
                      tlims=tlims,
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
-        F.run(dt, 'DREAM', likvar=1e-9, likfun='Normal', pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
+        F.run(dt, 'DREAM', likvar=1e-8, likfun='Normal', pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'], initheta=[0.0621, 1e-6])
         # ~ print(F.AIC, F.BIC, F.DIC)
-        # print (F.optimize(data=dt2, p0=[.0621, 2e-6, 1], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
+        # print (F.optimize(data=dt2, p0=[.0621, 1e-6, 1.0], optimizer='scipy',tol=1e-55, verbose=1, plot=1))
         F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
+        P.figure()
+        P.figure()
         P.plot(dt['time'], y[:, 1], label='I')
         plot_data(modname)
         P.clf()

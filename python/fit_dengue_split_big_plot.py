@@ -11,7 +11,6 @@ from matplotlib import font_manager
 from matplotlib.ticker import FormatStrFormatter
 import matplotlib.dates as mdates
 import matplotlib.pyplot as P
-import Gnuplot
 from scipy.stats import gaussian_kde
 import datetime
 import matplotlib.collections as collections
@@ -85,7 +84,7 @@ def create_tex_table(dbs):
     body = r""
     st = []
     # years = sorted(list(series.keys()))
-    print series.keys()
+    print (series.keys())
     for i, (Y, V) in enumerate(series.items()):
         cases = obs[Y].sum()
         first_week = V.index[0]
@@ -101,9 +100,9 @@ def create_tex_table(dbs):
                                                                                       )
             body += "\n"
         except KeyError as e:
-            print Y, first_week, e
+            print (Y, first_week, e)
         except ValueError as e:
-            print s0, e
+            print (s0, e)
 
     return head + body + bot
 
@@ -251,7 +250,7 @@ if __name__ == "__main__":
     #plot_concat_series(dbs)
     #print create_tex_table(dbs)
     # plot_AR_S0(dbs)
-    print calc_mse(dbs)
+    print (calc_mse(dbs))
 
 
     P.show()
