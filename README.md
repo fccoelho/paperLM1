@@ -36,5 +36,11 @@ With the posterior curves of S_0 we can then learn about the attack ratio of eve
 
 the scripts used to perform the analyses in the paper are in the `python` directory. They require Python 3 to run.
  - `fit_dengue_split_big.py` fits the model to the data estimating $S_0$ in the process.
- - `fit_dengue_split_big_plot.py` plots the results of the prievious script.
+ - `fit_dengue_split_big_plot.py` plots the results of the previous script.
  - `fit_simulated_data.py` generates the simulation experiment in the supplementary material.
+
+The code in the [R](https://github.com/fccoelho/paperLM1/tree/master/R) folder performs additional tasks:
+
+ - `elicit_Rt_prior.R` is a script to help practitioners elict priors for Rt (see comments in script and Appendix in the paper).
+ - `Rt_aux.R` contains auxiliary utility functions for tasks such as calculate posterior beta-binomial credibility intervals.
+ - `sampling_Rt_posterior.R` is a simple prior sensitivity analysis (PSA) for Rt.
