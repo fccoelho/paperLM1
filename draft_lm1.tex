@@ -85,7 +85,7 @@ $\ast$ E-mail: fccoelho@fgv.br
 \section*{Abstract}
 
 Quantifying the attack ratio of disease is key to epidemiological inference and 
-Public Health planning.
+public health planning.
 For multi-serotype pathogens, however, different levels of 
 serotype-specific immunity make it difficult to assess the population at risk. 
 In this paper we propose a Bayesian method for estimation of the attack ratio 
@@ -375,8 +375,9 @@ We are thus interested in the posterior distribution
  p(S_{0j}|\mathbf{Y_{j}}) \propto l(\mathbf{Y_{j}}|S_{0j}, R_t, \tau 
 )\pi(S_{0j}) 
 \end{equation}
-The likelihood $l(\mathbf{Y_{j}}|\cdot)$ is assumed to be a Normal distribution 
-with fixed variance $\sigma^2$.
+The likelihood $l(\mathbf{Y_{j}}|\cdot)$ is a approximated by a Normal 
+distribution with fixed variance $\sigma^2$. This approximation is a numerical 
+convenience since it confers better stability to the MCMC sampling.
 In this estimation procedure we kept $R_t$ fixed at fixed at the posterior mean 
 obtained as described above and fixed $\tau = 1/7\: \text{days}^{-1}$.
 To complete the inference, we need to specify prior distributions for the 
