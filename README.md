@@ -31,3 +31,10 @@ The intrinsic variability of R_t can be used to inform the time-varying force of
 The curves were estimated only for the periods where R_t> 1
 It is clear that this simple model, despite its limitations fits the data well.
 With the posterior curves of S_0 we can then learn about the attack ratio of every major epidemic in the city.
+
+####Scripts
+
+the scripts used to perform the analyses in the paper are in the `python` directory. They require Python 3 to run.
+ - `fit_dengue_split_big.py` fits the model to the data estimating $S_0$ in the process.
+ - `fit_dengue_split_big_plot.py` plots the results of the prievious script.
+ - `fit_simulated_data.py` generates the simulation experiment in the supplementary material.
