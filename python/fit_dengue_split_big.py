@@ -11,14 +11,8 @@ import scipy.stats as st
 import numpy as np
 import pylab as P
 import copy
-from collections import defaultdict
 import datetime
-import sys
 import pandas as pd
-import seaborn as sns
-# import numba
-#from numba import jit
-
 
 beta = 1.0  # Transmission coefficient
 b1 = 19.9
@@ -32,14 +26,13 @@ tau = 1  # recovery rate. FIXED
 N = 1  # Population of Rio
 
 inicio = 0
-#~ Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
+# ~ Ss = {0: s0, 1: s1, 2: s2}  # Multiple Ss map
 
 
 # Initial conditions
 inits = np.array([0.999, 0.001, 0.0])  # initial values for state variables.
 
 
-#@jit
 def sir(y, t, *pars):
     '''ODE model'''
     S, I, R = y
@@ -49,13 +42,12 @@ def sir(y, t, *pars):
 
     lamb = beta * (I + m) * S
 
-    return np.array([-lamb,  #dS/dt
-                     lamb - tau * I,  #dI/dt
-                     tau * I,  #dR/dt
-    ])
+    return np.array([-lamb,  # dS/dt
+                     lamb - tau * I,  # dI/dt
+                     tau * I,  # dR/dt
+                     ])
 
 
-#@jit
 def jac(y, t, *pars):
     S, I, R = y
     s0, m, tau = pars
@@ -65,7 +57,6 @@ def jac(y, t, *pars):
                      [0, tau, 0]])
 
 
-#@jit
 def model(theta):
     # setting parameters
     s0, m, tau = theta
@@ -76,11 +67,11 @@ def model(theta):
 
 
     # Initial conditions
-    #print inits, m
+    # print inits, m
     inits[0] = s0  # Define S0
     inits[-1] = N - sum(inits[:2])  # Define R(0)
-    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  #,tcrit=tcrit)
-    #inits = Y[-1, :]
+    Y[t0:tf, :] = odeint(sir, inits, np.arange(t0, tf, 1), args=(s0, m, tau), Dfun=jac)  # ,tcrit=tcrit)
+    # inits = Y[-1, :]
     Y[t0:tf, 1] = Y[t0:tf, 1] / 1  # Adjusting the output to just the reported I to compare with data
     return Y
 
@@ -137,8 +128,8 @@ def prepdata(fname, sday=0, eday=None, mao=7):
     # plot_data(data, dates, incidence, rawprev)
     # Doing moving average of order mao
     if mao > 1:
-        sw = np.ones(mao, dtype=float) / mao  #smoothing window
-        prev = np.convolve(rawprev, sw, 'same')  #Smoothing data (ma)
+        sw = np.ones(mao, dtype=float) / mao  # smoothing window
+        prev = np.convolve(rawprev, sw, 'same')  # Smoothing data (ma)
     else:
         prev = rawprev
     # sw = np.ones(6, dtype=float) / 6  #smoothing window
@@ -184,7 +175,7 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2010, 10, 17)),  # Start of the 2011 epidemic
            dt['time'].index(datetime.datetime(2011, 8, 28)),  # Start of the 2012 epidemic
            dt['time'].index(datetime.datetime(2012, 11, 11)),  # Start of the 2013 epidemic
-    ]
+           ]
     tfs = t0s[1:] + [len(dt['time'])]
     tfs = [dt['time'].index(datetime.datetime(1996, 7, 29)),  # end of the 1996 epidemic
            dt['time'].index(datetime.datetime(1998, 10, 12)),  # end of the 1998 epidemic
@@ -200,45 +191,45 @@ if __name__ == "__main__":
            dt['time'].index(datetime.datetime(2011, 8, 28)),  # end of the 2011 epidemic
            dt['time'].index(datetime.datetime(2012, 11, 11)),  # end of the 2012 epidemic
            dt['time'].index(datetime.datetime(2013, 8, 25)),  # end of the 2013 epidemic
-    ]
+           ]
     # print tfs
     # Interpolated Rt
     iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
 
     P.plot(dt['Rt'], '*', label='$R_t$')
-    print (dt['I']/dt['I'].max())
-    P.plot(dt['I']/dt['I'].max(), 'k-+', label='log(Cases)')
+    print(dt['I'] / dt['I'].max())
+    P.plot(dt['I'] / dt['I'].max(), 'k-+', label='log(Cases)')
     P.plot(np.arange(0, dt['Rt'].size, .2), [iRt(t) for t in np.arange(0, dt['Rt'].size, .2)])
     P.legend()
-    #print type(dt['Rt'])
-    #print [iRt(t) for t in np.arange(0, 728, .2)]
+    # print type(dt['Rt'])
+    # print [iRt(t) for t in np.arange(0, 728, .2)]
 
 
     pnames = ['S', 'I', 'R']
 
-    wl = dt['I'].shape[0]  #window length
-    nw = len(dt['time']) / wl  #number of windows
-    tf = wl * nw  #total duration of simulation
+    wl = dt['I'].shape[0]  # window length
+    nw = len(dt['time']) / wl  # number of windows
+    tf = wl * nw  # total duration of simulation
 
-    #~ print calc_R0s()
+    # ~ print calc_R0s()
     inicio = t0s[0]
     fim = tfs[-1]
-    #~ y = model([.999*N, 1e-6, 1])
-    #print y
-    #~ P.figure()
-    #~ P.plot(dt['I'], '*')
-    #~ P.plot(y[:, 1])
-    #~ top = y[:, 1].max()
-    #~ P.vlines(t0s,0,top, colors='g')
-    #~ P.vlines(tfs,0,top, colors='r')
-    #~ P.legend([pnames[1]])
+    # ~ y = model([.999*N, 1e-6, 1])
+    # print y
+    # ~ P.figure()
+    # ~ P.plot(dt['I'], '*')
+    # ~ P.plot(y[:, 1])
+    # ~ top = y[:, 1].max()
+    # ~ P.vlines(t0s,0,top, colors='g')
+    # ~ P.vlines(tfs,0,top, colors='r')
+    # ~ P.legend([pnames[1]])
     P.show()
-    #Priors and limits for all countries
+    # Priors and limits for all countries
 
 
 
 
-    for inicio, fim in zip(t0s, tfs):#[3:4]:  # Slice to force start from a different point
+    for inicio, fim in zip(t0s, tfs):  # [3:4]:  # Slice to force start from a different point
         dt = prepdata('../DATA/data_Rt_dengue_complete.csv', inicio, fim, 1)
         # Interpolated Rt
         iRt = interp1d(np.arange(dt['Rt'].size), np.array(dt['Rt']), kind='linear', bounds_error=False, fill_value=0)
@@ -258,7 +249,7 @@ if __name__ == "__main__":
 
         inits = [1 - dt['I'][0], dt['I'][0], 0]
         dt2 = copy.deepcopy(dt)
-        #print inits
+        # print inits
 
         F = FitModel(5000, model, inits, fim - inicio, tnames, pnames,
                      wl, nw, verbose=1, burnin=1000, constraints=[])
@@ -268,8 +259,8 @@ if __name__ == "__main__":
                      pdists=[st.beta] * nph, ppars=[(1, 1)] * nph, plims=[(0, 1)] * nph)
 
         F.run(dt, 'DREAM', likvar=1e-9, pool=False, ew=0, adjinits=True, dbname=modname, monitor=['I', 'S'])
-        #~ print F.AIC, F.BIC, F.DIC
-        #print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
+        # ~ print F.AIC, F.BIC, F.DIC
+        # print F.optimize(data=dt,p0=[s0,s1,s2], optimizer='scipy',tol=1e-55, verbose=1, plot=1)
         # F.plot_results(['S', 'I'], dbname=modname, savefigs=1)
         P.clf()
         P.clf()
