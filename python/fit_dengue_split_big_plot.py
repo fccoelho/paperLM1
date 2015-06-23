@@ -2,7 +2,7 @@
 Script to generate the plots for the
 multi-year simulations
 """
-import cPickle as CP
+import pickle as CP
 from itertools import cycle
 from scipy import stats
 import glob
@@ -70,10 +70,10 @@ def create_tex_table(dbs):
     obs, series, pts = get_ordered_series(dbs)
 
     head = r"""\begin{center}
-\begin{tabular}{c|c|c}
+\begin{tabular}{l|c|c|c}
 \hline
 """
-    head += r"""Year & median Attack Ratio $ $S_0$ \\
+    head += r"""Year & Cases & median Attack Ratio $ $S_0$ \\
 \hline
 """
     bot = r"""
@@ -91,7 +91,7 @@ def create_tex_table(dbs):
         s0 = array(series[Y].S.ix[first_week])
         try:
             ratio = 1.0*cases/s0
-            body += Y + r" & {:.2} ({:.2}-{:.2}) & {:.3}({:.2}-{:.2})\\".format(nanmedian(ratio),
+            body += Y + r" & {:.3} & {:.2} ({:.2}-{:.2}) & {:.3}({:.2}-{:.2})\\".format(cases*100, nanmedian(ratio),
                                                                                       stats.scoreatpercentile(ratio, 2.5),
                                                                                       stats.scoreatpercentile(ratio, 97.5),
                                                                                       nanmedian(s0)*100,
@@ -233,7 +233,7 @@ def calc_mse(dbs):
     mse = OrderedDict()
     mae = OrderedDict()
     mape = OrderedDict()
-    for Y, srs in series.iteritems():
+    for Y, srs in series.items():
         n = len(obs[Y])
         i_median = srs.I.groupby(level='time').median()
         mse[Y] = (1./n) * sum(((i_median-obs[Y])**2)/obs[Y]**2)
@@ -248,7 +248,7 @@ if __name__ == "__main__":
 
     dbs = glob.glob("../DengueS*.sqlite")
     #plot_concat_series(dbs)
-    #print create_tex_table(dbs)
+    print(create_tex_table(dbs))
     # plot_AR_S0(dbs)
     print (calc_mse(dbs))
 
