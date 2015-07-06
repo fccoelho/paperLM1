@@ -106,7 +106,8 @@ distribution of serotype-specific immunity in the population.
 \section*{Introduction}
 
 Dengue is an arthropod-borne febrile disease caused by a flavivirus with four 
-serotypes which causes an estimated  $50$ million infections each 
+serotypes (DEN-1, 2, 3 and 4) which causes an estimated  $50$ million 
+infections each 
 year~\citep{Guzman2010}.
 In humans, immunity against a particular serotype is considered permanent 
 after the exposure and cross immunity to other serotypes is considered short 
@@ -186,7 +187,10 @@ time-varying force of infection and derive a probability distribution  for
 Then, from the incidence series and the population at risk, we  calculate the 
 attack ratio for each epidemic.
 We apply our method to estimate $S_0$ before every major dengue epidemic in the 
-city of Rio de Janeiro, Brazil in the last 18 years.
+city of Rio de Janeiro, Brazil in the last 18 years. Dengue has been 
+reintroduced in Rio de Janeiro in 1986 after being absent for 68 
+years\citep{nogueira1999dengue}. During the last decades of the 20th century 
+only DEN-1 and DEN-2 serotypes
 
 \section*{Methods}
 
@@ -553,12 +557,21 @@ population.
 
 Table~\ref{tab:AR} contains the attack ratios and medians of the $S_0$ 
 estimated for each epidemic/outbreak.
-It is interesting to notice that the larger epidemics, in terms of peak size are 
-not the one with the greater attack ratios.
+ Underreporting of cases, which is known to exist but of which exact figures 
+cannot be determined, will lead to underestimation $S_0$. However, The attack 
+ratio shall remain unbiased as the underreporting affects both the numerator and 
+the denominator of equation \ref{eq:AR2}.
+It is interesting to notice that the larger epidemics, in terms of peak size 
+are not the one with the greater attack ratios.
 This stresses the importance of knowing the immunological structure of the 
 population. Knowing the $S_0$ for the circulating viruses we can order to more 
 accurately assess the potential impact of a coming epidemic, since particularly 
-virulent types, can be rendered less of a threat by a low $S_0$.
+virulent types, can be rendered less of a threat by a low $S_0$. Hon\'orio et 
+al.\citep{honorio2009spatial} conducted a serological survey in three separate 
+localities within the city, right before the 2008 epidemic, the authors report 
+seroprevalences varying from 56-77.4\% which is compatible with our prediction 
+of 87.5\% ($1-S_{0,2007}$) for the entire city, considering that we 
+underestimate $S_0$ due to the underreporting of cases.
 
 We hope that the results presented in paper will motivate public 
 health authorities to invest in annual serological surveys, to determine the 
@@ -599,23 +612,35 @@ $^\ddag$: percentage of population.
 These results show considerable variation in AR between epidemics, consistent with
 the accquiring and loss of serotype-specific immunity.}
 \begin{center}
-\begin{tabular}{l|c|c|c}
+\begin{tabular}{l|c|c|c|c}
 \hline
-$^\dag$Year & $^\ddag$Cases & median Attack Ratio & $^\ddag$$S_0$ \\
+$^\dag$Year & $^\ddag$Cases & median Attack Ratio & $^\ddag$$S_0$ & Circulating 
+ Serotypes \\
 \hline
-1996 & 0.066 & 0.39 (0.17-0.54) & 0.171(0.12-0.38)\\
-1997 & 0.238 & 0.87 (0.74-0.87) & 0.273(0.27-0.32)\\
-1998 & 0.0708 & 0.5 (0.49-0.5) & 0.142(0.14-0.14)\\
-1999 & 0.0371 & 0.11 (0.037-0.2) & 0.345(0.18-1.0)\\
-2000 & 0.394 & 0.25 (0.24-0.27) & 1.55(1.5-1.6)\\
-2001 & 2.38 & 0.48 (0.47-0.49) & 4.95(4.8-5.1)\\
-2005 & 0.217 & 0.15 (0.1-0.21) & 1.47(1.0-2.1)\\
-2006 & 0.315 & 0.11 (0.08-0.14) & 2.81(2.2-3.7)\\
-2007 & 2.03 & 0.15 (0.15-0.15) & 13.5(1.3e+01-1.4e+01)\\
-2008 & 0.0923 & 0.14 (0.031-0.31) & 0.672(0.3-2.4)\\
-2010 & 0.831 & 0.18 (0.17-0.19) & 4.54(4.3-4.8)\\
-2011 & 1.85 & 0.086 (0.082-0.094) & 21.5(2e+01-2.3e+01)\\
-2012 & 0.864 & 0.14 (0.13-0.15) & 6.21(5.8-6.8)\\
+1996 & 0.066 & 0.39 (0.17-0.54) & 0.171(0.12-0.38)& DEN-1 and 
+2\citep{nogueira1999dengue}\\
+1997 & 0.238 & 0.87 (0.74-0.87) & 0.273(0.27-0.32)& DEN-1 and 
+2\citep{nogueira1999dengue}\\
+1998 & 0.0708 & 0.5 (0.49-0.5) & 0.142(0.14-0.14)& DEN-1 and 
+2\citep{nogueira1999dengue}\\
+1999 & 0.0371 & 0.11 (0.037-0.2) & 0.345(0.18-1.0)&DEN-1, 2 and 
+3\citep{de2004dengue}\\
+2000 & 0.394 & 0.25 (0.24-0.27) & 1.55(1.5-1.6)&DEN-1, 2 and 
+3\citep{de2004dengue}\\
+2001 & 2.38 & 0.48 (0.47-0.49) & 4.95(4.8-5.1)&DEN-1, 2 and 
+3\citep{de2004dengue}\\
+2005 & 0.217 & 0.15 (0.1-0.21) & 1.47(1.0-2.1)&\\
+2006 & 0.315 & 0.11 (0.08-0.14) & 
+2.81(2.2-3.7)&DEN-2\citep{nogueira2011dengue}\\
+2007 & 2.03 & 0.15 (0.15-0.15) & 
+13.5(13.0-14.01)&DEN-2\citep{nogueira2011dengue}\\
+2008 & 0.0923 & 0.14 (0.031-0.31) & 
+0.672(0.3-2.4)&DEN-2\citep{nogueira2011dengue}\\
+2010 & 0.831 & 0.18 (0.17-0.19) & 
+4.54(4.3-4.8)&DEN-2\citep{nogueira2011dengue}\\
+2011 & 1.85 & 0.086 (0.082-0.094) & 
+21.5(20.0-23.0)&DEN-1, 2 and 4\citep{nogueira2011dengue}\\
+2012 & 0.864 & 0.14 (0.13-0.15) & 6.21(5.8-6.8)&\\
 
 \hline
 \end{tabular}
