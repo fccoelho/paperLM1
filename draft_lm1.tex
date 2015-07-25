@@ -9,7 +9,6 @@
 % dvipdf plos.template
 %
 % % % % % % % % % % % % % % % % % % % % % %
-%
 \documentclass[10pt]{article}
 \usepackage{todonotes}
 \usepackage{subfigure}
@@ -51,10 +50,8 @@
 
 % Our defs 
 \def \rr {$R_{t}\:$}
-
 % Leave date blank
 \date{}
-
 \pagestyle{myheadings}
 
 %% Include all macros below. Please limit the use of macros.
@@ -304,7 +301,7 @@ the transform in~(\ref{eq:confRt}).
 Also, one can choose $a_0$ and $b_0$ so as to elicit meaningful prior 
 distributions for $R_t$.
 We show how to elicit the prior for $R_t$ from specified prior mean and variance
-or coefficient of variation in the \textbf{Appendix}.
+or coefficient of variation in the~\textbf{Appendix}.
 
 Also, since $R_t > 1$ indicates sustained transmission, one may be 
 interested in computing the probability of this event.
@@ -450,12 +447,13 @@ derived
 in this paper. 
 It can be seen that the inter-epidemic periods are characterized by $R_t$ being 
 indistinguishable from 1.
-Due to the intrinsic variability of the \rr series, the examination of its 
+Due to the intrinsic variability of the~\rr series, the examination of its 
 credible intervals is essential to identify periods of sustained transmission.
 The wider intervals between epidemics are due to the scarcity of cases during 
-these periods.
-The method to quantify uncertainty proposed here provides more conservative 
-credibility intervals, and therefore offers protection against false alarms.
+these periods. 
+credibility intervals, and therefore offers protection against false alarms (see 
+the section on tail behaviour in the \textbf{Appendix} for a detailed 
+explanation).
 \begin{center}
 \begin{figure}[!h]
  \centering
@@ -560,7 +558,7 @@ estimated for each epidemic/outbreak.
  Underreporting of cases, which is known to exist but of which exact figures 
 cannot be determined, will lead to underestimation $S_0$. However, The attack 
 ratio shall remain unbiased as the underreporting affects both the numerator and 
-the denominator of equation \ref{eq:AR2}.
+the denominator of equation~\ref{eq:AR2}.
 It is interesting to notice that the larger epidemics, in terms of peak size 
 are not the one with the greater attack ratios.
 This stresses the importance of knowing the immunological structure of the 
@@ -662,7 +660,7 @@ Code\c{c}o for helpful discussions about the manuscript.
 \subsection*{A remark on prior distributions and tail behaviour of the 
 distribution of $R_t$}
 \label{sec:tails}
-There are a number of approaches to deriving the distribution of \rr.
+There are a number of approaches to deriving the distribution of~\rr.
 Alternatively to the approach described in the main text~\citep{mantel}, one 
 could use the conditional distribution of \rr on 
 $Y_{t+1}$ and $Y_t$ as defined in equation A7 of Nishiura et 
@@ -683,7 +681,7 @@ f_N(R_t| a_2, b_2) =  \frac{b_2^{a_2}}{\Gamma(a_2)} R_t^{a_2-1} e^{-b_2 R_t}
 
 In order to decide which approach to take, it may be of use analysing the 
 tail behaviour of the derived distributions for \rr. 
-Consider the case of using a flat $Uniform(0, 1)$ prior for $\theta_t$.
+Consider the case of using a flat $\text{Uniform}(0, 1)$ prior for $\theta_t$.
 With $a_0 = b_0 = 1$, $a_1 = a_2$ and $b_1 = b_2 + 1$.
 The beta prime (inverse beta distribution) will have heavier tails compared to 
 the conditional distribution proposed by~\citep{nishiura}, thus providing more 
@@ -695,29 +693,65 @@ To see that one needs simply take the ratio of the Beta prime and Gamma
  \lim_{R_t\to\infty}\frac{f_P(R_t| a_1, b_1)}{f_N(R_t| a_2, b_2)} =  
 \lim_{R_t\to\infty}\frac{e^{Y_{t}R_t}}{(1 +R_t)^{Y_{t} + Y_{t +1}+2}} = \infty
 \end{equation}
-Finally, note that we deliberately construct $c_{\alpha}(R_{t})$ as a 
+Note also that we deliberately construct $c_{\alpha}(R_{t})$ as a 
 equal-tailed $100\alpha\%$ credible set, rather than a less conservative 
 highest posterior density (HPD) interval.
+Finally, we performed a simple simulation study to assess the result in equation
+~\ref{seq:densityratio}.
+The simulations were carried out as follows:
+\begin{enumerate}
+ \item Create a two-dimensional grid of values for $\lambda_1$ and $\lambda_2$, 
+with rate values from $2$ to $1000$;
+\item For each point $(\lambda_1^{(j)}, \lambda_2^{(j)})$ in the grid,
+\begin{itemize}
+ \item Generate $1000$ realisations of the random variables $Y_{1}^{(ij)} \sim 
+\text{Poisson}(\lambda_1^{(j)})$ and $Y_{2}^{(ij)} \sim 
+\text{Poisson}(\lambda_2^{(j)})$, with $i= 1, 2, \ldots, 1000$  and compute 
+$R_{t}^{(ij)} = Y_{2}^{(ij)}/
+Y_{1}^{(ij)}$;
+\item Compute the $\alpha\%$ credibility/confidence intervals using the method 
+proposed here $(\beta)$ and using the distribution proposed by Nishiura 
+(2010)~\cite{nishiura} ($\Gamma$), denoted by $c_{\beta}(R_{t}^{(ij)}; 
+\alpha)$ and 
+$c_{\Gamma}(R_{t}^{(ij)}; \alpha)$ respectively;
+\item Determine whether
+\begin{itemize}
+ \item [(i)] $ c_{\Gamma}(R_{t}^{(ij)}; \alpha) \subseteq 
+c_{\beta}(R_{t}^{(ij)}; \alpha)$;
+\item [(ii)] $c_{\beta}(R_{t}^{(ij)}; \alpha) \subseteq 
+c_{\Gamma}(R_{t}^{(ij)}; \alpha)$ or;
+\item [(iii)] there is overlap
+\end{itemize}
+\item Calculate $Pr(R_{t}^{(ij)} > 1)$ using both distributions
+\end{itemize}
+\end{enumerate}
+The results show that the credibility intervals obtained using the distribution 
+proposed here were larger than (i.e. contained) those computed using the 
+distribution in~\ref{seq:densityNishiura} in $90.69\%$ of the simulations 
+(integrating over the grid), while the converse was observed in $1.14\%$ of the 
+cases.
+Moreover, our method yielded lower $Pr(R_{t} > 1)$  in $79.48\%$ of the 
+simulations, indicating it is indeed more robust to false alarm.
+An R script to perform the simulation study described above can be found 
+at~\url{
+https://github.com/fccoelho/paperLM1/blob/master/R/credibility_comparison.R}.
 
 As a side note, the Bayesian approach presented in this 
 paper will give similar results to orthodox confidence intervals~\citep{wilson} 
 and~\citep{clopper} for $Y_{t+1}$ and $Y_t >> 1$.
 Under the flat  uniform prior for $\theta_t$, the Bayesian posterior 
-credibility 
-interval is nearly indistinguishable from the confidence interval proposed by 
-Clopper \& Pearson (1931)~\citep{clopper} for $Y_{t+1}, Y_t > 20$.
+credibility interval is nearly indistinguishable from the confidence interval 
+proposed by Clopper \& Pearson (1931)~\citep{clopper} for $Y_{t+1}, Y_t > 20$.
 Note also that the uniform prior ($Beta(1, 1)$) for $\theta_t$ constitutes a 
-poor 
-prior 
-choice mainly because the induced distribution for \rr is only well-defined for 
-$b_0 > 2$.
+poor prior choice mainly because the induced distribution for \rr is only 
+well-defined for $b_0 > 2$.
 
 An advantage of the Bayesian approach is that one can devise prior 
 distributions for $\theta_t$ taking advantage of the intuitive parametrization 
 and flexibility of the beta family of distributions.
-Prior elicitation can also be done for \rr and the hyper-parameters directly 
+Prior elicitation can also be done for~\rr and the hyper-parameters directly 
 plugged into the prior for $\theta_t$. 
-One can, for example, choose prior mean and variance for \rr and find $a_0$ 
+One can, for example, choose prior mean and variance for~\rr and find $a_0$ 
 and $b_0$ that satisfy those conditions.
 Let $m_0$ and $v_0$ be the prior expectation and variance for $R_t$. 
 After some tedious algebra one finds
