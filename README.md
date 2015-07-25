@@ -44,3 +44,4 @@ The code in the [R](https://github.com/fccoelho/paperLM1/tree/master/R) folder p
  - `elicit_Rt_prior.R` is a script to help practitioners elict priors for Rt (see comments in script and Appendix in the paper).
  - `Rt_aux.R` contains auxiliary utility functions for tasks such as calculate posterior beta-binomial credibility intervals.
  - `sampling_Rt_posterior.R` is a simple prior sensitivity analysis (PSA) for Rt.
+ - `credibility_comparison.R` is a simulation study to assess if our method provides more conservative credibility intervals.
