@@ -1,0 +1,41 @@
+% \documentclass{standalone}
+% \usepackage{capt-of}
+% \usepackage{subfigure}
+% \usepackage{graphicx}
+% \begin{document}
+% %  \begin{center}
+% %  \includegraphics[width=8cm,height=4.82cm]{./plots/heatmap2010.jpg}
+%   \subfigure[2010]{\includegraphics[width=8cm,height=4.82cm]{./plots/heatmap2010.jpg}}
+%   \subfigure[2011]{\includegraphics[width=8cm]{./plots/heatmap2011.jpg}}
+%   \subfigure[2012]{\includegraphics[width=8cm]{./plots/heatmap2012.jpg}}
+%   \subfigure[2013]{\includegraphics[width=8cm]{./plots/heatmap2013.jpg}}
+% %  \end{center}
+% %    \captionof{figure}{}
+% \end{document}
+
+\documentclass[preview]{standalone}
+\usepackage{mwe}
+\usepackage[]{subfig}
+\usepackage[margin=0.1cm]{geometry}
+\begin{document}
+% \def\FigSize{.23}
+\begin{figure}[H]
+\centering
+\subfloat[\textbf{2010}]
+  {
+ \includegraphics[width=0.485\textwidth,height=4.0cm]{./plots/heatmap2010.jpg}
+  }
+\subfloat[\textbf{2011}]
+  {
+ \includegraphics[width=0.485\textwidth,height=4.0cm]{./plots/heatmap2011.jpg}
+  }\\
+\subfloat[\textbf{2012}]
+  {
+ \includegraphics[width=0.485\textwidth,height=4.0cm]{./plots/heatmap2012.jpg}
+  }
+  \subfloat[\textbf{2013}]
+  {
+ \includegraphics[width=0.485\textwidth,height=4.0cm]{./plots/heatmap2013.jpg}
+  }
+\end{figure}
+\end{document}

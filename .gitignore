@@ -70,7 +70,7 @@ docs/_build/
 *.snm
 
 #binary stuff
-*.png
+#*.png
 *.jpg
 *.pickle
 *.svg
