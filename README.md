@@ -1,4 +1,4 @@
-## Estimating the Attack Ratio of Dengue Epidemics from Aggregated Notification Data
+## [Estimating the Attack Ratio of Dengue Epidemics from Aggregated Notification Data](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4682072/)
 Flavio Coelho<sup>1</sup> and Luiz Max de Carvalho<sup>2</sup>  
 
 <sup>1</sup> School of Applied Mathematics, Getulio Vargas Foundation (FGV), Rio de Janeiro -- RJ, Brazil.
